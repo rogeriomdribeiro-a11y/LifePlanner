@@ -23,7 +23,6 @@ from ui.widgets.line_edit import LPLineEdit, LPPasswordEdit
 from PySide6.QtWidgets import QMessageBox
 from database.user_repository import UserRepository
 from ui.base.base_page import BasePage
-
 BASE_DIR = Path(__file__).resolve().parents[2]
 IMAGES_DIR = BASE_DIR / "assets" / "images" / "login"
 
@@ -142,9 +141,8 @@ class RegisterPage(BasePage):
 
 
     def handle_register(self):
-
         full_name = self.name_input.text().strip()
-        email = self.email_input.text().strip()
+        email = self.email_input.text().strip().lower()
         password = self.password_input.text()
         confirm_password = self.confirm_password_input.text()
 
@@ -156,6 +154,14 @@ class RegisterPage(BasePage):
             )
             return
 
+        if "@" not in email or "." not in email:
+            QMessageBox.warning(
+                self,
+                "Email inválido",
+                "Introduza um email válido."
+            )
+            return
+
         if password != confirm_password:
             QMessageBox.warning(
                 self,
@@ -164,18 +170,26 @@ class RegisterPage(BasePage):
             )
             return
 
-        repo = UserRepository()
+        repository = UserRepository()
 
-        repo.create_user(
+        success, message = repository.create_user(
             full_name,
             email,
             password
         )
 
+        if not success:
+            QMessageBox.warning(
+                self,
+                "Erro",
+                message
+            )
+            return
+
         QMessageBox.information(
             self,
             "Sucesso",
-            "Conta criada com sucesso."
+            message
         )
 
         self.go_to_login()
