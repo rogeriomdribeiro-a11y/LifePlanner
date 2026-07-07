@@ -12,13 +12,15 @@ def get_theme():
 
     QFrame#loginPanel {
         background-color: #1E293B;
-        border-radius: 0px;
+        border-radius: 16px;
+        
     }
 
     QLabel#loginWelcome {
         font-size: 34px;
         font-weight: 700;
         color: #F8FAFC;
+        
     }
 
     QLabel#loginDescription {
@@ -125,4 +127,92 @@ def get_theme():
     QPushButton#textLinkButton:hover {
     color: #93C5FD;
     }
+
+
+    QDialog#customDialog {
+        background-color: #1E293B;
+        border-radius: 16px;
+    }
+
+    QLabel#dialogTitle {
+        color: #F8FAFC;
+        font-size: 20px;
+        font-weight: 700;
+    }
+
+    QLabel#dialogMessage {
+        color: #CBD5E1;
+        font-size: 14px;
+    }
+
+    QPushButton#dialogButton {
+        background-color: #3B82F6;
+        border: none;
+        border-radius: 8px;
+        color: #FFFFFF;
+        font-weight: 600;
+        padding: 8px 20px;
+    }
+
+    QPushButton#dialogButton:hover {
+        background-color: #2563EB;
+    }
+
+    /* ============================================
+    CUSTOM DIALOG
+    ============================================ */
+
+    QFrame#dialogContainer {
+    background-color: #263145;
+    border: 1px solid #334155;
+    border-radius: 16px;
+    }
+
+    QLabel#dialogTitle {
+        color: #F8FAFC;
+        font-size: 20px;
+        font-weight: 700;
+    }
+
+    QLabel#dialogMessage {
+        color: #CBD5E1;
+        font-size: 14px;
+    }
+
+    QPushButton#dialogButton {
+        background-color: #3B82F6;
+        border: none;
+        border-radius: 8px;
+        color: white;
+        font-size: 14px;
+        font-weight: 600;
+    }
+
+    QPushButton#dialogButton:hover {
+        background-color: #2563EB;
+    }
+
+    QPushButton#dialogButton:pressed {
+        background-color: #1D4ED8;
+    }
+
+     /* ============================================
+    DASHBOARD
+    ============================================ */
+
+    QWidget#dashboardPage {
+    background-color: #0F172A;
+    }
+
+    QLabel#dashboardTitle {
+        color: #F8FAFC;
+        font-size: 32px;
+        font-weight: 700;
+    }
+
+    QLabel#dashboardSubtitle {
+        color: #CBD5E1;
+        font-size: 16px;
+    }
+
     """

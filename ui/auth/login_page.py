@@ -1,10 +1,8 @@
-from pathlib import Path
+from PySide6.QtCore import Qt
 
-from PySide6.QtCore import Qt, QSize
-from PySide6.QtGui import QPixmap
 from PySide6.QtWidgets import (
-    QWidget, QHBoxLayout, QVBoxLayout, QLabel,
-    QLineEdit, QPushButton, QFrame
+     QHBoxLayout, QVBoxLayout, QLabel,
+     QPushButton, QFrame
 )
 
 from app.constants import (
@@ -17,15 +15,13 @@ from app.constants import (
     ILLUSTRATION_WIDTH,
     ILLUSTRATION_HEIGHT
 )
-from app.resources import get_icon
 from ui.widgets.button import LPButton, LPGoogleButton
 from ui.widgets.line_edit import LPLineEdit, LPPasswordEdit
 from ui.widgets.separator import LPSeparator
 from ui.base.base_page import BasePage
-
-BASE_DIR = Path(__file__).resolve().parents[2]
-IMAGES_DIR = BASE_DIR / "assets" / "images" / "login"
-
+from database.user_repository import UserRepository
+from ui.dialogs.custom_dialog import CustomDialog
+from app.session import Session
 
 class LoginPage(BasePage):
     def __init__(self, app_controller=None):
@@ -154,15 +150,41 @@ class LoginPage(BasePage):
         return panel
 
     def handle_login(self):
-        email = self.email_input.text().strip()
-        password = self.password_input.text().strip()
+        email = self.email_input.text().strip().lower()
+        password = self.password_input.text()
 
         if not email or not password:
-            print("Preenche todos os campos.")
+            CustomDialog.warning(
+                self,
+                "Preencha todos os campos.",
+                "Campos obrigatórios"
+            )
             return
 
-        print("Login clicado")
-        print("Email:", email)
+        repository = UserRepository()
+
+        success, message, user = repository.authenticate_user(
+            email,
+            password
+        )
+
+        if not success:
+            CustomDialog.error(
+                self,
+                message,
+                "Erro no login"
+            )
+            return
+
+        CustomDialog.success(
+            self,
+            "Login efetuado com sucesso."
+        )
+
+        Session.login(user)
+
+        if self.app_controller:
+            self.app_controller.show_dashboard()
 
     def go_to_register(self):
         if self.app_controller:
