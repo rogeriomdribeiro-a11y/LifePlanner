@@ -215,4 +215,72 @@ def get_theme():
         font-size: 16px;
     }
 
+
+
+ /* ============================================
+    APP LAYOUT
+    ============================================ */
+    QWidget#appLayout {
+    background-color: #0F172A;
+    }
+
+    QPushButton#sidebarButton {
+    background-color: transparent;
+    border: none;
+    border-radius: 10px;
+    color: #CBD5E1;
+    font-size: 15px;
+    font-weight: 500;
+    text-align: left;
+    padding: 12px 16px;
+    }
+
+    QPushButton#sidebarButton:hover {
+        background-color: #1E293B;
+        color: white;
+    }
+
+    QPushButton#sidebarButton:checked {
+        background-color: #2563EB;
+        color: white;
+    }
+
+    QFrame#topbar {
+        background-color: #0F172A;
+        border-bottom: 1px solid #1E293B;
+    }
+
+    QLabel#topbarTitle {
+        color: #F8FAFC;
+        font-size: 26px;
+        font-weight: 700;
+    }
+
+    QLineEdit#searchInput {
+        background-color: #1E293B;
+        border: 1px solid #334155;
+        border-radius: 10px;
+        color: #F8FAFC;
+        padding: 10px;
+    }
+
+    QPushButton#topbarIconButton {
+        background-color: #1E293B;
+        border: none;
+        border-radius: 8px;
+        color: #F8FAFC;
+        min-width: 42px;
+        min-height: 42px;
+    }
+
+    QWidget#contentArea {
+        background-color: #0F172A;
+    }
+
+    QLabel#pagePlaceholder {
+        color: #94A3B8;
+        font-size: 20px;
+        padding: 40px;
+    }
+
     """

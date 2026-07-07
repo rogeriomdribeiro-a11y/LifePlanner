@@ -1,6 +1,6 @@
 # LifePlanner
 
-LifePlanner é uma aplicação desktop desenvolvida em Python com PySide6, criada no âmbito da Prova de Aptidão Profissional (PAP).
+LifePlanner é uma aplicação desktop desenvolvida em Python com PySide6, criada no âmbito da UC Projeto Final do curso CET Sistemas.
 
 ## Tecnologias
 
