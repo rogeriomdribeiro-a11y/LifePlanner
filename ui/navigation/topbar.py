@@ -12,19 +12,20 @@ class Topbar(QFrame):
         self.setFixedHeight(74)
 
         layout = QHBoxLayout(self)
-        layout.setContentsMargins(28, 16, 28, 16)
+        layout.setContentsMargins(28, 16, 140, 16)
         layout.setSpacing(12)
 
         user = Session.current_user
-        name = user["full_name"] if user else "Utilizador"
+        #Obter apenas o primeiro nome
+        name = user["full_name"].split()[0] if user else "Utilizador"
 
-        title = QLabel(f"Olá, {name}! 👋")
+        title = QLabel(f"Olá, {name}!")
         title.setObjectName("topbarTitle")
 
         search = QLineEdit()
         search.setObjectName("searchInput")
         search.setPlaceholderText("Pesquisar...")
-        search.setFixedWidth(300)
+        search.setFixedWidth(260)
 
         notification = QPushButton("🔔")
         notification.setObjectName("topbarIconButton")

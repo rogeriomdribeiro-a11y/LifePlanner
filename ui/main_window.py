@@ -1,10 +1,9 @@
-from PySide6.QtWidgets import QWidget, QStackedWidget, QVBoxLayout
-from ui.auth.login_page import LoginPage
-from ui.auth.register_page import RegisterPage
 from PySide6.QtCore import Qt, QSize
 from PySide6.QtWidgets import QWidget, QStackedWidget, QVBoxLayout, QPushButton
+
 from app.resources import get_icon
-from ui.dashboard.dashboard_page import DashboardPage
+from ui.auth.login_page import LoginPage
+from ui.auth.register_page import RegisterPage
 from ui.layout.app_layout import AppLayout
 
 
@@ -17,30 +16,26 @@ class MainWindow(QWidget):
         self.setObjectName("loginWindow")
         self.setWindowTitle("LifePlanner")
         self.setMinimumSize(1280, 720)
+        self.setWindowFlags(Qt.FramelessWindowHint)
+
+        self.old_pos = None
+        self.is_window_maximized = True
 
         self.stack = QStackedWidget()
 
         self.login_page = LoginPage(app_controller=self)
         self.register_page = RegisterPage(app_controller=self)
-        self.dashboard_page = DashboardPage(app_controller=self)
+        self.app_layout = AppLayout(app_controller=self)
 
         self.stack.addWidget(self.login_page)
         self.stack.addWidget(self.register_page)
-        self.stack.addWidget(self.dashboard_page)
-        
+        self.stack.addWidget(self.app_layout)
 
         layout = QVBoxLayout(self)
         layout.setContentsMargins(0, 0, 0, 0)
         layout.addWidget(self.stack)
 
-        self.setWindowFlags(Qt.FramelessWindowHint)
-        self.old_pos = None
-        self.is_window_maximized = True
-    
         self.create_window_buttons()
-
-        self.app_layout = AppLayout(app_controller=self)
-        self.stack.addWidget(self.app_layout)
 
     def show_login(self):
         self.stack.setCurrentWidget(self.login_page)
@@ -49,8 +44,6 @@ class MainWindow(QWidget):
         self.stack.setCurrentWidget(self.register_page)
 
     def show_dashboard(self):
-        self.app_layout = AppLayout(app_controller=self)
-        self.stack.addWidget(self.app_layout)
         self.stack.setCurrentWidget(self.app_layout)
 
     def create_window_buttons(self):
@@ -99,13 +92,6 @@ class MainWindow(QWidget):
         else:
             self.maximize_custom()
 
-    def resizeEvent(self, event):
-        if hasattr(self, "close_button"):
-            self.position_window_buttons()
-
-        super().resizeEvent(event)
-
-
     def maximize_custom(self):
         screen_geometry = self.screen().availableGeometry()
         self.setGeometry(screen_geometry)
@@ -113,11 +99,19 @@ class MainWindow(QWidget):
 
     def restore_custom(self):
         self.resize(1280, 720)
+
         screen_geometry = self.screen().availableGeometry()
         x = screen_geometry.x() + (screen_geometry.width() - self.width()) // 2
         y = screen_geometry.y() + (screen_geometry.height() - self.height()) // 2
+
         self.move(x, y)
         self.is_window_maximized = False
+
+    def resizeEvent(self, event):
+        if hasattr(self, "close_button"):
+            self.position_window_buttons()
+
+        super().resizeEvent(event)
 
     def mousePressEvent(self, event):
         if event.button() == Qt.LeftButton:
