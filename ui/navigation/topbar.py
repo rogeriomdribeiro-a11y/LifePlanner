@@ -10,7 +10,7 @@ class Topbar(QFrame):
         self.setFixedHeight(74)
 
         layout = QHBoxLayout(self)
-        layout.setContentsMargins(28, 16, 140, 16)
+        layout.setContentsMargins(40, 16, 140, 16)
         layout.setSpacing(12)
 
         self.search = QLineEdit()

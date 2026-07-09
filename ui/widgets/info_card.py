@@ -40,7 +40,6 @@ class LPInfoCard(QFrame):
         layout.setContentsMargins(22, 20, 22, 20)
         layout.setSpacing(14)
 
-        # Header
         header = QHBoxLayout()
         header.setSpacing(14)
 
@@ -62,31 +61,29 @@ class LPInfoCard(QFrame):
             icon.setFixedSize(28, 28)
 
             icon_layout.addWidget(icon, alignment=Qt.AlignCenter)
-
             header.addWidget(icon_container)
 
         text_layout = QVBoxLayout()
         text_layout.setSpacing(2)
 
-        title_label = QLabel(title)
-        title_label.setObjectName("infoCardTitle")
+        self.title_label = QLabel(title)
+        self.title_label.setObjectName("infoCardTitle")
 
-        value_label = QLabel(value)
-        value_label.setObjectName("infoCardValue")
+        self.value_label = QLabel(str(value))
+        self.value_label.setObjectName("infoCardValue")
 
-        subtitle_label = QLabel(subtitle)
-        subtitle_label.setObjectName("infoCardSubtitle")
+        self.subtitle_label = QLabel(subtitle)
+        self.subtitle_label.setObjectName("infoCardSubtitle")
 
-        text_layout.addWidget(title_label)
-        text_layout.addWidget(value_label)
-        text_layout.addWidget(subtitle_label)
+        text_layout.addWidget(self.title_label)
+        text_layout.addWidget(self.value_label)
+        text_layout.addWidget(self.subtitle_label)
 
         header.addLayout(text_layout)
         header.addStretch()
 
         layout.addLayout(header)
 
-        # Accent bar
         accent_bar = QFrame()
         accent_bar.setObjectName("infoCardAccent")
         accent_bar.setFixedHeight(4)
@@ -99,3 +96,9 @@ class LPInfoCard(QFrame):
 
         layout.addStretch()
         layout.addWidget(accent_bar)
+
+    def set_value(self, value):
+        self.value_label.setText(str(value))
+
+    def set_subtitle(self, subtitle):
+        self.subtitle_label.setText(str(subtitle))

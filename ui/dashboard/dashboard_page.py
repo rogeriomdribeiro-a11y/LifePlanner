@@ -12,6 +12,7 @@ from PySide6.QtWidgets import (
 )
 
 from app.session import Session
+from database.task_repository import TaskRepository
 from ui.widgets.info_card import LPInfoCard
 from ui.widgets.section import LPSection
 from ui.widgets.task_item import LPTaskItem
@@ -22,6 +23,8 @@ from ui.widgets.goal_progress import LPGoalProgress
 class DashboardPage(QWidget):
     def __init__(self):
         super().__init__()
+
+        self.task_repository = TaskRepository()
 
         self.setObjectName("dashboardPage")
 
@@ -70,7 +73,7 @@ class DashboardPage(QWidget):
         self.welcome_subtitle = QLabel("Bem-vindo ao LifePlanner")
         self.welcome_subtitle.setObjectName("dashboardWelcomeSubtitle")
 
-        self.summary_label = QLabel("Hoje tens 5 tarefas e 2 eventos agendados.")
+        self.summary_label = QLabel()
         self.summary_label.setObjectName("dashboardWelcomeSummary")
 
         text_layout.addWidget(self.welcome_title)
@@ -91,35 +94,43 @@ class DashboardPage(QWidget):
         cards_grid = QGridLayout()
         cards_grid.setSpacing(18)
 
+        self.tasks_card = LPInfoCard(
+            title="Tarefas",
+            value="0",
+            subtitle="Para hoje",
+            icon_name="tasks.svg",
+            accent_color="#3B82F6",
+        )
+
+        self.goals_card = LPInfoCard(
+            title="Objetivos",
+            value="3",
+            subtitle="Em progresso",
+            icon_name="goals.svg",
+            accent_color="#10B981",
+        )
+
+        self.notes_card = LPInfoCard(
+            title="Notas",
+            value="12",
+            subtitle="Recentes",
+            icon_name="notes.svg",
+            accent_color="#8B5CF6",
+        )
+
+        self.progress_card = LPInfoCard(
+            title="Progresso",
+            value="82%",
+            subtitle="Esta semana",
+            icon_name="reports.svg",
+            accent_color="#F59E0B",
+        )
+
         cards = [
-            LPInfoCard(
-                title="Tarefas",
-                value="5",
-                subtitle="Para hoje",
-                icon_name="tasks.svg",
-                accent_color="#3B82F6",
-            ),
-            LPInfoCard(
-                title="Objetivos",
-                value="3",
-                subtitle="Em progresso",
-                icon_name="goals.svg",
-                accent_color="#10B981",
-            ),
-            LPInfoCard(
-                title="Notas",
-                value="12",
-                subtitle="Recentes",
-                icon_name="notes.svg",
-                accent_color="#8B5CF6",
-            ),
-            LPInfoCard(
-                title="Progresso",
-                value="82%",
-                subtitle="Esta semana",
-                icon_name="reports.svg",
-                accent_color="#F59E0B",
-            ),
+            self.tasks_card,
+            self.goals_card,
+            self.notes_card,
+            self.progress_card,
         ]
 
         for index, card in enumerate(cards):
@@ -135,8 +146,9 @@ class DashboardPage(QWidget):
 
         events_section = LPSection("Próximos eventos", "Ver calendário")
         events_section.setMinimumHeight(230)
+
         events_section.content_layout.addWidget(
-        LPEventItem("15:00", "Reunião de equipa", "Sala 2B", "#3B82F6")
+            LPEventItem("15:00", "Reunião de equipa", "Sala 2B", "#3B82F6")
         )
 
         events_section.content_layout.addWidget(
@@ -149,13 +161,14 @@ class DashboardPage(QWidget):
 
         goal_section = LPSection("Objetivo principal", "Ver objetivos")
         goal_section.setMinimumHeight(230)
+
         goal_section.content_layout.addWidget(
-        LPGoalProgress(
-            title="Aprender Python",
-            subtitle="Estudar 30 minutos por dia",
-            progress=80,
-            left_info="24 de 30 dias",
-            right_info="Termina em 12 dias",
+            LPGoalProgress(
+                title="Aprender Python",
+                subtitle="Estudar 30 minutos por dia",
+                progress=80,
+                left_info="24 de 30 dias",
+                right_info="Termina em 12 dias",
             )
         )
 
@@ -165,38 +178,86 @@ class DashboardPage(QWidget):
         sections_grid.setColumnStretch(0, 1)
         sections_grid.setColumnStretch(1, 1)
 
-        tasks_section = LPSection("Tarefas de hoje", "Ver +")
-        tasks_section.setMinimumHeight(260)
-
-        tasks_section.content_layout.addWidget(
-            LPTaskItem("Comprar leite", "Pessoal", "09:00", "#3B82F6")
-            )
-
-        tasks_section.content_layout.addWidget(
-            LPTaskItem("Preparar apresentação", "Trabalho", "11:30", "#10B981")
-            )
-
-        tasks_section.content_layout.addWidget(
-            LPTaskItem("Marcar consulta", "Saúde", "14:00", "#8B5CF6")
-            )
-
-        tasks_section.content_layout.addWidget(
-            LPTaskItem("Responder a e-mails", "Trabalho", "16:00", "#10B981")
-            )
-
-        tasks_section.content_layout.addWidget(
-            LPTaskItem("Rever relatório mensal", "Trabalho", "17:30", "#10B981")
-            )
+        self.tasks_section = LPSection("Tarefas de hoje", "Ver +")
+        self.tasks_section.setMinimumHeight(260)
 
         self.layout.addLayout(sections_grid)
-        self.layout.addWidget(tasks_section)
+        self.layout.addWidget(self.tasks_section)
 
     def refresh(self):
         self.welcome_title.setText(
-            f"{self.get_greeting()}, {self.get_first_name()}"
+            f"{self.get_greeting()}, {self.get_first_name()} 👋"
         )
 
         self.date_label.setText(self.get_current_date())
+
+        user = Session.current_user
+
+        if not user:
+            self.summary_label.setText("Hoje tens 0 tarefas e 0 eventos agendados.")
+            return
+
+        user_id = user["id"]
+
+        self.task_repository.ensure_sample_tasks_for_today(user_id)
+
+        total_tasks = self.task_repository.count_today_tasks(user_id)
+        completed_tasks = self.task_repository.count_completed_today_tasks(user_id)
+
+        task_word = "tarefa" if total_tasks == 1 else "tarefas"
+
+        self.summary_label.setText(
+            f"Hoje tens {total_tasks} {task_word} e 2 eventos agendados."
+        )
+
+        self.tasks_card.set_value(total_tasks)
+
+        if completed_tasks > 0:
+            self.tasks_card.set_subtitle(f"{completed_tasks} concluídas")
+        else:
+            self.tasks_card.set_subtitle("Para hoje")
+
+        self.load_today_tasks(user_id)
+
+    def load_today_tasks(self, user_id):
+        self.clear_layout(self.tasks_section.content_layout)
+
+        tasks = self.task_repository.get_today_tasks(user_id, limit=5)
+
+        if not tasks:
+            self.tasks_section.add_text_item("Ainda não tens tarefas para hoje.")
+            return
+
+        for task in tasks:
+            category = task["category"] or "Pessoal"
+
+            self.tasks_section.content_layout.addWidget(
+                LPTaskItem(
+                    task["title"],
+                    category,
+                    task["due_time"] or "",
+                    self.get_category_color(category),
+                )
+            )
+
+    def clear_layout(self, layout):
+        while layout.count():
+            item = layout.takeAt(0)
+
+            widget = item.widget()
+
+            if widget:
+                widget.deleteLater()
+
+    def get_category_color(self, category):
+        colors = {
+            "Pessoal": "#3B82F6",
+            "Trabalho": "#10B981",
+            "Saúde": "#8B5CF6",
+            "Estudo": "#F59E0B",
+        }
+
+        return colors.get(category, "#3B82F6")
 
     def get_first_name(self):
         user = Session.current_user
