@@ -237,6 +237,7 @@ class DashboardPage(QWidget):
                     category,
                     task["due_time"] or "",
                     self.get_category_color(category),
+                    task["priority"] or "Normal",
                 )
             )
 

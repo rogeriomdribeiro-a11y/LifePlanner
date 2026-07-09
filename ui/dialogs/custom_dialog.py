@@ -10,7 +10,7 @@ from PySide6.QtWidgets import (
     QPushButton,
     QVBoxLayout,
     QHBoxLayout,
-    QGraphicsDropShadowEffect
+    QGraphicsDropShadowEffect,
 )
 
 
@@ -25,7 +25,9 @@ class CustomDialog(QDialog):
         title,
         message,
         dialog_type="info",
-        button_text="OK"
+        button_text="OK",
+        cancel_text=None,
+        destructive=False,
     ):
         super().__init__(parent)
 
@@ -70,33 +72,90 @@ class CustomDialog(QDialog):
         message_label.setObjectName("dialogMessage")
         message_label.setWordWrap(True)
 
+        buttons_layout = QHBoxLayout()
+        buttons_layout.setSpacing(10)
+        buttons_layout.addStretch()
+
+        if cancel_text:
+            cancel_button = QPushButton(cancel_text)
+            cancel_button.setObjectName("dialogCancelButton")
+            cancel_button.setFixedSize(130, 38)
+            cancel_button.setCursor(Qt.PointingHandCursor)
+            cancel_button.clicked.connect(self.reject)
+
+            buttons_layout.addWidget(cancel_button)
+
         button = QPushButton(button_text)
-        button.setObjectName("dialogButton")
-        button.setFixedSize(150, 38)
+        button.setObjectName("dialogDangerButton" if destructive else "dialogButton")
+        button.setFixedSize(140 if cancel_text else 150, 38)
         button.setCursor(Qt.PointingHandCursor)
         button.clicked.connect(self.accept)
+
+        buttons_layout.addWidget(button)
 
         main_layout.addLayout(header_layout)
         main_layout.addWidget(message_label)
         main_layout.addStretch()
-        main_layout.addWidget(button, alignment=Qt.AlignRight)
+        main_layout.addLayout(buttons_layout)
 
     @staticmethod
-    def success(parent, message, title="Sucesso", button_text="OK"):
-        CustomDialog(parent, title, message, "success", button_text).exec()
+    def success(parent, message, title="Sucesso", button_text="Continuar"):
+        CustomDialog(
+            parent,
+            title,
+            message,
+            "success",
+            button_text,
+        ).exec()
 
     @staticmethod
-    def error(parent, message, title="Erro", button_text="OK"):
-        CustomDialog(parent, title, message, "error", button_text).exec()
+    def error(parent, message, title="Erro", button_text="Fechar"):
+        CustomDialog(
+            parent,
+            title,
+            message,
+            "error",
+            button_text,
+        ).exec()
 
     @staticmethod
     def warning(parent, message, title="Aviso", button_text="OK"):
-        CustomDialog(parent, title, message, "warning", button_text).exec()
+        CustomDialog(
+            parent,
+            title,
+            message,
+            "warning",
+            button_text,
+        ).exec()
 
     @staticmethod
     def info(parent, message, title="Informação", button_text="OK"):
-        CustomDialog(parent, title, message, "info", button_text).exec()
+        CustomDialog(
+            parent,
+            title,
+            message,
+            "info",
+            button_text,
+        ).exec()
 
     @staticmethod
-    def question(parent, message, title="Confirmação", button_text="OK"):
-        CustomDialog(parent, title, message, "question", button_text).exec()
+    def confirm(
+        parent,
+        message,
+        title="Confirmar",
+        button_text="Confirmar",
+        cancel_text="Cancelar",
+        dialog_type="warning",
+        destructive=False,
+    ):
+        dialog = CustomDialog(
+            parent,
+            title,
+            message,
+            dialog_type,
+            button_text,
+            cancel_text,
+            destructive,
+        )
+
+        return dialog.exec() == QDialog.Accepted

@@ -91,6 +91,9 @@ class AppLayout(QWidget):
         )
 
     def show_page(self, page):
+        if hasattr(page, "refresh"):
+            page.refresh()
+
         self.pages.setCurrentWidget(page)
 
     def refresh(self):

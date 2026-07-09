@@ -150,18 +150,19 @@ class TaskRepository:
         today = date.today().isoformat()
 
         sample_tasks = [
-            ("Comprar leite", "Pessoal", "09:00"),
-            ("Preparar apresentação", "Trabalho", "11:30"),
-            ("Marcar consulta", "Saúde", "14:00"),
-            ("Responder a e-mails", "Trabalho", "16:00"),
-            ("Rever relatório mensal", "Trabalho", "17:30"),
+            ("Comprar leite", "Pessoal", "09:00", "Baixa"),
+            ("Preparar apresentação", "Trabalho", "11:30", "Alta"),
+            ("Marcar consulta", "Saúde", "14:00", "Normal"),
+            ("Responder a e-mails", "Trabalho", "16:00", "Normal"),
+            ("Rever relatório mensal", "Trabalho", "17:30", "Urgente"),
         ]
 
-        for title, category, due_time in sample_tasks:
+        for title, category, due_time, priority in sample_tasks:
             self.create_task(
                 user_id=user_id,
                 title=title,
                 category=category,
                 due_date=today,
                 due_time=due_time,
+                priority=priority,
             )

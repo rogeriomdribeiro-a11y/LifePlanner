@@ -532,4 +532,165 @@ def get_theme():
         background-color: #10B981;
         border-radius: 8px;
     }
+
+
+    /* ============================================
+    TASKS PAGE
+    ============================================ */
+
+    QWidget#tasksPage {
+        background-color: #0F172A;
+    }
+
+    QScrollArea#tasksScrollArea {
+        background-color: #0F172A;
+        border: none;
+    }
+
+    QWidget#tasksContent {
+        background-color: #0F172A;
+    }
+
+    QFrame#taskFormCard,
+    QFrame#taskListCard {
+        background-color: #1E293B;
+        border: 1px solid #334155;
+        border-radius: 16px;
+    }
+
+    QLabel#taskFormTitle,
+    QLabel#taskListTitle {
+        color: #F8FAFC;
+        font-size: 18px;
+        font-weight: 700;
+    }
+
+    QLineEdit#taskInput,
+    QComboBox#taskCombo,
+    QDateEdit#taskDate,
+    QTimeEdit#taskTimeEdit {
+        background-color: #0F172A;
+        border: 1px solid #334155;
+        border-radius: 10px;
+        color: #F8FAFC;
+        padding: 10px;
+        font-size: 14px;
+        min-height: 22px;
+    }
+
+    QLineEdit#taskInput:focus,
+    QComboBox#taskCombo:focus,
+    QDateEdit#taskDate:focus,
+    QTimeEdit#taskTimeEdit:focus {
+        border: 1px solid #3B82F6;
+    }
+
+    QPushButton#taskAddButton {
+        background-color: #2563EB;
+        border: none;
+        border-radius: 10px;
+        color: white;
+        padding: 10px 18px;
+        font-size: 14px;
+        font-weight: 700;
+    }
+
+    QPushButton#taskAddButton:hover {
+        background-color: #1D4ED8;
+    }
+
+    QLabel#taskListCounter {
+        color: #94A3B8;
+        font-size: 13px;
+        font-weight: 600;
+    }
+
+    QFrame#taskRow {
+        background-color: transparent;
+        border-bottom: 1px solid #334155;
+    }
+
+    QPushButton#taskStatusButton {
+        background-color: transparent;
+        border: none;
+        color: #60A5FA;
+        font-size: 20px;
+        font-weight: 700;
+        min-width: 32px;
+    }
+
+    QLabel#taskRowTitle {
+        color: #F8FAFC;
+        font-size: 14px;
+        font-weight: 500;
+    }
+
+    QLabel#taskRowTitleCompleted {
+        color: #64748B;
+        font-size: 14px;
+        font-weight: 500;
+        text-decoration: line-through;
+    }
+
+    QLabel#taskRowCategory {
+        background-color: rgba(59, 130, 246, 0.15);
+        color: #60A5FA;
+        border-radius: 8px;
+        padding: 4px 10px;
+        font-size: 12px;
+        font-weight: 600;
+    }
+
+    QLabel#taskRowDate {
+        color: #CBD5E1;
+        font-size: 13px;
+        min-width: 120px;
+    }
+
+    QPushButton#taskDeleteButton {
+        background-color: rgba(239, 68, 68, 0.12);
+        border: none;
+        border-radius: 8px;
+        color: #F87171;
+        padding: 6px 10px;
+        font-size: 12px;
+        font-weight: 700;
+    }
+
+    QPushButton#taskDeleteButton:hover {
+        background-color: rgba(239, 68, 68, 0.22);
+    }
+
+    QLabel#emptyStateLabel {
+        color: #94A3B8;
+        font-size: 14px;
+        padding: 20px 0;
+    }
+
+    QPushButton#dialogCancelButton {
+    background-color: #334155;
+    border: none;
+    border-radius: 10px;
+    color: #CBD5E1;
+    font-size: 13px;
+    font-weight: 700;
+    }
+
+    QPushButton#dialogCancelButton:hover {
+        background-color: #475569;
+        color: #F8FAFC;
+    }
+
+    QPushButton#dialogDangerButton {
+        background-color: #DC2626;
+        border: none;
+        border-radius: 10px;
+        color: white;
+        font-size: 13px;
+        font-weight: 700;
+    }
+
+    QPushButton#dialogDangerButton:hover {
+        background-color: #B91C1C;
+    }
     """
