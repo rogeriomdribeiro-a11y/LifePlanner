@@ -1355,4 +1355,285 @@ def get_theme():
         color: #F8FAFC;
     }
     
+    /* ============================================
+    NOTES PAGE
+    ============================================ */
+
+    QWidget#notesPage {
+        background-color: #0F172A;
+    }
+
+    QScrollArea#notesScrollArea {
+        background-color: #0F172A;
+        border: none;
+    }
+
+    QWidget#notesContent {
+        background-color: #0F172A;
+    }
+
+    QFrame#notesListCard {
+        background-color: #1E293B;
+        border: 1px solid #334155;
+        border-radius: 16px;
+    }
+
+    QLabel#notesListTitle {
+        color: #F8FAFC;
+        font-size: 18px;
+        font-weight: 700;
+    }
+
+    QLabel#notesListCounter {
+        color: #94A3B8;
+        font-size: 13px;
+        font-weight: 600;
+    }
+
+    QPushButton#notePrimaryButton {
+        background-color: #2563EB;
+        border: none;
+        border-radius: 10px;
+        color: white;
+        padding: 10px 18px;
+        font-size: 14px;
+        font-weight: 700;
+    }
+
+    QPushButton#notePrimaryButton:hover {
+        background-color: #1D4ED8;
+    }
+
+    QPushButton#notePinButton {
+        background-color: rgba(251, 191, 36, 0.14);
+        border: none;
+        border-radius: 8px;
+    }
+
+    QPushButton#notePinButton:hover {
+    background-color: rgba(251, 191, 36, 0.24);
+    }
+
+    QPushButton#noteUnpinButton {
+        background-color: rgba(148, 163, 184, 0.12);
+        border: none;
+        border-radius: 8px;
+    }
+
+    QPushButton#noteUnpinButton:hover {
+        background-color: rgba(148, 163, 184, 0.22);
+    }
+
+    QPushButton#noteIconButton {
+        background-color: rgba(96, 165, 250, 0.12);
+        border: none;
+        border-radius: 8px;
+    }
+
+    QPushButton#noteIconButton:hover {
+        background-color: rgba(96, 165, 250, 0.22);
+    }
+
+    QPushButton#noteIconDangerButton {
+        background-color: rgba(248, 113, 113, 0.12);
+        border: none;
+        border-radius: 8px;
+    }
+
+    QPushButton#noteIconDangerButton:hover {
+        background-color: rgba(248, 113, 113, 0.22);
+    }
+
+    /* ============================================
+    NOTE CARD
+    ============================================ */
+
+    QFrame#noteCard {
+        background-color: #0F172A;
+        border: 1px solid #334155;
+        border-radius: 14px;
+    }
+
+    QFrame#noteCard:hover {
+        border: 1px solid #475569;
+    }
+
+    QLabel#noteCardTitle {
+        color: #F8FAFC;
+        font-size: 16px;
+        font-weight: 800;
+    }
+
+    QLabel#noteCardContent {
+        color: #CBD5E1;
+        font-size: 13px;
+        line-height: 18px;
+    }
+    QLabel#noteCardPinBadge {
+        min-width: 22px;
+        min-height: 22px;
+    }
+
+    QLabel#noteCardPin {
+        font-size: 16px;
+    }
+
+
+    QPushButton#noteIconButton {
+        background-color: rgba(96, 165, 250, 0.12);
+        border: none;
+        border-radius: 8px;
+    }
+
+    QPushButton#noteIconButton:hover {
+        background-color: rgba(96, 165, 250, 0.22);
+    }
+
+    QPushButton#noteIconDangerButton {
+        background-color: rgba(248, 113, 113, 0.12);
+        border: none;
+        border-radius: 8px;
+    }
+
+    QPushButton#noteIconDangerButton:hover {
+        background-color: rgba(248, 113, 113, 0.22);
+    }
+
+
+/* ============================================
+    NOTE DIALOG
+    ============================================ */
+
+    QFrame#noteDialogContainer {
+        background-color: #1E293B;
+        border: 1px solid #334155;
+        border-radius: 18px;
+    }
+
+    QLabel#noteDialogTitle {
+        color: #F8FAFC;
+        font-size: 24px;
+        font-weight: 800;
+    }
+
+    QLabel#noteDialogSubtitle {
+        color: #94A3B8;
+        font-size: 14px;
+        font-weight: 500;
+    }
+
+    QLabel#noteDialogFieldLabel {
+        color: #CBD5E1;
+        font-size: 12px;
+        font-weight: 700;
+    }
+
+    QLabel#noteDialogError {
+        color: #F87171;
+        font-size: 13px;
+        font-weight: 600;
+    }
+
+    QLineEdit#noteDialogInput,
+    QComboBox#noteDialogCombo {
+        background-color: #0F172A;
+        border: 1px solid #334155;
+        border-radius: 10px;
+        color: #F8FAFC;
+        padding: 10px 12px;
+        font-size: 14px;
+        min-height: 22px;
+    }
+
+    QTextEdit#noteDialogTextEdit {
+        background-color: #0F172A;
+        border: 1px solid #334155;
+        border-radius: 10px;
+        color: #F8FAFC;
+        padding: 10px 12px;
+        font-size: 14px;
+    }
+
+    QLineEdit#noteDialogInput:focus,
+    QTextEdit#noteDialogTextEdit:focus,
+    QComboBox#noteDialogCombo:focus {
+        border: 1px solid #8B5CF6;
+    }
+
+    QComboBox#noteDialogCombo::drop-down {
+        border: none;
+        background-color: transparent;
+        width: 28px;
+    }
+
+    QComboBox#noteDialogCombo::down-arrow {
+        image: none;
+        width: 0;
+        height: 0;
+    }
+
+    QComboBox#noteDialogCombo QAbstractItemView {
+        background-color: #0F172A;
+        border: 1px solid #334155;
+        color: #F8FAFC;
+        selection-background-color: #334155;
+        selection-color: #F8FAFC;
+        padding: 6px;
+    }
+
+    QCheckBox#noteDialogCheckbox {
+        color: #CBD5E1;
+        font-size: 13px;
+        font-weight: 600;
+    }
+
+    QPushButton#noteDialogPrimaryButton {
+        background-color: #2563EB;
+        border: none;
+        border-radius: 10px;
+        color: white;
+        font-size: 13px;
+        font-weight: 700;
+    }
+
+    QPushButton#noteDialogPrimaryButton:hover {
+        background-color: #1D4ED8;
+    }
+
+    QPushButton#noteDialogCancelButton {
+        background-color: #334155;
+        border: none;
+        border-radius: 10px;
+        color: #CBD5E1;
+        font-size: 13px;
+        font-weight: 700;
+    }
+
+    QPushButton#noteDialogCancelButton:hover {
+        background-color: #475569;
+        color: #F8FAFC;
+    }
+
+    QPushButton#notePinToggleButton {
+    background-color: rgba(251, 191, 36, 0.14);
+    border: none;
+    border-radius: 10px;
+    color: #FBBF24;
+    padding: 9px 14px;
+    font-size: 13px;
+    font-weight: 700;
+    }
+
+    QPushButton#notePinToggleButton:hover {
+        background-color: rgba(251, 191, 36, 0.24);
+    }
+
+    QPushButton#notePinToggleButton:checked {
+        background-color: rgba(148, 163, 184, 0.14);
+        color: #CBD5E1;
+    }
+
+    QPushButton#notePinToggleButton:checked:hover {
+        background-color: rgba(148, 163, 184, 0.24);
+    }
     """

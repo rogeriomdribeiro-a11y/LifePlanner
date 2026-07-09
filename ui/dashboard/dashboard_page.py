@@ -19,7 +19,7 @@ from ui.widgets.task_item import LPTaskItem
 from ui.widgets.event_item import LPEventItem
 from ui.widgets.goal_progress import LPGoalProgress
 from database.event_repository import EventRepository
-
+from database.note_repository import NoteRepository
 
 class DashboardPage(QWidget):
     def __init__(self):
@@ -27,6 +27,7 @@ class DashboardPage(QWidget):
 
         self.task_repository = TaskRepository()
         self.event_repository = EventRepository()
+        self.note_repository = NoteRepository()
         self.setObjectName("dashboardPage")
 
         main_layout = QVBoxLayout(self)
@@ -194,6 +195,7 @@ class DashboardPage(QWidget):
         total_tasks = self.task_repository.count_today_tasks(user_id)
         completed_tasks = self.task_repository.count_completed_today_tasks(user_id)
         total_events = self.event_repository.count_today_events(user_id)
+        total_notes = self.note_repository.count_notes_by_user(user_id)
 
         task_word = "tarefa" if total_tasks == 1 else "tarefas"
         event_word = "evento" if total_events == 1 else "eventos"
@@ -211,6 +213,13 @@ class DashboardPage(QWidget):
 
         self.load_today_tasks(user_id)
         self.load_today_events(user_id)
+
+        self.notes_card.set_value(total_notes)
+
+        if total_notes == 1:
+            self.notes_card.set_subtitle("nota guardada")
+        else:
+            self.notes_card.set_subtitle("notas guardadas")
 
     def load_today_events(self, user_id):
         self.clear_layout(self.events_section.content_layout)

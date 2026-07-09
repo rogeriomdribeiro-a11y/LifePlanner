@@ -63,4 +63,24 @@ def create_tables(connection):
     )
     """)
 
+    cursor.execute("""
+    CREATE TABLE IF NOT EXISTS notes (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+
+        user_id INTEGER NOT NULL,
+
+        title TEXT NOT NULL,
+        content TEXT,
+
+        category TEXT DEFAULT 'Geral',
+        color TEXT DEFAULT '#8B5CF6',
+        is_pinned INTEGER DEFAULT 0,
+
+        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+        updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+
+        FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
+    )
+    """)
+
     connection.commit()
