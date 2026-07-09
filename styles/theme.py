@@ -564,7 +564,100 @@ def get_theme():
         font-size: 18px;
         font-weight: 700;
     }
+    /* ============================================
+    TASKS PAGE - HEADER
+    ============================================ */
 
+    QWidget#tasksContent QLabel#contentPageTitle {
+        color: #F8FAFC;
+        font-size: 32px;
+        font-weight: 800;
+    }
+
+    QWidget#tasksContent QLabel#contentPageSubtitle {
+        color: #94A3B8;
+        font-size: 15px;
+        font-weight: 500;
+    }
+    /* ============================================
+    TASK FORM INPUTS
+    ============================================ */
+
+    QLineEdit#taskInput,
+    QComboBox#taskCombo,
+    QDateEdit#taskDate,
+    QTimeEdit#taskTimeEdit {
+        background-color: #0F172A;
+        border: 1px solid #334155;
+        border-radius: 10px;
+        color: #F8FAFC;
+        padding: 10px 12px;
+        font-size: 14px;
+        min-height: 22px;
+    }
+
+    QLineEdit#taskInput:focus,
+    QComboBox#taskCombo:focus,
+    QDateEdit#taskDate:focus,
+    QTimeEdit#taskTimeEdit:focus {
+        border: 1px solid #3B82F6;
+    }
+
+    QComboBox#taskCombo::drop-down,
+    QDateEdit#taskDate::drop-down {
+        border: none;
+        background-color: transparent;
+        width: 28px;
+        border-top-right-radius: 10px;
+        border-bottom-right-radius: 10px;
+    }
+
+    QComboBox#taskCombo::down-arrow,
+    QDateEdit#taskDate::down-arrow {
+        image: none;
+        width: 0;
+        height: 0;
+    }
+
+    QTimeEdit#taskTimeEdit::up-button,
+    QTimeEdit#taskTimeEdit::down-button {
+        width: 0;
+        height: 0;
+        border: none;
+        background-color: transparent;
+    }
+
+    QTimeEdit#taskTimeEdit::up-arrow,
+    QTimeEdit#taskTimeEdit::down-arrow {
+        image: none;
+        width: 0;
+        height: 0;
+    }
+
+
+    /* ============================================
+    TASK ACTION ICON BUTTONS
+    ============================================ */
+
+    QPushButton#taskIconButton {
+        background-color: rgba(148, 163, 184, 0.10);
+        border: none;
+        border-radius: 8px;
+    }
+
+    QPushButton#taskIconButton:hover {
+        background-color: rgba(148, 163, 184, 0.20);
+    }
+
+    QPushButton#taskIconDangerButton {
+        background-color: rgba(239, 68, 68, 0.12);
+        border: none;
+        border-radius: 8px;
+    }
+
+    QPushButton#taskIconDangerButton:hover {
+        background-color: rgba(239, 68, 68, 0.22);
+    }
     QLineEdit#taskInput,
     QComboBox#taskCombo,
     QDateEdit#taskDate,
@@ -644,7 +737,7 @@ def get_theme():
     QLabel#taskRowDate {
         color: #CBD5E1;
         font-size: 13px;
-        min-width: 120px;
+        min-width: 130px;
     }
 
     QPushButton#taskDeleteButton {
@@ -692,5 +785,46 @@ def get_theme():
 
     QPushButton#dialogDangerButton:hover {
         background-color: #B91C1C;
+    }
+
+    QLabel#taskGroupTitle {
+    color: #CBD5E1;
+    font-size: 15px;
+    font-weight: 700;
+    margin-top: 8px;
+    }
+
+    QLabel#taskGroupCounter {
+        background-color: #334155;
+        color: #CBD5E1;
+        border-radius: 8px;
+        padding: 4px 10px;
+        font-size: 12px;
+        font-weight: 700;
+    }
+   QPushButton#taskStatusButtonCompleted {
+    background-color: transparent;
+    border: none;
+    color: #10B981;
+    font-size: 20px;
+    font-weight: 700;
+    min-width: 32px;
+    }
+
+    QPushButton#taskStatusButtonCompleted:hover {
+        color: #34D399;
+    }
+    QPushButton#taskToggleFormButton {
+    background-color: #2563EB;
+    border: none;
+    border-radius: 10px;
+    color: white;
+    padding: 10px 18px;
+    font-size: 14px;
+    font-weight: 700;
+    }
+
+    QPushButton#taskToggleFormButton:hover {
+        background-color: #1D4ED8;
     }
     """

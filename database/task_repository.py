@@ -166,3 +166,41 @@ class TaskRepository:
                 due_time=due_time,
                 priority=priority,
             )
+
+    def update_task(
+        self,
+        task_id,
+        user_id,
+        title,
+        description="",
+        category="Pessoal",
+        due_date=None,
+        due_time=None,
+        priority="Normal",
+    ):
+        cursor = self.connection.cursor()
+
+        cursor.execute("""
+            UPDATE tasks
+            SET title = ?,
+                description = ?,
+                category = ?,
+                due_date = ?,
+                due_time = ?,
+                priority = ?,
+                updated_at = CURRENT_TIMESTAMP
+            WHERE id = ?
+            AND user_id = ?
+            AND is_completed = 0
+        """, (
+            title,
+            description,
+            category,
+            due_date,
+            due_time,
+            priority,
+            task_id,
+            user_id,
+        ))
+
+        self.connection.commit()

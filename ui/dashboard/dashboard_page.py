@@ -186,7 +186,7 @@ class DashboardPage(QWidget):
 
     def refresh(self):
         self.welcome_title.setText(
-            f"{self.get_greeting()}, {self.get_first_name()} 👋"
+            f"{self.get_greeting()}, {self.get_first_name()} "
         )
 
         self.date_label.setText(self.get_current_date())

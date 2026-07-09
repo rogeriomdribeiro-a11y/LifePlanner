@@ -1,17 +1,8 @@
 from PySide6.QtCore import Qt
 from PySide6.QtWidgets import QFrame, QHBoxLayout, QLabel
 
+from ui.widgets.category_badge import LPCategoryBadge
 from ui.widgets.priority_badge import LPPriorityBadge
-
-
-def hex_to_rgba(hex_color, opacity=0.16):
-    hex_color = hex_color.replace("#", "")
-
-    r = int(hex_color[0:2], 16)
-    g = int(hex_color[2:4], 16)
-    b = int(hex_color[4:6], 16)
-
-    return f"rgba({r}, {g}, {b}, {opacity})"
 
 
 class LPTaskItem(QFrame):
@@ -41,21 +32,7 @@ class LPTaskItem(QFrame):
         title_label.setObjectName("taskTitle")
         title_label.setMinimumWidth(240)
 
-        category_label = QLabel(category)
-        category_label.setObjectName("taskCategory")
-        category_label.setFixedWidth(86)
-        category_label.setFixedHeight(24)
-        category_label.setAlignment(Qt.AlignCenter)
-
-        category_label.setStyleSheet(f"""
-            QLabel#taskCategory {{
-                background-color: {hex_to_rgba(category_color, 0.16)};
-                color: {category_color};
-                border-radius: 8px;
-                font-size: 11px;
-                font-weight: 600;
-            }}
-        """)
+        category_label = LPCategoryBadge(category, category_color)
 
         priority_label = LPPriorityBadge(priority)
 
