@@ -18,6 +18,7 @@ from ui.widgets.section import LPSection
 from ui.widgets.task_item import LPTaskItem
 from ui.widgets.event_item import LPEventItem
 from ui.widgets.goal_progress import LPGoalProgress
+from database.event_repository import EventRepository
 
 
 class DashboardPage(QWidget):
@@ -25,7 +26,7 @@ class DashboardPage(QWidget):
         super().__init__()
 
         self.task_repository = TaskRepository()
-
+        self.event_repository = EventRepository()
         self.setObjectName("dashboardPage")
 
         main_layout = QVBoxLayout(self)
@@ -144,20 +145,8 @@ class DashboardPage(QWidget):
         sections_grid = QGridLayout()
         sections_grid.setSpacing(18)
 
-        events_section = LPSection("Próximos eventos", "Ver calendário")
-        events_section.setMinimumHeight(230)
-
-        events_section.content_layout.addWidget(
-            LPEventItem("15:00", "Reunião de equipa", "Sala 2B", "#3B82F6")
-        )
-
-        events_section.content_layout.addWidget(
-            LPEventItem("18:30", "Ginásio", "Treino de força", "#10B981")
-        )
-
-        events_section.content_layout.addWidget(
-            LPEventItem("20:00", "Aniversário da Ana", "Jantar", "#8B5CF6")
-        )
+        self.events_section = LPSection("Próximos eventos", "Ver calendário")
+        self.events_section.setMinimumHeight(230)
 
         goal_section = LPSection("Objetivo principal", "Ver objetivos")
         goal_section.setMinimumHeight(230)
@@ -172,7 +161,7 @@ class DashboardPage(QWidget):
             )
         )
 
-        sections_grid.addWidget(events_section, 0, 0)
+        sections_grid.addWidget(self.events_section, 0, 0)
         sections_grid.addWidget(goal_section, 0, 1)
 
         sections_grid.setColumnStretch(0, 1)
@@ -200,14 +189,17 @@ class DashboardPage(QWidget):
         user_id = user["id"]
 
         self.task_repository.ensure_sample_tasks_for_today(user_id)
+        self.event_repository.ensure_sample_events_for_today(user_id)
 
         total_tasks = self.task_repository.count_today_tasks(user_id)
         completed_tasks = self.task_repository.count_completed_today_tasks(user_id)
+        total_events = self.event_repository.count_today_events(user_id)
 
         task_word = "tarefa" if total_tasks == 1 else "tarefas"
+        event_word = "evento" if total_events == 1 else "eventos"
 
         self.summary_label.setText(
-            f"Hoje tens {total_tasks} {task_word} e 2 eventos agendados."
+            f"Hoje tens {total_tasks} {task_word} e {total_events} {event_word} agendados."
         )
 
         self.tasks_card.set_value(total_tasks)
@@ -218,7 +210,29 @@ class DashboardPage(QWidget):
             self.tasks_card.set_subtitle("Para hoje")
 
         self.load_today_tasks(user_id)
+        self.load_today_events(user_id)
 
+    def load_today_events(self, user_id):
+        self.clear_layout(self.events_section.content_layout)
+
+        events = self.event_repository.get_today_events(user_id, limit=5)
+
+        if not events:
+            self.events_section.add_text_item("Não tens eventos para hoje.")
+            return
+
+        for event in events:
+            start_time = event["start_time"] or "--:--"
+            subtitle = event["location"] or event["description"] or ""
+
+            self.events_section.content_layout.addWidget(
+                LPEventItem(
+                    start_time,
+                    event["title"],
+                    subtitle,
+                    event["color"] or "#3B82F6",
+                )
+            )
     def load_today_tasks(self, user_id):
         self.clear_layout(self.tasks_section.content_layout)
 
@@ -240,7 +254,6 @@ class DashboardPage(QWidget):
                     task["priority"] or "Normal",
                 )
             )
-
     def clear_layout(self, layout):
         while layout.count():
             item = layout.takeAt(0)

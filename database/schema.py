@@ -40,5 +40,27 @@ def create_tables(connection):
             FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
         )
     """)
+    cursor.execute("""
+    CREATE TABLE IF NOT EXISTS events (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+
+        user_id INTEGER NOT NULL,
+
+        title TEXT NOT NULL,
+        description TEXT,
+
+        event_date TEXT NOT NULL,
+        start_time TEXT,
+        end_time TEXT,
+
+        location TEXT,
+        color TEXT DEFAULT '#3B82F6',
+
+        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+        updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+
+        FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
+    )
+    """)
 
     connection.commit()
