@@ -1,3 +1,5 @@
+from datetime import date, datetime, timedelta
+
 from PySide6.QtCore import Qt
 from PySide6.QtGui import QColor
 from PySide6.QtWidgets import (
@@ -12,16 +14,16 @@ from PySide6.QtWidgets import (
 
 
 class EventDetailsDialog(QDialog):
-    def __init__(self, parent=None, event=None):
+    def __init__(self, parent=None, event_data=None):
         super().__init__(parent)
 
-        self.event_data = event 
+        self.event_data = event_data
         self.action = None
 
         self.setWindowFlags(Qt.FramelessWindowHint | Qt.Dialog)
         self.setAttribute(Qt.WA_TranslucentBackground)
         self.setModal(True)
-        self.setFixedSize(500, 380)
+        self.setFixedSize(500, 390)
 
         wrapper_layout = QVBoxLayout(self)
         wrapper_layout.setContentsMargins(15, 15, 15, 15)
@@ -47,31 +49,34 @@ class EventDetailsDialog(QDialog):
         color_dot = QFrame()
         color_dot.setFixedSize(12, 12)
         color_dot.setStyleSheet(f"""
-            background-color: {event["color"] or "#3B82F6"};
+            background-color: {event_data["color"] or "#3B82F6"};
             border-radius: 6px;
         """)
 
-        title = QLabel(event["title"])
+        title = QLabel(event_data["title"])
         title.setObjectName("eventDialogTitle")
+        title.setWordWrap(True)
 
         header.addWidget(color_dot)
         header.addWidget(title)
         header.addStretch()
 
-        description = QLabel(event["description"] or "Sem descrição.")
+        description = QLabel(event_data["description"] or "Sem descrição.")
         description.setObjectName("eventDialogText")
         description.setWordWrap(True)
 
-        location = QLabel(f'Local: {event["location"] or "Sem local definido"}')
+        location = QLabel(f'Local: {event_data["location"] or "Sem local definido"}')
         location.setObjectName("eventDialogInfo")
 
-        time_text = event["start_time"] or ""
+        time_text = event_data["start_time"] or ""
 
-        if event["start_time"] and event["end_time"]:
-            time_text = f'{event["start_time"]} - {event["end_time"]}'
+        if event_data["start_time"] and event_data["end_time"]:
+            time_text = f'{event_data["start_time"]} - {event_data["end_time"]}'
 
-        date = QLabel(f'Data: {event["event_date"]}')
-        date.setObjectName("eventDialogInfo")
+        event_date = QLabel(
+            f'Data: {self.format_event_date(event_data["event_date"])}'
+        )
+        event_date.setObjectName("eventDialogInfo")
 
         time = QLabel(f'Horário: {time_text or "Sem horário definido"}')
         time.setObjectName("eventDialogInfo")
@@ -106,10 +111,62 @@ class EventDetailsDialog(QDialog):
         layout.addWidget(description)
         layout.addSpacing(6)
         layout.addWidget(location)
-        layout.addWidget(date)
+        layout.addWidget(event_date)
         layout.addWidget(time)
         layout.addStretch()
         layout.addLayout(buttons)
+
+    def format_event_date(self, event_date):
+        if not event_date:
+            return "Sem data"
+
+        try:
+            parsed_date = datetime.strptime(event_date, "%Y-%m-%d").date()
+        except ValueError:
+            return event_date
+
+        today = date.today()
+        tomorrow = today + timedelta(days=1)
+        yesterday = today - timedelta(days=1)
+
+        if parsed_date == today:
+            return "Hoje"
+
+        if parsed_date == tomorrow:
+            return "Amanhã"
+
+        if parsed_date == yesterday:
+            return "Ontem"
+
+        weekdays = [
+            "Segunda-feira",
+            "Terça-feira",
+            "Quarta-feira",
+            "Quinta-feira",
+            "Sexta-feira",
+            "Sábado",
+            "Domingo",
+        ]
+
+        months = [
+            "janeiro",
+            "fevereiro",
+            "março",
+            "abril",
+            "maio",
+            "junho",
+            "julho",
+            "agosto",
+            "setembro",
+            "outubro",
+            "novembro",
+            "dezembro",
+        ]
+
+        weekday = weekdays[parsed_date.weekday()]
+        month = months[parsed_date.month - 1]
+
+        return f"{weekday}, {parsed_date.day} de {month}"
 
     def edit_event(self):
         self.action = "edit"

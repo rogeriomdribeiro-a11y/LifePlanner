@@ -19,6 +19,7 @@ from database.event_repository import EventRepository
 from ui.dialogs.custom_dialog import CustomDialog
 from ui.dialogs.event_form_dialog import EventFormDialog
 from ui.dialogs.event_details_dialog import EventDetailsDialog
+from ui.dialogs.day_events_dialog import DayEventsDialog
 from app.path import ICONS_DIR
 
 class CalendarDayCell(QFrame):
@@ -72,15 +73,23 @@ class CalendarDayCell(QFrame):
     def add_event(self, event, callback):
         color = event["color"] or "#3B82F6"
         title = event["title"]
+        start_time = event["start_time"] or ""
 
-        if len(title) > 18:
-            title = title[:16] + "..."
+        if start_time:
+            display_text = f"{start_time}  {title}"
+        else:
+            display_text = title
 
-        event_button = QPushButton(title)
+        if len(display_text) > 22:
+            display_text = display_text[:20] + "..."
+
+        event_button = QPushButton(display_text)
         event_button.setObjectName("calendarEventBadge")
         event_button.setCursor(Qt.PointingHandCursor)
         event_button.setFixedHeight(22)
         event_button.setToolTip(event["title"])
+
+        event_button.setAttribute(Qt.WA_NoMousePropagation, True)
 
         event_button.setStyleSheet(f"""
             QPushButton#calendarEventBadge {{
@@ -93,6 +102,11 @@ class CalendarDayCell(QFrame):
                 padding: 2px 6px;
                 text-align: left;
             }}
+
+            QPushButton#calendarEventBadge:hover {{
+                background-color: {color};
+                border: 1px solid rgba(255, 255, 255, 0.35);
+            }}
         """)
 
         event_button.clicked.connect(
@@ -101,10 +115,17 @@ class CalendarDayCell(QFrame):
 
         self.events_layout.addWidget(event_button)
 
-    def add_more_label(self, count):
-        label = QLabel(f"+{count} eventos")
-        label.setObjectName("calendarMoreEvents")
-        self.events_layout.addWidget(label)
+    def add_more_button(self, count, events, callback):
+        button = QPushButton(f"+{count} eventos")
+        button.setObjectName("calendarMoreEventsButton")
+        button.setCursor(Qt.PointingHandCursor)
+        button.setAttribute(Qt.WA_NoMousePropagation, True)
+
+        button.clicked.connect(
+            lambda: callback(events)
+        )
+
+        self.events_layout.addWidget(button)
 
 
 class CalendarPage(QWidget):
@@ -201,7 +222,7 @@ class CalendarPage(QWidget):
         toolbar.setSpacing(10)
 
         today_button = QPushButton("Hoje")
-        today_button.setObjectName("calendarToolbarButton")
+        today_button.setObjectName("calendarTodayButton")
         today_button.setCursor(Qt.PointingHandCursor)
         today_button.clicked.connect(self.go_today)
 
@@ -293,6 +314,14 @@ class CalendarPage(QWidget):
         self.refresh()
 
     def handle_day_click(self, day_date):
+        if day_date < date.today():
+            CustomDialog.warning(
+                self,
+                "Não é possível criar eventos em datas passadas.",
+                "Data inválida"
+            )
+            return
+
         self.open_event_form(selected_date=day_date)
 
     def handle_event_click(self, event):
@@ -307,6 +336,17 @@ class CalendarPage(QWidget):
 
         if dialog.action == "delete":
             self.delete_event(event)
+
+    def handle_more_events_click(self, events):
+        dialog = DayEventsDialog(self, events)
+
+        if dialog.exec() != QDialog.Accepted:
+            return
+
+        if not dialog.selected_event:
+            return
+
+        self.handle_event_click(dialog.selected_event)
 
     def delete_event(self, event):
         user = Session.current_user
@@ -384,7 +424,11 @@ class CalendarPage(QWidget):
                     cell.add_event(event, self.handle_event_click)
 
                 if len(day_events) > 3:
-                    cell.add_more_label(len(day_events) - 3)
+                    cell.add_more_button(
+                        len(day_events) - 3,
+                        day_events,
+                        self.handle_more_events_click,
+                    )
 
                 self.calendar_grid.addWidget(cell, row_index, column_index)
 

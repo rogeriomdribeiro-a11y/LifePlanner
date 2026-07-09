@@ -1124,11 +1124,10 @@ def get_theme():
         width: 28px;
     }
 
-    QComboBox#eventDialogCombo::down-arrow,
-    QDateEdit#eventDialogDate::down-arrow {
-        image: none;
-        width: 0;
-        height: 0;
+    QComboBox#eventDialogCombo::down-arrow {
+    image: none;
+    width: 0;
+    height: 0;
     }
 
     QTimeEdit#eventDialogTime::up-button,
@@ -1191,4 +1190,169 @@ def get_theme():
     QPushButton#calendarNavIconButton:hover {
         background-color: #334155;
     }
+
+    QPushButton#calendarTodayButton {
+    background-color: #2563EB;
+    border: none;
+    border-radius: 8px;
+    color: white;
+    padding: 8px 14px;
+    font-size: 13px;
+    font-weight: 800;
+    }
+
+    QPushButton#calendarTodayButton:hover {
+        background-color: #1D4ED8;
+    }
+    QLabel#eventDialogFieldLabel {
+    color: #CBD5E1;
+    font-size: 12px;
+    font-weight: 700;
+    }
+    QComboBox#eventDialogCombo QAbstractItemView {
+    background-color: #0F172A;
+    border: 1px solid #334155;
+    color: #F8FAFC;
+    selection-background-color: #334155;
+    selection-color: #F8FAFC;
+    padding: 6px;
+    }
+
+    /* ============================================
+    EVENT DATE PICKER CALENDAR
+    ============================================ */
+
+    QCalendarWidget#eventDateCalendar {
+        background-color: #1E293B;
+        border: 1px solid #334155;
+        border-radius: 12px;
+        color: #F8FAFC;
+    }
+
+    QCalendarWidget#eventDateCalendar QWidget {
+        background-color: #1E293B;
+        color: #F8FAFC;
+    }
+
+    QCalendarWidget#eventDateCalendar QWidget#qt_calendar_navigationbar {
+        background-color: #1E293B;
+        border-bottom: 1px solid #334155;
+    }
+
+    QCalendarWidget#eventDateCalendar QToolButton {
+        background-color: #273449;
+        border: none;
+        border-radius: 6px;
+        color: #F8FAFC;
+        padding: 5px 8px;
+        font-size: 12px;
+        font-weight: 700;
+    }
+
+    QCalendarWidget#eventDateCalendar QToolButton:hover {
+        background-color: #334155;
+    }
+
+    QCalendarWidget#eventDateCalendar QMenu {
+        background-color: #0F172A;
+        border: 1px solid #334155;
+        color: #F8FAFC;
+    }
+
+    QCalendarWidget#eventDateCalendar QSpinBox {
+    background-color: #0F172A;
+    border: 1px solid #334155;
+    border-radius: 6px;
+    color: #F8FAFC;
+    padding: 3px 22px 3px 6px;
+    font-size: 12px;
+    font-weight: 700;
+    selection-background-color: #2563EB;
+    selection-color: white;
+    }
+
+    QCalendarWidget#eventDateCalendar QAbstractItemView {
+        background-color: #0F172A;
+        alternate-background-color: #0F172A;
+        color: #CBD5E1;
+        selection-background-color: #2563EB;
+        selection-color: white;
+        gridline-color: #334155;
+        outline: none;
+    }
+
+    QCalendarWidget#eventDateCalendar QAbstractItemView:item:hover {
+        background-color: #1E293B;
+        color: #F8FAFC;
+    }
+    QCalendarWidget#eventDateCalendar QSpinBox {
+    background-color: #0F172A;
+    border: 1px solid #334155;
+    border-radius: 6px;
+    color: #F8FAFC;
+    padding: 3px 6px;
+    font-size: 12px;
+    font-weight: 700;
+    selection-background-color: #2563EB;
+    selection-color: white;
+    }
+
+    QCalendarWidget#eventDateCalendar QSpinBox {
+    background-color: #0F172A;
+    border: 1px solid #334155;
+    border-radius: 6px;
+    color: #F8FAFC;
+    padding: 3px;
+    font-size: 12px;
+    font-weight: 700;
+    selection-background-color: #2563EB;
+    selection-color: white;
+    }
+
+  
+/* ============================================
+    DAY EVENTS DIALOG
+    ============================================ */
+
+    QFrame#dayEventsDialogContainer {
+        background-color: #1E293B;
+        border: 1px solid #334155;
+        border-radius: 18px;
+    }
+
+    QLabel#dayEventsDialogTitle {
+        color: #F8FAFC;
+        font-size: 24px;
+        font-weight: 800;
+    }
+
+    QLabel#dayEventsDialogSubtitle {
+        color: #94A3B8;
+        font-size: 14px;
+        font-weight: 500;
+    }
+
+    QScrollArea#dayEventsScrollArea {
+        background-color: transparent;
+        border: none;
+    }
+
+    QWidget#dayEventsScrollContent {
+        background-color: transparent;
+    }
+
+    QPushButton#calendarMoreEventsButton {
+        background-color: transparent;
+        border: none;
+        color: #94A3B8;
+        font-size: 11px;
+        font-weight: 700;
+        text-align: left;
+        padding-left: 4px;
+    }
+
+    QPushButton#calendarMoreEventsButton:hover {
+        color: #F8FAFC;
+    }
+    
     """
