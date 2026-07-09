@@ -44,6 +44,7 @@ class MainWindow(QWidget):
         self.stack.setCurrentWidget(self.register_page)
 
     def show_dashboard(self):
+        self.app_layout.refresh()
         self.stack.setCurrentWidget(self.app_layout)
 
     def create_window_buttons(self):

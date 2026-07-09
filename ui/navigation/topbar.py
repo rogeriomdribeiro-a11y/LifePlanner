@@ -1,7 +1,5 @@
 from PySide6.QtCore import Qt
-from PySide6.QtWidgets import QFrame, QHBoxLayout, QLabel, QLineEdit, QPushButton
-
-from app.session import Session
+from PySide6.QtWidgets import QFrame, QHBoxLayout, QLineEdit, QPushButton
 
 
 class Topbar(QFrame):
@@ -15,28 +13,23 @@ class Topbar(QFrame):
         layout.setContentsMargins(28, 16, 140, 16)
         layout.setSpacing(12)
 
-        user = Session.current_user
-        #Obter apenas o primeiro nome
-        name = user["full_name"].split()[0] if user else "Utilizador"
+        self.search = QLineEdit()
+        self.search.setObjectName("searchInput")
+        self.search.setPlaceholderText("Pesquisar...")
+        self.search.setFixedWidth(320)
 
-        title = QLabel(f"Olá, {name}!")
-        title.setObjectName("topbarTitle")
+        self.notification_button = QPushButton("🔔")
+        self.notification_button.setObjectName("topbarIconButton")
+        self.notification_button.setCursor(Qt.PointingHandCursor)
 
-        search = QLineEdit()
-        search.setObjectName("searchInput")
-        search.setPlaceholderText("Pesquisar...")
-        search.setFixedWidth(260)
+        self.settings_button = QPushButton("⚙")
+        self.settings_button.setObjectName("topbarIconButton")
+        self.settings_button.setCursor(Qt.PointingHandCursor)
 
-        notification = QPushButton("🔔")
-        notification.setObjectName("topbarIconButton")
-        notification.setCursor(Qt.PointingHandCursor)
-
-        settings = QPushButton("⚙")
-        settings.setObjectName("topbarIconButton")
-        settings.setCursor(Qt.PointingHandCursor)
-
-        layout.addWidget(title)
+        layout.addWidget(self.search)
         layout.addStretch()
-        layout.addWidget(search)
-        layout.addWidget(notification)
-        layout.addWidget(settings)
+        layout.addWidget(self.notification_button)
+        layout.addWidget(self.settings_button)
+
+    def refresh_user(self):
+        pass

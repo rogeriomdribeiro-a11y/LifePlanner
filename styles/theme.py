@@ -283,4 +283,253 @@ def get_theme():
         padding: 40px;
     }
 
+    
+    QFrame#infoCard {
+    background-color: #1E293B;
+    border: 1px solid #334155;
+    border-radius: 16px;
+    }
+
+    QFrame#infoCard:hover {
+        border: 1px solid #475569;
+    }
+
+    QLabel#infoCardTitle {
+        color: #CBD5E1;
+        font-size: 14px;
+        font-weight: 600;
+    }
+
+    QLabel#infoCardValue {
+        color: white;
+        font-size: 34px;
+        font-weight: 700;
+    }
+
+    QLabel#infoCardSubtitle {
+        color: #94A3B8;
+        font-size: 13px;
+    }
+
+    /* ============================================
+   SECTIONS
+    ============================================ */
+
+    QFrame#sectionCard {
+        background-color: #1E293B;
+        border: 1px solid #334155;
+        border-radius: 16px;
+    }
+
+    QFrame#sectionCard:hover {
+        border: 1px solid #475569;
+    }
+
+    QLabel#sectionTitle {
+        color: #F8FAFC;
+        font-size: 17px;
+        font-weight: 700;
+    }
+
+    QPushButton#sectionAction {
+        background-color: transparent;
+        border: none;
+        color: #60A5FA;
+        font-size: 13px;
+        font-weight: 600;
+    }
+
+    QPushButton#sectionAction:hover {
+        color: #93C5FD;
+    }
+
+    QLabel#sectionItem {
+        color: #CBD5E1;
+        font-size: 14px;
+        padding: 6px 0;
+    }/* ============================================
+   DASHBOARD
+    ============================================ */
+
+    QFrame#dashboardWelcomeCard {
+        background-color: #1E293B;
+        border: 1px solid #334155;
+        border-radius: 18px;
+    }
+
+    QLabel#dashboardWelcomeTitle {
+        color: #F8FAFC;
+        font-size: 24px;
+        font-weight: 700;
+    }
+
+    QLabel#dashboardWelcomeSubtitle {
+        color: #94A3B8;
+        font-size: 14px;
+    }
+
+    QLabel#dashboardWelcomeSummary {
+        color: #CBD5E1;
+        font-size: 15px;
+        font-weight: 500;
+        margin-top: 8px;
+    }
+
+    QLabel#dashboardDateLabel {
+        color: #94A3B8;
+        font-size: 14px;
+        font-weight: 600;
+    }
+
+    QProgressBar#goalProgressBar {
+        background-color: #334155;
+        border: none;
+        border-radius: 8px;
+        height: 18px;
+        color: #F8FAFC;
+        font-size: 12px;
+        font-weight: 600;
+        text-align: center;
+    }
+
+    QProgressBar#goalProgressBar::chunk {
+        background-color: #10B981;
+        border-radius: 8px;
+    }
+
+    QWidget#dashboardPage {
+    background-color: #0F172A;
+    }
+
+    QScrollArea#dashboardScrollArea {
+        background-color: #0F172A;
+        border: none;
+    }
+
+    QWidget#dashboardContent {
+        background-color: #0F172A;
+    }
+
+    QScrollBar:vertical {
+        background-color: #0F172A;
+        width: 10px;
+        margin: 0;
+    }
+
+    QScrollBar::handle:vertical {
+        background-color: #334155;
+        border-radius: 5px;
+        min-height: 30px;
+    }
+
+    QScrollBar::handle:vertical:hover {
+        background-color: #475569;
+    }
+
+    QScrollBar::add-line:vertical,
+    QScrollBar::sub-line:vertical {
+        height: 0;
+    }
+
+    /* ============================================
+   TASK ITEMS
+    ============================================ */
+
+    QFrame#taskItem {
+        background-color: transparent;
+        border-bottom: 1px solid #334155;
+    }
+
+    QLabel#taskCheckbox {
+        color: #94A3B8;
+        font-size: 20px;
+        font-weight: 600;
+    }
+
+    QLabel#taskTitle {
+        color: #F8FAFC;
+        font-size: 14px;
+        font-weight: 500;
+    }
+
+    QLabel#taskCategory {
+    border-radius: 8px;
+    font-size: 11px;
+    font-weight: 600;
+    }
+
+    QLabel#taskTime {
+        color: #CBD5E1;
+        font-size: 13px;
+        min-width: 48px;
+    }
+
+    /* ============================================
+    EVENT ITEMS
+    ============================================ */
+
+    QFrame#eventItem {
+        background-color: transparent;
+        border-bottom: 1px solid #334155;
+    }
+
+    QLabel#eventTime {
+        color: #60A5FA;
+        font-size: 14px;
+        font-weight: 700;
+    }
+
+    QLabel#eventTitle {
+        color: #F8FAFC;
+        font-size: 14px;
+        font-weight: 600;
+    }
+
+    QLabel#eventSubtitle {
+        color: #94A3B8;
+        font-size: 12px;
+    }
+
+    /* ============================================
+    GOAL PROGRESS
+    ============================================ */
+
+    QFrame#goalProgressWidget {
+        background-color: transparent;
+        border: none;
+    }
+
+    QLabel#goalProgressTitle {
+        color: #F8FAFC;
+        font-size: 18px;
+        font-weight: 700;
+    }
+
+    QLabel#goalProgressSubtitle {
+        color: #CBD5E1;
+        font-size: 13px;
+    }
+
+    QLabel#goalProgressPercent {
+        color: #10B981;
+        font-size: 28px;
+        font-weight: 800;
+    }
+
+    QLabel#goalProgressInfo {
+        color: #94A3B8;
+        font-size: 13px;
+    }
+
+    QProgressBar#goalProgressBar {
+        background-color: #334155;
+        border: none;
+        border-radius: 8px;
+        height: 16px;
+    }
+
+    QProgressBar#goalProgressBar::chunk {
+        background-color: #10B981;
+        border-radius: 8px;
+    }
     """

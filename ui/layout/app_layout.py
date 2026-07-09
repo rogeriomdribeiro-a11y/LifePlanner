@@ -92,3 +92,9 @@ class AppLayout(QWidget):
 
     def show_page(self, page):
         self.pages.setCurrentWidget(page)
+
+    def refresh(self):
+        self.dashboard_page.refresh()
+
+        if hasattr(self.topbar, "refresh_user"):
+            self.topbar.refresh_user()
