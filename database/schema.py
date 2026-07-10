@@ -82,5 +82,42 @@ def create_tables(connection):
         FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
     )
     """)
+    cursor.execute("""
+    CREATE TABLE IF NOT EXISTS goals (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        user_id INTEGER NOT NULL,
+
+        title TEXT NOT NULL,
+        description TEXT,
+        category TEXT DEFAULT 'Pessoal',
+
+        target_date TEXT,
+        progress INTEGER DEFAULT 0,
+        status TEXT DEFAULT 'Em progresso',
+        color TEXT DEFAULT '#10B981',
+        is_main INTEGER DEFAULT 0,
+
+        created_at TEXT DEFAULT CURRENT_TIMESTAMP,
+        updated_at TEXT DEFAULT CURRENT_TIMESTAMP,
+
+        FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
+    )
+    """)
+    cursor.execute("""
+    CREATE TABLE IF NOT EXISTS goal_steps (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        goal_id INTEGER NOT NULL,
+
+        title TEXT NOT NULL,
+        description TEXT,
+        is_completed INTEGER DEFAULT 0,
+        position INTEGER DEFAULT 0,
+
+        created_at TEXT DEFAULT CURRENT_TIMESTAMP,
+        updated_at TEXT DEFAULT CURRENT_TIMESTAMP,
+
+        FOREIGN KEY (goal_id) REFERENCES goals(id) ON DELETE CASCADE
+    )
+    """)
 
     connection.commit()

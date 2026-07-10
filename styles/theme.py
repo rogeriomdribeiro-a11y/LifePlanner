@@ -1636,4 +1636,367 @@ def get_theme():
     QPushButton#notePinToggleButton:checked:hover {
         background-color: rgba(148, 163, 184, 0.24);
     }
+    /* Goals page */
+
+    QWidget#goalsPage {
+        background-color: transparent;
+    }
+
+    QScrollArea#goalsScrollArea {
+        background-color: transparent;
+        border: none;
+    }
+
+    QWidget#goalsContent {
+        background-color: transparent;
+    }
+
+    QLabel#goalsPageTitle {
+        color: #F8FAFC;
+        font-size: 28px;
+        font-weight: 800;
+    }
+
+    QLabel#goalsPageSubtitle {
+        color: #94A3B8;
+        font-size: 14px;
+    }
+
+    QPushButton#goalsPrimaryButton {
+        background-color: #2563EB;
+        color: #FFFFFF;
+        border: none;
+        border-radius: 12px;
+        font-size: 14px;
+        font-weight: 700;
+    }
+
+    QPushButton#goalsPrimaryButton:hover {
+        background-color: #1D4ED8;
+    }
+
+    QFrame#goalsSummaryCard,
+    QFrame#goalsListCard {
+        background-color: rgba(15, 23, 42, 0.86);
+        border: 1px solid rgba(148, 163, 184, 0.12);
+        border-radius: 18px;
+    }
+
+    QFrame#goalsSummaryItem {
+        background-color: rgba(30, 41, 59, 0.62);
+        border: 1px solid rgba(148, 163, 184, 0.10);
+        border-radius: 14px;
+    }
+
+    QLabel#goalsSummaryValue {
+        color: #F8FAFC;
+        font-size: 24px;
+        font-weight: 800;
+    }
+
+    QLabel#goalsSummaryLabel {
+        color: #94A3B8;
+        font-size: 12px;
+        font-weight: 600;
+    }
+
+    QLabel#goalsListTitle {
+        color: #F8FAFC;
+        font-size: 18px;
+        font-weight: 800;
+    }
+
+    QLabel#goalsListCount {
+        color: #94A3B8;
+        font-size: 13px;
+        font-weight: 600;
+    }
+
+    QLabel#goalsEmptyLabel {
+        color: #64748B;
+        font-size: 14px;
+        padding: 34px;
+    }
+
+    /* Goal card */
+
+    QLabel#goalCardTitle {
+        color: #F8FAFC;
+        font-size: 16px;
+        font-weight: 800;
+    }
+
+    QLabel#goalCardDescription {
+        color: #CBD5E1;
+        font-size: 13px;
+        line-height: 18px;
+    }
+
+    QLabel#goalCardDate {
+        color: #94A3B8;
+        font-size: 12px;
+        font-weight: 600;
+    }
+
+    QLabel#goalCardProgressLabel {
+        color: #94A3B8;
+        font-size: 12px;
+        font-weight: 700;
+    }
+
+    QLabel#goalCardProgressValue {
+        color: #F8FAFC;
+        font-size: 13px;
+        font-weight: 800;
+    }
+
+    QPushButton#goalSmallButton {
+        background-color: rgba(59, 130, 246, 0.12);
+        color: #60A5FA;
+        border: none;
+        border-radius: 8px;
+        font-size: 12px;
+        font-weight: 800;
+    }
+
+    QPushButton#goalSmallButton:hover {
+        background-color: rgba(59, 130, 246, 0.22);
+    }
+
+    QPushButton#goalIconButton {
+        background-color: rgba(96, 165, 250, 0.12);
+        border: none;
+        border-radius: 8px;
+    }
+
+    QPushButton#goalIconButton:hover {
+        background-color: rgba(96, 165, 250, 0.22);
+    }
+
+    QPushButton#goalIconDangerButton {
+        background-color: rgba(248, 113, 113, 0.12);
+        border: none;
+        border-radius: 8px;
+    }
+
+    QPushButton#goalIconDangerButton:hover {
+        background-color: rgba(248, 113, 113, 0.22);
+    }
+
+    /* Goal dialog */
+
+    QFrame#goalDialogContainer {
+        background-color: #0F172A;
+        border: 1px solid rgba(148, 163, 184, 0.18);
+        border-radius: 22px;
+    }
+
+    QLabel#goalDialogTitle {
+        color: #F8FAFC;
+        font-size: 24px;
+        font-weight: 800;
+    }
+
+    QLabel#goalDialogSubtitle {
+        color: #94A3B8;
+        font-size: 13px;
+    }
+
+    QLabel#goalDialogFieldLabel {
+        color: #CBD5E1;
+        font-size: 12px;
+        font-weight: 700;
+    }
+
+    QLabel#goalDialogError {
+        color: #F87171;
+        font-size: 12px;
+        font-weight: 700;
+    }
+
+    QLineEdit#goalDialogInput,
+    QTextEdit#goalDialogTextEdit,
+    QComboBox#goalDialogCombo,
+    QDateEdit#goalDialogDateInput,
+    QSpinBox#goalDialogSpinBox {
+        background-color: rgba(15, 23, 42, 0.96);
+        color: #F8FAFC;
+        border: 1px solid rgba(148, 163, 184, 0.20);
+        border-radius: 10px;
+        padding: 9px 11px;
+        font-size: 13px;
+    }
+
+    QTextEdit#goalDialogTextEdit {
+        padding: 10px;
+    }
+
+    QLineEdit#goalDialogInput:focus,
+    QTextEdit#goalDialogTextEdit:focus,
+    QComboBox#goalDialogCombo:focus,
+    QDateEdit#goalDialogDateInput:focus,
+    QSpinBox#goalDialogSpinBox:focus {
+        border: 1px solid #3B82F6;
+    }
+
+    QCheckBox#goalDialogCheckbox {
+        color: #CBD5E1;
+        font-size: 13px;
+        font-weight: 600;
+    }
+
+    QPushButton#goalDialogPrimaryButton {
+        background-color: #2563EB;
+        color: #FFFFFF;
+        border: none;
+        border-radius: 10px;
+        font-size: 13px;
+        font-weight: 800;
+    }
+
+    QPushButton#goalDialogPrimaryButton:hover {
+        background-color: #1D4ED8;
+    }
+
+    QPushButton#goalDialogCancelButton {
+        background-color: rgba(148, 163, 184, 0.12);
+        color: #CBD5E1;
+        border: none;
+        border-radius: 10px;
+        font-size: 13px;
+        font-weight: 700;
+    }
+
+    QPushButton#goalDialogCancelButton:hover {
+        background-color: rgba(148, 163, 184, 0.20);
+    }
+
+    /* Goal steps */
+
+    QLabel#goalDialogSectionTitle {
+        color: #F8FAFC;
+        font-size: 15px;
+        font-weight: 800;
+    }
+
+    QLabel#goalDialogSectionCount {
+        color: #94A3B8;
+        font-size: 12px;
+        font-weight: 700;
+        padding-left: 8px;
+    }
+
+    QPushButton#goalAddStepButton {
+        background-color: rgba(59, 130, 246, 0.14);
+        color: #60A5FA;
+        border: none;
+        border-radius: 10px;
+        font-size: 13px;
+        font-weight: 800;
+    }
+
+    QPushButton#goalAddStepButton:hover {
+        background-color: rgba(59, 130, 246, 0.24);
+    }
+
+    QScrollArea#goalStepsScrollArea {
+        background-color: transparent;
+        border: none;
+    }
+
+    QWidget#goalStepsContainer {
+        background-color: transparent;
+    }
+
+    QFrame#goalStepEditor {
+        background-color: rgba(30, 41, 59, 0.50);
+        border: 1px solid rgba(148, 163, 184, 0.12);
+        border-radius: 14px;
+    }
+
+    QLabel#goalStepEditorTitle {
+        color: #F8FAFC;
+        font-size: 13px;
+        font-weight: 800;
+    }
+
+    QPushButton#goalStepRemoveButton {
+        background-color: rgba(248, 113, 113, 0.12);
+        color: #F87171;
+        border: none;
+        border-radius: 8px;
+        font-size: 12px;
+        font-weight: 700;
+    }
+
+    QPushButton#goalStepRemoveButton:hover {
+        background-color: rgba(248, 113, 113, 0.22);
+    }
+
+    QTextEdit#goalDialogSmallTextEdit {
+        background-color: rgba(15, 23, 42, 0.96);
+        color: #F8FAFC;
+        border: 1px solid rgba(148, 163, 184, 0.20);
+        border-radius: 10px;
+        padding: 8px 10px;
+        font-size: 13px;
+    }
+
+    QTextEdit#goalDialogSmallTextEdit:focus {
+        border: 1px solid #3B82F6;
+    }
+
+    QLabel#goalCardStepsTitle {
+        color: #F8FAFC;
+        font-size: 13px;
+        font-weight: 800;
+    }
+
+    QFrame#goalStepRow {
+        background-color: rgba(30, 41, 59, 0.46);
+        border: 1px solid rgba(148, 163, 184, 0.08);
+        border-radius: 10px;
+    }
+
+    QLabel#goalStepTitle {
+        color: #E2E8F0;
+        font-size: 13px;
+        font-weight: 700;
+    }
+
+    QLabel#goalStepTitleDone {
+        color: #94A3B8;
+        font-size: 13px;
+        font-weight: 700;
+        text-decoration: line-through;
+    }
+
+    QLabel#goalStepDescription {
+        color: #94A3B8;
+        font-size: 12px;
+    }
+
+    QCheckBox#goalStepCheckbox {
+        spacing: 8px;
+    }
+
+   QPushButton#goalMainButton {
+    background-color: rgba(148, 163, 184, 0.10);
+    border: none;
+    border-radius: 8px;
+    }
+
+    QPushButton#goalMainButton:hover {
+        background-color: rgba(148, 163, 184, 0.20);
+    }
+
+    QPushButton#goalMainButtonActive {
+        background-color: rgba(251, 191, 36, 0.18);
+        border: 1px solid rgba(251, 191, 36, 0.55);
+        border-radius: 8px;
+    }
+
+    QPushButton#goalMainButtonActive:hover {
+        background-color: rgba(251, 191, 36, 0.28);
+    }
     """

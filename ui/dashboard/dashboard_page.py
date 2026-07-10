@@ -20,6 +20,7 @@ from ui.widgets.event_item import LPEventItem
 from ui.widgets.goal_progress import LPGoalProgress
 from database.event_repository import EventRepository
 from database.note_repository import NoteRepository
+from database.goal_repository import GoalRepository
 
 class DashboardPage(QWidget):
     def __init__(self):
@@ -28,6 +29,7 @@ class DashboardPage(QWidget):
         self.task_repository = TaskRepository()
         self.event_repository = EventRepository()
         self.note_repository = NoteRepository()
+        self.goal_repository = GoalRepository()
         self.setObjectName("dashboardPage")
 
         main_layout = QVBoxLayout(self)
@@ -149,21 +151,12 @@ class DashboardPage(QWidget):
         self.events_section = LPSection("Próximos eventos", "Ver calendário")
         self.events_section.setMinimumHeight(230)
 
-        goal_section = LPSection("Objetivo principal", "Ver objetivos")
-        goal_section.setMinimumHeight(230)
-
-        goal_section.content_layout.addWidget(
-            LPGoalProgress(
-                title="Aprender Python",
-                subtitle="Estudar 30 minutos por dia",
-                progress=80,
-                left_info="24 de 30 dias",
-                right_info="Termina em 12 dias",
-            )
-        )
+        self.goal_section = LPSection("Objetivo principal", "Ver objetivos")
+        self.goal_section.setMinimumHeight(230)
+        self.goal_section.add_text_item("A carregar objetivo...")
 
         sections_grid.addWidget(self.events_section, 0, 0)
-        sections_grid.addWidget(goal_section, 0, 1)
+        sections_grid.addWidget(self.goal_section, 0, 1)
 
         sections_grid.setColumnStretch(0, 1)
         sections_grid.setColumnStretch(1, 1)
@@ -196,6 +189,9 @@ class DashboardPage(QWidget):
         completed_tasks = self.task_repository.count_completed_today_tasks(user_id)
         total_events = self.event_repository.count_today_events(user_id)
         total_notes = self.note_repository.count_notes_by_user(user_id)
+        total_goals = self.goal_repository.count_active_goals(user_id)
+        main_goal = self.goal_repository.get_main_goal(user_id)
+        
 
         task_word = "tarefa" if total_tasks == 1 else "tarefas"
         event_word = "evento" if total_events == 1 else "eventos"
@@ -220,6 +216,15 @@ class DashboardPage(QWidget):
             self.notes_card.set_subtitle("nota guardada")
         else:
             self.notes_card.set_subtitle("notas guardadas")
+
+        self.goals_card.set_value(total_goals)
+
+        if total_goals == 1:
+            self.goals_card.set_subtitle("objetivo ativo")
+        else:
+            self.goals_card.set_subtitle("objetivos ativos")
+
+        self.load_main_goal(user_id)
 
     def load_today_events(self, user_id):
         self.clear_layout(self.events_section.content_layout)
@@ -333,3 +338,55 @@ class DashboardPage(QWidget):
         month = months[now.month - 1]
 
         return f"{weekday}, {now.day} de {month}"
+    
+    def clear_layout(self, layout):
+        while layout.count():
+            item = layout.takeAt(0)
+
+            widget = item.widget()
+
+            if widget:
+                widget.deleteLater()
+
+
+    def load_main_goal(self, user_id):
+        self.clear_layout(self.goal_section.content_layout)
+
+        main_goal = self.goal_repository.get_main_goal(user_id)
+
+        if not main_goal:
+            self.goal_section.add_text_item("Ainda não tens objetivos ativos.")
+            return
+
+        steps = self.goal_repository.get_goal_steps(main_goal["id"])
+
+        total_steps = len(steps)
+        completed_steps = sum(1 for step in steps if step["is_completed"])
+
+        progress = int(main_goal["progress"] or 0)
+
+        if total_steps == 1:
+            steps_text = f"{completed_steps} de 1 etapa concluída"
+        else:
+            steps_text = f"{completed_steps} de {total_steps} etapas concluídas"
+
+        goal_widget = LPGoalProgress(
+            title=main_goal["title"],
+            subtitle=main_goal["description"] or steps_text,
+            progress=progress,
+            left_info=steps_text,
+            right_info=self.format_goal_target_date(main_goal["target_date"]),
+        )
+
+        self.goal_section.content_layout.addWidget(goal_widget)
+
+
+    def format_goal_target_date(self, target_date):
+        if not target_date:
+            return "Sem data objetivo"
+
+        try:
+            year, month, day = target_date.split("-")
+            return f"Termina em {day}/{month}/{year}"
+        except ValueError:
+            return target_date
