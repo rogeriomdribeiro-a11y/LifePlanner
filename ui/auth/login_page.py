@@ -176,10 +176,6 @@ class LoginPage(BasePage):
             )
             return
 
-        CustomDialog.success(
-            self,
-            "Login efetuado com sucesso."
-        )
 
         Session.login(user)
 

@@ -1,98 +1,80 @@
-from datetime import datetime
+from datetime import date
 
 from PySide6.QtCore import Qt
 from PySide6.QtWidgets import (
     QWidget,
-    QFrame,
     QLabel,
-    QHBoxLayout,
     QVBoxLayout,
+    QHBoxLayout,
     QGridLayout,
     QScrollArea,
+    QFrame,
 )
 
 from app.session import Session
 from database.task_repository import TaskRepository
-from ui.widgets.info_card import LPInfoCard
-from ui.widgets.section import LPSection
-from ui.widgets.task_item import LPTaskItem
-from ui.widgets.event_item import LPEventItem
-from ui.widgets.goal_progress import LPGoalProgress
 from database.event_repository import EventRepository
 from database.note_repository import NoteRepository
 from database.goal_repository import GoalRepository
+from ui.widgets.info_card import LPInfoCard
+from ui.widgets.section import LPSection
+from ui.widgets.goal_progress import LPGoalProgress
+
 
 class DashboardPage(QWidget):
-    def __init__(self):
+    def __init__(self, on_navigate=None):
         super().__init__()
+
+        self.setObjectName("dashboardPage")
+        self.on_navigate = on_navigate
 
         self.task_repository = TaskRepository()
         self.event_repository = EventRepository()
         self.note_repository = NoteRepository()
         self.goal_repository = GoalRepository()
-        self.setObjectName("dashboardPage")
 
         main_layout = QVBoxLayout(self)
         main_layout.setContentsMargins(0, 0, 0, 0)
         main_layout.setSpacing(0)
 
-        self.scroll_area = QScrollArea()
-        self.scroll_area.setObjectName("dashboardScrollArea")
-        self.scroll_area.setWidgetResizable(True)
-        self.scroll_area.setFrameShape(QFrame.NoFrame)
-        self.scroll_area.setHorizontalScrollBarPolicy(Qt.ScrollBarAlwaysOff)
+        scroll_area = QScrollArea()
+        scroll_area.setObjectName("dashboardScrollArea")
+        scroll_area.setWidgetResizable(True)
+        scroll_area.setFrameShape(QFrame.NoFrame)
+        scroll_area.setHorizontalScrollBarPolicy(Qt.ScrollBarAlwaysOff)
 
-        self.content = QWidget()
-        self.content.setObjectName("dashboardContent")
+        content = QWidget()
+        content.setObjectName("dashboardContent")
 
-        self.layout = QVBoxLayout(self.content)
-        self.layout.setContentsMargins(40, 32, 40, 40)
-        self.layout.setSpacing(18)
-
-        self.scroll_area.setWidget(self.content)
-        main_layout.addWidget(self.scroll_area)
+        self.layout = QVBoxLayout(content)
+        self.layout.setContentsMargins(28, 26, 28, 34)
+        self.layout.setSpacing(24)
 
         self.create_welcome_card()
         self.create_info_cards()
         self.create_sections()
 
-        self.layout.addStretch()
-
-        self.refresh()
+        scroll_area.setWidget(content)
+        main_layout.addWidget(scroll_area)
 
     def create_welcome_card(self):
-        self.welcome_card = QFrame()
-        self.welcome_card.setObjectName("dashboardWelcomeCard")
+        welcome_card = QFrame()
+        welcome_card.setObjectName("dashboardWelcomeCard")
 
-        layout = QHBoxLayout(self.welcome_card)
-        layout.setContentsMargins(24, 20, 24, 20)
-        layout.setSpacing(20)
+        layout = QVBoxLayout(welcome_card)
+        layout.setContentsMargins(26, 22, 26, 22)
+        layout.setSpacing(6)
 
-        text_layout = QVBoxLayout()
-        text_layout.setSpacing(6)
-
-        self.welcome_title = QLabel()
+        self.welcome_title = QLabel("Olá!")
         self.welcome_title.setObjectName("dashboardWelcomeTitle")
 
-        self.welcome_subtitle = QLabel("Bem-vindo ao LifePlanner")
+        self.welcome_subtitle = QLabel("")
         self.welcome_subtitle.setObjectName("dashboardWelcomeSubtitle")
 
-        self.summary_label = QLabel()
-        self.summary_label.setObjectName("dashboardWelcomeSummary")
+        layout.addWidget(self.welcome_title)
+        layout.addWidget(self.welcome_subtitle)
 
-        text_layout.addWidget(self.welcome_title)
-        text_layout.addWidget(self.welcome_subtitle)
-        text_layout.addWidget(self.summary_label)
-
-        self.date_label = QLabel()
-        self.date_label.setObjectName("dashboardDateLabel")
-        self.date_label.setAlignment(Qt.AlignRight | Qt.AlignVCenter)
-
-        layout.addLayout(text_layout)
-        layout.addStretch()
-        layout.addWidget(self.date_label)
-
-        self.layout.addWidget(self.welcome_card)
+        self.layout.addWidget(welcome_card)
 
     def create_info_cards(self):
         cards_grid = QGridLayout()
@@ -100,47 +82,43 @@ class DashboardPage(QWidget):
 
         self.tasks_card = LPInfoCard(
             title="Tarefas",
-            value="0",
-            subtitle="Para hoje",
+            value="0/0",
+            subtitle="sem tarefas hoje",
             icon_name="tasks.svg",
             accent_color="#3B82F6",
         )
 
         self.goals_card = LPInfoCard(
             title="Objetivos",
-            value="3",
-            subtitle="Em progresso",
+            value="0",
+            subtitle="objetivos ativos",
             icon_name="goals.svg",
             accent_color="#10B981",
         )
 
         self.notes_card = LPInfoCard(
             title="Notas",
-            value="12",
-            subtitle="Recentes",
+            value="0",
+            subtitle="notas guardadas",
             icon_name="notes.svg",
             accent_color="#8B5CF6",
         )
 
         self.progress_card = LPInfoCard(
             title="Progresso",
-            value="82%",
-            subtitle="Esta semana",
+            value="0%",
+            subtitle="Objetivos",
             icon_name="reports.svg",
             accent_color="#F59E0B",
         )
 
-        cards = [
-            self.tasks_card,
-            self.goals_card,
-            self.notes_card,
-            self.progress_card,
-        ]
+        cards_grid.addWidget(self.tasks_card, 0, 0)
+        cards_grid.addWidget(self.goals_card, 0, 1)
+        cards_grid.addWidget(self.notes_card, 0, 2)
+        cards_grid.addWidget(self.progress_card, 0, 3)
 
-        for index, card in enumerate(cards):
-            card.setMinimumWidth(0)
-            cards_grid.addWidget(card, 0, index)
-            cards_grid.setColumnStretch(index, 1)
+        for column in range(4):
+            cards_grid.setColumnStretch(column, 1)
 
         self.layout.addLayout(cards_grid)
 
@@ -155,6 +133,9 @@ class DashboardPage(QWidget):
         self.goal_section.setMinimumHeight(230)
         self.goal_section.add_text_item("A carregar objetivo...")
 
+        self.connect_section_action(self.events_section, self.go_to_calendar)
+        self.connect_section_action(self.goal_section, self.go_to_goals)
+
         sections_grid.addWidget(self.events_section, 0, 0)
         sections_grid.addWidget(self.goal_section, 0, 1)
 
@@ -167,55 +148,57 @@ class DashboardPage(QWidget):
         self.layout.addLayout(sections_grid)
         self.layout.addWidget(self.tasks_section)
 
+    def connect_section_action(self, section, callback):
+        if hasattr(section, "set_action_callback"):
+            section.set_action_callback(callback)
+            return
+
+        if hasattr(section, "action_button") and section.action_button:
+            section.action_button.clicked.connect(callback)
+
+    def go_to_calendar(self):
+        if self.on_navigate:
+            self.on_navigate("calendar")
+
+    def go_to_goals(self):
+        if self.on_navigate:
+            self.on_navigate("goals")
+
     def refresh(self):
-        self.welcome_title.setText(
-            f"{self.get_greeting()}, {self.get_first_name()} "
-        )
-
-        self.date_label.setText(self.get_current_date())
-
         user = Session.current_user
 
         if not user:
-            self.summary_label.setText("Hoje tens 0 tarefas e 0 eventos agendados.")
             return
 
         user_id = user["id"]
 
-        self.task_repository.ensure_sample_tasks_for_today(user_id)
-        self.event_repository.ensure_sample_events_for_today(user_id)
+        self.update_welcome(user)
 
         total_tasks = self.task_repository.count_today_tasks(user_id)
         completed_tasks = self.task_repository.count_completed_today_tasks(user_id)
+        pending_tasks = max(total_tasks - completed_tasks, 0)
+
         total_events = self.event_repository.count_today_events(user_id)
         total_notes = self.note_repository.count_notes_by_user(user_id)
         total_goals = self.goal_repository.count_active_goals(user_id)
-        main_goal = self.goal_repository.get_main_goal(user_id)
-        
 
-        task_word = "tarefa" if total_tasks == 1 else "tarefas"
-        event_word = "evento" if total_events == 1 else "eventos"
+        goals = self.goal_repository.get_goals_by_user(user_id)
 
-        self.summary_label.setText(
-            f"Hoje tens {total_tasks} {task_word} e {total_events} {event_word} agendados."
-        )
-
-        self.tasks_card.set_value(total_tasks)
-
-        if completed_tasks > 0:
-            self.tasks_card.set_subtitle(f"{completed_tasks} concluídas")
+        if goals:
+            average_progress = round(
+                sum(int(goal["progress"] or 0) for goal in goals) / len(goals)
+            )
         else:
-            self.tasks_card.set_subtitle("Para hoje")
+            average_progress = 0
 
-        self.load_today_tasks(user_id)
-        self.load_today_events(user_id)
+        self.tasks_card.set_value(pending_tasks)
 
-        self.notes_card.set_value(total_notes)
-
-        if total_notes == 1:
-            self.notes_card.set_subtitle("nota guardada")
+        if total_tasks == 0:
+            self.tasks_card.set_subtitle("sem tarefas hoje")
+        elif completed_tasks == 1:
+            self.tasks_card.set_subtitle("1 tarefa concluída")
         else:
-            self.notes_card.set_subtitle("notas guardadas")
+            self.tasks_card.set_subtitle(f"{completed_tasks} tarefas concluídas")
 
         self.goals_card.set_value(total_goals)
 
@@ -224,98 +207,25 @@ class DashboardPage(QWidget):
         else:
             self.goals_card.set_subtitle("objetivos ativos")
 
+        self.notes_card.set_value(total_notes)
+
+        if total_notes == 1:
+            self.notes_card.set_subtitle("nota guardada")
+        else:
+            self.notes_card.set_subtitle("notas guardadas")
+
+        self.progress_card.set_value(f"{average_progress}%")
+        self.progress_card.set_subtitle("Objetivos")
+
+        self.load_today_events(user_id)
         self.load_main_goal(user_id)
+        self.load_today_tasks(user_id)
 
-    def load_today_events(self, user_id):
-        self.clear_layout(self.events_section.content_layout)
+    def update_welcome(self, user):
+        full_name = user["full_name"] or "Utilizador"
+        first_name = full_name.split()[0]
 
-        events = self.event_repository.get_today_events(user_id, limit=5)
-
-        if not events:
-            self.events_section.add_text_item("Não tens eventos para hoje.")
-            return
-
-        for event in events:
-            start_time = event["start_time"] or "--:--"
-            subtitle = event["location"] or event["description"] or ""
-
-            self.events_section.content_layout.addWidget(
-                LPEventItem(
-                    start_time,
-                    event["title"],
-                    subtitle,
-                    event["color"] or "#3B82F6",
-                )
-            )
-    def load_today_tasks(self, user_id):
-        self.clear_layout(self.tasks_section.content_layout)
-
-        tasks = self.task_repository.get_today_tasks(user_id, limit=5)
-
-        if not tasks:
-            self.tasks_section.add_text_item("Ainda não tens tarefas para hoje.")
-            return
-
-        for task in tasks:
-            category = task["category"] or "Pessoal"
-
-            self.tasks_section.content_layout.addWidget(
-                LPTaskItem(
-                    task["title"],
-                    category,
-                    task["due_time"] or "",
-                    self.get_category_color(category),
-                    task["priority"] or "Normal",
-                )
-            )
-    def clear_layout(self, layout):
-        while layout.count():
-            item = layout.takeAt(0)
-
-            widget = item.widget()
-
-            if widget:
-                widget.deleteLater()
-
-    def get_category_color(self, category):
-        colors = {
-            "Pessoal": "#3B82F6",
-            "Trabalho": "#10B981",
-            "Saúde": "#8B5CF6",
-            "Estudo": "#F59E0B",
-        }
-
-        return colors.get(category, "#3B82F6")
-
-    def get_first_name(self):
-        user = Session.current_user
-
-        if user and user["full_name"]:
-            return user["full_name"].split()[0]
-
-        return "Utilizador"
-
-    def get_greeting(self):
-        hour = datetime.now().hour
-
-        if hour < 12:
-            return "Bom dia"
-
-        if hour < 20:
-            return "Boa tarde"
-
-        return "Boa noite"
-
-    def get_current_date(self):
-        weekdays = [
-            "Segunda-feira",
-            "Terça-feira",
-            "Quarta-feira",
-            "Quinta-feira",
-            "Sexta-feira",
-            "Sábado",
-            "Domingo",
-        ]
+        today = date.today()
 
         months = [
             "janeiro",
@@ -332,22 +242,39 @@ class DashboardPage(QWidget):
             "dezembro",
         ]
 
-        now = datetime.now()
+        weekdays = [
+            "segunda-feira",
+            "terça-feira",
+            "quarta-feira",
+            "quinta-feira",
+            "sexta-feira",
+            "sábado",
+            "domingo",
+        ]
 
-        weekday = weekdays[now.weekday()]
-        month = months[now.month - 1]
+        formatted_date = (
+            f"{weekdays[today.weekday()]}, "
+            f"{today.day} de {months[today.month - 1]} de {today.year}"
+        )
 
-        return f"{weekday}, {now.day} de {month}"
-    
-    def clear_layout(self, layout):
-        while layout.count():
-            item = layout.takeAt(0)
+        self.welcome_title.setText(f"Olá, {first_name} 👋")
+        self.welcome_subtitle.setText(
+            f"Hoje é {formatted_date}. Organiza o teu dia com clareza."
+        )
 
-            widget = item.widget()
+    def load_today_events(self, user_id):
+        self.clear_layout(self.events_section.content_layout)
 
-            if widget:
-                widget.deleteLater()
+        events = self.event_repository.get_today_events(user_id)
 
+        if not events:
+            self.events_section.add_text_item("Não tens eventos para hoje.")
+            return
+
+        for event in events[:4]:
+            self.events_section.content_layout.addWidget(
+                self.create_event_row(event)
+            )
 
     def load_main_goal(self, user_id):
         self.clear_layout(self.goal_section.content_layout)
@@ -380,6 +307,156 @@ class DashboardPage(QWidget):
 
         self.goal_section.content_layout.addWidget(goal_widget)
 
+    def load_today_tasks(self, user_id):
+        self.clear_layout(self.tasks_section.content_layout)
+
+        tasks = self.task_repository.get_today_tasks(user_id)
+        pending_tasks = [task for task in tasks if not bool(task["is_completed"])]
+
+        if not pending_tasks:
+            self.tasks_section.add_text_item("Não tens tarefas pendentes para hoje.")
+            return
+
+        for task in pending_tasks[:5]:
+            self.tasks_section.content_layout.addWidget(
+                self.create_task_row(task)
+            )
+
+    def create_task_row(self, task):
+        row = QFrame()
+        row.setObjectName("dashboardTaskRow")
+
+        row.setStyleSheet("""
+            QFrame#dashboardTaskRow {
+                background-color: rgba(30, 41, 59, 0.48);
+                border: 1px solid rgba(148, 163, 184, 0.10);
+                border-radius: 12px;
+            }
+
+            QLabel#dashboardTaskTitle {
+                color: #F8FAFC;
+                font-size: 13px;
+                font-weight: 700;
+            }
+
+            QLabel#dashboardTaskMeta {
+                color: #94A3B8;
+                font-size: 12px;
+                font-weight: 600;
+            }
+
+            QLabel#dashboardTaskCategory {
+                border-radius: 8px;
+                padding: 4px 9px;
+                font-size: 11px;
+                font-weight: 700;
+            }
+
+            QLabel#dashboardTaskPriority {
+                background-color: rgba(245, 158, 11, 0.14);
+                color: #F59E0B;
+                border-radius: 8px;
+                padding: 4px 9px;
+                font-size: 11px;
+                font-weight: 700;
+            }
+        """)
+
+        layout = QHBoxLayout(row)
+        layout.setContentsMargins(14, 10, 14, 10)
+        layout.setSpacing(12)
+
+        texts = QVBoxLayout()
+        texts.setSpacing(3)
+
+        title = QLabel(task["title"])
+        title.setObjectName("dashboardTaskTitle")
+        title.setWordWrap(True)
+
+        due_time = task["due_time"] or "Sem hora"
+
+        meta = QLabel(due_time)
+        meta.setObjectName("dashboardTaskMeta")
+
+        texts.addWidget(title)
+        texts.addWidget(meta)
+
+        category_text = task["category"] or "Geral"
+        category_color = self.get_category_color(category_text)
+
+        category = QLabel(category_text)
+        category.setObjectName("dashboardTaskCategory")
+        category.setStyleSheet(f"""
+            QLabel#dashboardTaskCategory {{
+                background-color: {self.hex_to_rgba(category_color, 0.16)};
+                color: {category_color};
+                border-radius: 8px;
+                padding: 4px 9px;
+                font-size: 11px;
+                font-weight: 700;
+            }}
+        """)
+
+        priority = QLabel(task["priority"] or "Normal")
+        priority.setObjectName("dashboardTaskPriority")
+
+        layout.addLayout(texts)
+        layout.addStretch()
+        layout.addWidget(category)
+        layout.addWidget(priority)
+
+        return row
+
+    def create_event_row(self, event):
+        row = QFrame()
+        row.setObjectName("dashboardEventRow")
+
+        color = event["color"] or "#3B82F6"
+
+        row.setStyleSheet(f"""
+            QFrame#dashboardEventRow {{
+                background-color: rgba(30, 41, 59, 0.48);
+                border: 1px solid rgba(148, 163, 184, 0.10);
+                border-left: 4px solid {color};
+                border-radius: 12px;
+            }}
+
+            QLabel#dashboardEventTitle {{
+                color: #F8FAFC;
+                font-size: 13px;
+                font-weight: 700;
+            }}
+
+            QLabel#dashboardEventMeta {{
+                color: #94A3B8;
+                font-size: 12px;
+                font-weight: 600;
+            }}
+        """)
+
+        layout = QVBoxLayout(row)
+        layout.setContentsMargins(14, 10, 14, 10)
+        layout.setSpacing(3)
+
+        title = QLabel(event["title"])
+        title.setObjectName("dashboardEventTitle")
+        title.setWordWrap(True)
+
+        start_time = event["start_time"] or "--:--"
+        end_time = event["end_time"] or "--:--"
+
+        if event["location"]:
+            meta_text = f"{start_time} - {end_time} · {event['location']}"
+        else:
+            meta_text = f"{start_time} - {end_time}"
+
+        meta = QLabel(meta_text)
+        meta.setObjectName("dashboardEventMeta")
+
+        layout.addWidget(title)
+        layout.addWidget(meta)
+
+        return row
 
     def format_goal_target_date(self, target_date):
         if not target_date:
@@ -390,3 +467,32 @@ class DashboardPage(QWidget):
             return f"Termina em {day}/{month}/{year}"
         except ValueError:
             return target_date
+
+    def clear_layout(self, layout):
+        while layout.count():
+            item = layout.takeAt(0)
+
+            widget = item.widget()
+
+            if widget:
+                widget.deleteLater()
+
+    def get_category_color(self, category):
+        colors = {
+            "Pessoal": "#3B82F6",
+            "Trabalho": "#10B981",
+            "Saúde": "#8B5CF6",
+            "Estudo": "#F59E0B",
+            "Geral": "#94A3B8",
+        }
+
+        return colors.get(category, "#94A3B8")
+
+    def hex_to_rgba(self, hex_color, opacity=0.16):
+        hex_color = hex_color.replace("#", "")
+
+        r = int(hex_color[0:2], 16)
+        g = int(hex_color[2:4], 16)
+        b = int(hex_color[4:6], 16)
+
+        return f"rgba({r}, {g}, {b}, {opacity})"

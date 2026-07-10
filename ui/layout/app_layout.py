@@ -38,7 +38,7 @@ class AppLayout(QWidget):
         self.pages = QStackedWidget()
         self.pages.setObjectName("contentStack")
 
-        self.dashboard_page = DashboardPage()
+        self.dashboard_page = DashboardPage(on_navigate=self.navigate_from_dashboard)
         self.calendar_page = CalendarPage()
         self.tasks_page = TasksPage()
         self.notes_page = NotesPage()
@@ -101,3 +101,9 @@ class AppLayout(QWidget):
 
         if hasattr(self.topbar, "refresh_user"):
             self.topbar.refresh_user()
+
+    def navigate_from_dashboard(self, page_name):
+        if page_name == "calendar":
+            self.show_page(self.calendar_page)
+        elif page_name == "goals":
+            self.show_page(self.goals_page)
