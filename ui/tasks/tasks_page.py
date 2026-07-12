@@ -292,6 +292,7 @@ class TasksPage(QWidget):
             layout.addWidget(overdue_badge)
 
         layout.addWidget(when)
+        
         if not is_completed:
             edit_button = QPushButton()
             edit_button.setObjectName("taskIconButton")

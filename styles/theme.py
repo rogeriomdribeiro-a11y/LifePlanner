@@ -2197,4 +2197,107 @@ def get_theme():
         font-size: 12px;
         font-weight: 700;
     }
+
+    /* Reports page */
+
+    QWidget#reportsPage {
+        background-color: transparent;
+    }
+
+    QScrollArea#reportsScrollArea {
+        background-color: transparent;
+        border: none;
+    }
+
+    QWidget#reportsContent {
+        background-color: transparent;
+    }
+
+    QLabel#reportsStatTitle {
+        color: #94A3B8;
+        font-size: 13px;
+        font-weight: 700;
+    }
+
+    QLabel#reportsStatValue {
+        color: #F8FAFC;
+        font-size: 28px;
+        font-weight: 800;
+    }
+
+    QLabel#reportsStatSubtitle {
+        color: #CBD5E1;
+        font-size: 12px;
+        font-weight: 600;
+    }
+
+    QFrame#reportsSectionCard {
+        background-color: rgba(15, 23, 42, 0.86);
+        border: 1px solid rgba(148, 163, 184, 0.12);
+        border-radius: 18px;
+    }
+
+    QLabel#reportsSectionTitle {
+        color: #F8FAFC;
+        font-size: 17px;
+        font-weight: 800;
+    }
+
+    QLabel#reportsMetricLabel {
+        color: #94A3B8;
+        font-size: 13px;
+        font-weight: 600;
+    }
+
+    QLabel#reportsMetricValue {
+        color: #F8FAFC;
+        font-size: 13px;
+        font-weight: 800;
+    }
+
+    QLabel#reportsProgressLabel {
+        color: #CBD5E1;
+        font-size: 12px;
+        font-weight: 700;
+    }
+
+    QProgressBar#reportsProgressBar {
+        background-color: rgba(148, 163, 184, 0.16);
+        border: none;
+        border-radius: 6px;
+    }
+
+    QProgressBar#reportsProgressBar::chunk {
+        background-color: #3B82F6;
+        border-radius: 6px;
+    }
+
+    QFrame#reportsChartCard {
+    background-color: rgba(15, 23, 42, 0.86);
+    border: 1px solid rgba(148, 163, 184, 0.12);
+    border-radius: 18px;
+    }
+
+    QLabel#reportsChartTitle {
+        color: #F8FAFC;
+        font-size: 16px;
+        font-weight: 800;
+    }
+
+    QLabel#reportsChartSubtitle {
+        color: #94A3B8;
+        font-size: 13px;
+        font-weight: 600;
+    }
+
+    QLabel#contentPageTitle {
+    color: #F8FAFC;
+    font-size: 28px;
+    font-weight: 800;
+    }
+
+    QLabel#contentPageSubtitle {
+        color: #94A3B8;
+        font-size: 14px;
+    }
     """
