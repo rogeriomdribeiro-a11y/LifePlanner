@@ -2300,4 +2300,151 @@ def get_theme():
         color: #94A3B8;
         font-size: 14px;
     }
+
+    /* Settings page */
+
+    QWidget#settingsPage {
+        background-color: transparent;
+    }
+
+    QScrollArea#settingsScrollArea {
+        background-color: transparent;
+        border: none;
+    }
+
+    QWidget#settingsContent {
+        background-color: transparent;
+    }
+
+    QFrame#settingsSectionCard {
+        background-color: rgba(15, 23, 42, 0.86);
+        border: 1px solid rgba(148, 163, 184, 0.12);
+        border-radius: 18px;
+    }
+
+    QLabel#settingsSectionTitle {
+        color: #F8FAFC;
+        font-size: 18px;
+        font-weight: 800;
+    }
+
+    QLabel#settingsFieldLabel {
+        color: #94A3B8;
+        font-size: 13px;
+        font-weight: 700;
+    }
+
+    QLabel#settingsInfoValue {
+        color: #F8FAFC;
+        font-size: 13px;
+        font-weight: 800;
+    }
+
+    QLabel#settingsRowTitle {
+        color: #F8FAFC;
+        font-size: 14px;
+        font-weight: 800;
+    }
+
+    QLabel#settingsRowSubtitle {
+        color: #94A3B8;
+        font-size: 13px;
+        font-weight: 600;
+    }
+
+    QLineEdit#settingsInput,
+    QLineEdit#settingsInputReadOnly {
+        background-color: rgba(15, 23, 42, 0.96);
+        color: #F8FAFC;
+        border: 1px solid rgba(148, 163, 184, 0.20);
+        border-radius: 10px;
+        padding: 9px 11px;
+        font-size: 13px;
+    }
+
+    QLineEdit#settingsInput:focus {
+        border: 1px solid #3B82F6;
+    }
+
+    QLineEdit#settingsInputReadOnly {
+        color: #94A3B8;
+        background-color: rgba(30, 41, 59, 0.48);
+    }
+
+    QPushButton#settingsPrimaryButton {
+        background-color: #2563EB;
+        color: #FFFFFF;
+        border: none;
+        border-radius: 10px;
+        font-size: 13px;
+        font-weight: 800;
+    }
+
+    QPushButton#settingsPrimaryButton:hover {
+        background-color: #1D4ED8;
+    }
+
+    QPushButton#settingsSecondaryButton {
+        background-color: rgba(59, 130, 246, 0.12);
+        color: #60A5FA;
+        border: none;
+        border-radius: 10px;
+        font-size: 13px;
+        font-weight: 800;
+    }
+
+    QPushButton#settingsSecondaryButton:hover {
+        background-color: rgba(59, 130, 246, 0.22);
+    }
+
+    /* Settings dialog */
+
+    QFrame#settingsDialogContainer {
+        background-color: #0F172A;
+        border: 1px solid rgba(148, 163, 184, 0.18);
+        border-radius: 22px;
+    }
+
+    QLabel#settingsDialogTitle {
+        color: #F8FAFC;
+        font-size: 24px;
+        font-weight: 800;
+    }
+
+    QLabel#settingsDialogSubtitle {
+        color: #94A3B8;
+        font-size: 13px;
+    }
+
+    QLabel#settingsDialogError {
+        color: #F87171;
+        font-size: 12px;
+        font-weight: 700;
+    }
+
+    QPushButton#settingsDialogPrimaryButton {
+        background-color: #2563EB;
+        color: #FFFFFF;
+        border: none;
+        border-radius: 10px;
+        font-size: 13px;
+        font-weight: 800;
+    }
+
+    QPushButton#settingsDialogPrimaryButton:hover {
+        background-color: #1D4ED8;
+    }
+
+    QPushButton#settingsDialogCancelButton {
+        background-color: rgba(148, 163, 184, 0.12);
+        color: #CBD5E1;
+        border: none;
+        border-radius: 10px;
+        font-size: 13px;
+        font-weight: 700;
+    }
+
+    QPushButton#settingsDialogCancelButton:hover {
+        background-color: rgba(148, 163, 184, 0.20);
+    }
     """

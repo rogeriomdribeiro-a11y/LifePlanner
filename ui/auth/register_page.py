@@ -162,7 +162,13 @@ class RegisterPage(BasePage):
                 "Email inválido",
             )
             return
-
+        if len(password) < 6:
+            CustomDialog.warning(
+                self,
+                "A password deve ter pelo menos 6 caracteres.",
+                "Password inválida",
+            )
+            return
         if password != confirm_password:
             CustomDialog.warning(
                 self,
