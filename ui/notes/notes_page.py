@@ -57,10 +57,10 @@ class NotesPage(QWidget):
         text_layout.setSpacing(4)
 
         title = QLabel("Notas")
-        title.setObjectName("contentPageTitle")
+        title.setObjectName("notesPageTitle")
 
         subtitle = QLabel("Guarda ideias, lembretes e informação importante.")
-        subtitle.setObjectName("contentPageSubtitle")
+        subtitle.setObjectName("notesPageSubtitle")
 
         text_layout.addWidget(title)
         text_layout.addWidget(subtitle)

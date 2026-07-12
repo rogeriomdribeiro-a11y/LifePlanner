@@ -27,13 +27,16 @@ class GoalStepEditor(QFrame):
 
         self.on_remove = on_remove
         self.is_completed = bool(step["is_completed"]) if step else False
+
         self.setObjectName("goalStepEditor")
+        self.setMinimumHeight(165)
 
         layout = QVBoxLayout(self)
-        layout.setContentsMargins(14, 10, 14, 10)
-        layout.setSpacing(7)
+        layout.setContentsMargins(16, 14, 16, 14)
+        layout.setSpacing(10)
 
         header = QHBoxLayout()
+        header.setSpacing(10)
 
         self.number_label = QLabel(f"Etapa {number}")
         self.number_label.setObjectName("goalStepEditorTitle")
@@ -51,12 +54,12 @@ class GoalStepEditor(QFrame):
         self.title_input = QLineEdit()
         self.title_input.setObjectName("goalDialogInput")
         self.title_input.setPlaceholderText("Título da etapa")
-        self.title_input.setFixedHeight(36)
+        self.title_input.setFixedHeight(38)
 
         self.description_input = QTextEdit()
         self.description_input.setObjectName("goalDialogSmallTextEdit")
         self.description_input.setPlaceholderText("Descrição da etapa...")
-        self.description_input.setFixedHeight(42)
+        self.description_input.setFixedHeight(76)
 
         layout.addLayout(header)
         layout.addWidget(self.title_input)
@@ -109,10 +112,10 @@ class GoalFormDialog(QDialog):
         self.setWindowFlags(Qt.FramelessWindowHint | Qt.Dialog)
         self.setAttribute(Qt.WA_TranslucentBackground)
         self.setModal(True)
-        self.setFixedSize(700, 670)
+        self.setFixedSize(760, 720)
 
         wrapper_layout = QVBoxLayout(self)
-        wrapper_layout.setContentsMargins(15, 15, 15, 15)
+        wrapper_layout.setContentsMargins(12, 12, 12, 12)
 
         container = QFrame()
         container.setObjectName("goalDialogContainer")
@@ -126,51 +129,65 @@ class GoalFormDialog(QDialog):
         wrapper_layout.addWidget(container)
 
         layout = QVBoxLayout(container)
-        layout.setContentsMargins(26, 22, 26, 22)
-        layout.setSpacing(10)
+        layout.setContentsMargins(28, 24, 28, 22)
+        layout.setSpacing(12)
 
         title_text = "Editar objetivo" if goal else "Novo objetivo"
 
         title = QLabel(title_text)
         title.setObjectName("goalDialogTitle")
 
-        subtitle = QLabel("Divide o objetivo em etapas e acompanha o progresso automaticamente.")
+        subtitle = QLabel(
+            "Divide o objetivo em etapas e acompanha o progresso automaticamente."
+        )
         subtitle.setObjectName("goalDialogSubtitle")
+        subtitle.setWordWrap(True)
 
-        self.error_label = QLabel("")
-        self.error_label.setObjectName("goalDialogError")
-        self.error_label.setFixedHeight(18)
+        layout.addWidget(title)
+        layout.addWidget(subtitle)
+
+        self.form_scroll_area = QScrollArea()
+        self.form_scroll_area.setObjectName("goalFormScrollArea")
+        self.form_scroll_area.setWidgetResizable(True)
+        self.form_scroll_area.setFrameShape(QFrame.NoFrame)
+        self.form_scroll_area.setHorizontalScrollBarPolicy(Qt.ScrollBarAlwaysOff)
+
+        form_content = QWidget()
+        form_content.setObjectName("goalFormScrollContent")
+
+        self.form_layout = QVBoxLayout(form_content)
+        self.form_layout.setContentsMargins(0, 0, 0, 0)
+        self.form_layout.setSpacing(14)
 
         self.title_input = QLineEdit()
         self.title_input.setObjectName("goalDialogInput")
         self.title_input.setPlaceholderText("Ex: Concluir o projeto LifePlanner")
-        self.title_input.setFixedHeight(38)
+        self.title_input.setFixedHeight(40)
 
         self.description_input = QTextEdit()
         self.description_input.setObjectName("goalDialogTextEdit")
         self.description_input.setPlaceholderText("Descreve o objetivo principal...")
-        self.description_input.setFixedHeight(76)
+        self.description_input.setFixedHeight(100)
 
         self.category_input = QComboBox()
         self.category_input.setObjectName("goalDialogCombo")
         self.category_input.addItems(self.CATEGORIES)
-        self.category_input.setFixedHeight(38)
+        self.category_input.setFixedHeight(40)
 
         self.color_input = QComboBox()
         self.color_input.setObjectName("goalDialogCombo")
         self.color_input.setIconSize(QSize(14, 14))
-        self.color_input.setFixedHeight(38)
+        self.color_input.setFixedHeight(40)
 
         for color_name, color_value in self.COLORS.items():
             self.color_input.addItem(
                 self.create_color_icon(color_value),
-                color_name
+                color_name,
             )
 
         self.date_input = QDateEdit()
         self.date_input.setObjectName("goalDialogDateInput")
-        self.date_input.setFixedHeight(38)
-
+        self.date_input.setFixedHeight(40)
         self.date_input.setCalendarPopup(True)
         self.date_input.setDisplayFormat("dd/MM/yyyy")
         self.date_input.setDate(QDate.currentDate())
@@ -178,10 +195,9 @@ class GoalFormDialog(QDialog):
         self.no_date_checkbox = QCheckBox("Sem data objetivo")
         self.no_date_checkbox.setObjectName("goalDialogCheckbox")
         self.no_date_checkbox.stateChanged.connect(self.toggle_date_input)
-        
 
         grid = QGridLayout()
-        grid.setHorizontalSpacing(14)
+        grid.setHorizontalSpacing(16)
         grid.setVerticalSpacing(12)
 
         grid.addLayout(self.create_field("Categoria", self.category_input), 0, 0)
@@ -190,6 +206,7 @@ class GoalFormDialog(QDialog):
         grid.addWidget(self.no_date_checkbox, 1, 1, alignment=Qt.AlignBottom)
 
         steps_header = QHBoxLayout()
+        steps_header.setSpacing(10)
 
         steps_title = QLabel("Etapas do objetivo")
         steps_title.setObjectName("goalDialogSectionTitle")
@@ -200,7 +217,7 @@ class GoalFormDialog(QDialog):
         add_step_button = QPushButton("+ Adicionar etapa")
         add_step_button.setObjectName("goalAddStepButton")
         add_step_button.setCursor(Qt.PointingHandCursor)
-        add_step_button.setFixedSize(150, 36)
+        add_step_button.setFixedSize(160, 38)
         add_step_button.clicked.connect(self.add_empty_step)
 
         steps_header.addWidget(steps_title)
@@ -208,20 +225,31 @@ class GoalFormDialog(QDialog):
         steps_header.addStretch()
         steps_header.addWidget(add_step_button)
 
-        self.steps_scroll_area = QScrollArea()
-        self.steps_scroll_area.setObjectName("goalStepsScrollArea")
-        self.steps_scroll_area.setWidgetResizable(True)
-        self.steps_scroll_area.setFrameShape(QFrame.NoFrame)
-        self.steps_scroll_area.setFixedHeight(155)
-
         self.steps_container = QWidget()
         self.steps_container.setObjectName("goalStepsContainer")
 
         self.steps_layout = QVBoxLayout(self.steps_container)
         self.steps_layout.setContentsMargins(0, 0, 0, 0)
-        self.steps_layout.setSpacing(10)
+        self.steps_layout.setSpacing(12)
 
-        self.steps_scroll_area.setWidget(self.steps_container)
+        self.form_layout.addLayout(self.create_field("Título", self.title_input))
+        self.form_layout.addLayout(
+            self.create_field("Descrição", self.description_input)
+        )
+        self.form_layout.addLayout(grid)
+        self.form_layout.addSpacing(4)
+        self.form_layout.addLayout(steps_header)
+        self.form_layout.addWidget(self.steps_container)
+        self.form_layout.addStretch()
+
+        self.form_scroll_area.setWidget(form_content)
+        layout.addWidget(self.form_scroll_area)
+
+        self.error_label = QLabel("")
+        self.error_label.setObjectName("goalDialogError")
+        self.error_label.setFixedHeight(20)
+
+        layout.addWidget(self.error_label)
 
         buttons = QHBoxLayout()
         buttons.setSpacing(10)
@@ -230,7 +258,7 @@ class GoalFormDialog(QDialog):
         cancel_button = QPushButton("Cancelar")
         cancel_button.setObjectName("goalDialogCancelButton")
         cancel_button.setCursor(Qt.PointingHandCursor)
-        cancel_button.setFixedSize(120, 38)
+        cancel_button.setFixedSize(130, 40)
         cancel_button.clicked.connect(self.reject)
 
         save_text = "Guardar alterações" if goal else "Criar objetivo"
@@ -238,25 +266,12 @@ class GoalFormDialog(QDialog):
         save_button = QPushButton(save_text)
         save_button.setObjectName("goalDialogPrimaryButton")
         save_button.setCursor(Qt.PointingHandCursor)
-        save_button.setFixedSize(170, 38)
+        save_button.setFixedSize(180, 40)
         save_button.clicked.connect(self.validate_and_accept)
 
         buttons.addWidget(cancel_button)
         buttons.addWidget(save_button)
 
-        layout.addWidget(title)
-        layout.addWidget(subtitle)
-        layout.addSpacing(4)
-        layout.addLayout(self.create_field("Título", self.title_input))
-        layout.addLayout(self.create_field("Descrição", self.description_input))
-        layout.addSpacing(4)
-        layout.addLayout(grid)
-        layout.addSpacing(6)
-        layout.addLayout(steps_header)
-        layout.addWidget(self.steps_scroll_area)
-        layout.addWidget(self.error_label)
-
-        layout.addStretch()
         layout.addLayout(buttons)
 
         self.load_data()
@@ -335,6 +350,8 @@ class GoalFormDialog(QDialog):
         self.steps_layout.addWidget(editor)
         self.update_steps_count()
 
+        self.form_scroll_area.ensureWidgetVisible(editor)
+
     def remove_step_editor(self, editor):
         if len(self.step_editors) == 1:
             self.error_label.setText("O objetivo precisa de pelo menos uma etapa.")
@@ -373,7 +390,9 @@ class GoalFormDialog(QDialog):
             has_description = bool(step_data["description"])
 
             if has_description and not has_title:
-                self.error_label.setText("Todas as etapas com descrição precisam de título.")
+                self.error_label.setText(
+                    "Todas as etapas com descrição precisam de título."
+                )
                 return
 
             if has_title:
@@ -416,5 +435,4 @@ class GoalFormDialog(QDialog):
             "status": "Em progresso",
             "color": self.COLORS.get(color_name, "#10B981"),
             "steps": steps,
-           
-            }
+        }

@@ -1999,4 +1999,202 @@ def get_theme():
     QPushButton#goalMainButtonActive:hover {
         background-color: rgba(251, 191, 36, 0.28);
     }
+
+    /* Calendar polish */
+
+    QLabel#calendarPageTitle {
+        color: #F8FAFC;
+        font-size: 28px;
+        font-weight: 800;
+    }
+
+    QLabel#calendarPageSubtitle {
+        color: #94A3B8;
+        font-size: 14px;
+    }
+
+    QPushButton#calendarPrimaryButton,
+    QPushButton#calendarNewEventButton,
+    QPushButton#newEventButton {
+        background-color: #2563EB;
+        color: #FFFFFF;
+        border: none;
+        border-radius: 12px;
+        font-size: 14px;
+        font-weight: 700;
+    }
+
+    QPushButton#calendarPrimaryButton:hover,
+    QPushButton#calendarNewEventButton:hover,
+    QPushButton#newEventButton:hover {
+        background-color: #1D4ED8;
+    }
+
+    /* Notes title polish */
+
+    QLabel#notesPageTitle {
+        color: #F8FAFC;
+        font-size: 28px;
+        font-weight: 800;
+    }
+
+    QLabel#notesPageSubtitle {
+        color: #94A3B8;
+        font-size: 14px;
+    }
+
+    /* Global date inputs */
+
+    QDateEdit::drop-down {
+        subcontrol-origin: padding;
+        subcontrol-position: top right;
+        width: 34px;
+        border: none;
+    }
+
+    QDateEdit::down-arrow {
+        image: url("assets/icons/actions/calendar.svg");
+        width: 16px;
+        height: 16px;
+        margin-right: 10px;
+    }
+
+    QLabel#calendarPageTitle {
+    color: #F8FAFC;
+    font-size: 28px;
+    font-weight: 800;
+    }
+
+    QLabel#calendarPageSubtitle {
+        color: #94A3B8;
+        font-size: 14px;
+    }
+
+    QPushButton#calendarPrimaryButton {
+    background-color: #2563EB;
+    color: #FFFFFF;
+    border: none;
+    border-radius: 12px;
+    font-size: 14px;
+    font-weight: 700;
+    }
+
+    QPushButton#calendarPrimaryButton:hover {
+        background-color: #1D4ED8;
+    }
+
+    QLabel#notesPageTitle {
+    color: #F8FAFC;
+    font-size: 28px;
+    font-weight: 800;
+    }
+
+    QLabel#notesPageSubtitle {
+        color: #94A3B8;
+        font-size: 14px;
+    }
+
+    QScrollArea#goalFormScrollArea {
+    background-color: transparent;
+    border: none;
+    }
+
+    QWidget#goalFormScrollContent {
+        background-color: transparent;
+    }
+
+    QWidget#goalStepsContainer {
+        background-color: transparent;
+    }
+
+    /* Task dialog */
+
+    QFrame#taskDialogContainer {
+        background-color: #0F172A;
+        border: 1px solid rgba(148, 163, 184, 0.18);
+        border-radius: 22px;
+    }
+
+    QLabel#taskDialogTitle {
+        color: #F8FAFC;
+        font-size: 24px;
+        font-weight: 800;
+    }
+
+    QLabel#taskDialogSubtitle {
+        color: #94A3B8;
+        font-size: 13px;
+    }
+
+    QLabel#taskDialogFieldLabel {
+        color: #CBD5E1;
+        font-size: 12px;
+        font-weight: 700;
+    }
+
+    QLabel#taskDialogError {
+        color: #F87171;
+        font-size: 12px;
+        font-weight: 700;
+    }
+
+    QLineEdit#taskDialogInput,
+    QComboBox#taskDialogCombo,
+    QDateEdit#taskDialogDateInput,
+    QTimeEdit#taskDialogTimeInput {
+        background-color: rgba(15, 23, 42, 0.96);
+        color: #F8FAFC;
+        border: 1px solid rgba(148, 163, 184, 0.20);
+        border-radius: 10px;
+        padding: 9px 11px;
+        font-size: 13px;
+    }
+
+    QLineEdit#taskDialogInput:focus,
+    QComboBox#taskDialogCombo:focus,
+    QDateEdit#taskDialogDateInput:focus,
+    QTimeEdit#taskDialogTimeInput:focus {
+        border: 1px solid #3B82F6;
+    }
+
+    QPushButton#taskDialogPrimaryButton {
+        background-color: #2563EB;
+        color: #FFFFFF;
+        border: none;
+        border-radius: 10px;
+        font-size: 13px;
+        font-weight: 800;
+    }
+
+    QPushButton#taskDialogPrimaryButton:hover {
+        background-color: #1D4ED8;
+    }
+
+    QPushButton#taskDialogCancelButton {
+        background-color: rgba(148, 163, 184, 0.12);
+        color: #CBD5E1;
+        border: none;
+        border-radius: 10px;
+        font-size: 13px;
+        font-weight: 700;
+    }
+
+    QPushButton#taskDialogCancelButton:hover {
+        background-color: rgba(148, 163, 184, 0.20);
+    }
+
+    QLabel#taskOverdueBadge {
+    background-color: rgba(248, 113, 113, 0.16);
+    color: #F87171;
+    border-radius: 8px;
+    padding: 4px 9px;
+    font-size: 11px;
+    font-weight: 800;
+    }
+
+    QLabel#taskRowDateOverdue {
+        color: #F87171;
+        font-size: 12px;
+        font-weight: 700;
+    }
     """

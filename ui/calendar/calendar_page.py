@@ -1,5 +1,6 @@
 import calendar
 from datetime import date
+from turtle import title
 from PySide6.QtCore import Qt, QSize
 from PySide6.QtGui import QIcon
 from PySide6.QtWidgets import (
@@ -188,18 +189,18 @@ class CalendarPage(QWidget):
         text_layout.setSpacing(4)
 
         title = QLabel("Calendário")
-        title.setObjectName("contentPageTitle")
+        title.setObjectName("calendarPageTitle")
 
         subtitle = QLabel("Organiza os teus eventos numa vista mensal.")
-        subtitle.setObjectName("contentPageSubtitle")
+        subtitle.setObjectName("calendarPageSubtitle")
 
         text_layout.addWidget(title)
         text_layout.addWidget(subtitle)
 
         new_event_button = QPushButton("+ Novo evento")
-        new_event_button.setObjectName("calendarToggleFormButton")
+        new_event_button.setObjectName("calendarPrimaryButton")
         new_event_button.setCursor(Qt.PointingHandCursor)
-        new_event_button.setFixedHeight(42)
+        new_event_button.setFixedSize(160, 42)
         new_event_button.clicked.connect(
             lambda: self.open_event_form(selected_date=date.today())
         )
