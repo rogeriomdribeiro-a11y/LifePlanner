@@ -18,7 +18,6 @@ from database.user_repository import UserRepository
 from ui.dialogs.custom_dialog import CustomDialog
 from ui.widgets.line_edit import LPPasswordEdit
 
-
 class ChangePasswordDialog(QDialog):
     def __init__(self, parent=None):
         super().__init__(parent)
@@ -233,21 +232,14 @@ class SettingsPage(QWidget):
         title = QLabel("Tema da aplicação")
         title.setObjectName("settingsRowTitle")
 
-        subtitle = QLabel("Tema atual: Escuro")
+        subtitle = QLabel("Tema escuro ativo.")
         subtitle.setObjectName("settingsRowSubtitle")
 
         text_layout.addWidget(title)
         text_layout.addWidget(subtitle)
 
-        theme_button = QPushButton("Alterar tema")
-        theme_button.setObjectName("settingsSecondaryButton")
-        theme_button.setCursor(Qt.PointingHandCursor)
-        theme_button.setFixedSize(140, 40)
-        theme_button.clicked.connect(self.theme_coming_next)
-
         row.addLayout(text_layout)
         row.addStretch()
-        row.addWidget(theme_button)
 
         section.addLayout(row)
 
@@ -313,6 +305,7 @@ class SettingsPage(QWidget):
 
         self.name_input.setText(user["full_name"] or "")
         self.email_input.setText(user["email"] or "")
+        
 
     def save_user_name(self):
         user = Session.current_user
@@ -379,9 +372,6 @@ class SettingsPage(QWidget):
             "Password alterada",
         )
 
-    def theme_coming_next(self):
-        CustomDialog.info(
-            self,
-            "A alteração de tema será implementada no próximo passo.",
-            "Tema da aplicação",
-        )
+    
+
+   

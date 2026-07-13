@@ -1,6 +1,26 @@
-def get_theme():
-    return """
-    QWidget {
+"""
+Centralized dark stylesheet for LifePlanner.
+
+Structure:
+- get_theme(): public function used by the app.
+- DARK_THEME: current production dark theme.
+
+Note:
+This file is grouped by application areas/pages.
+Avoid adding page-specific styles randomly at the bottom; create or use the correct section.
+"""
+
+
+def _join_styles(*styles):
+    return "\n\n".join(style.strip() for style in styles if style and style.strip())
+
+
+# ============================================
+# Global_And_Auth
+# ============================================
+
+GLOBAL_AND_AUTH_STYLE = r'''
+QWidget {
         font-family: Segoe UI;
         font-size: 14px;
         color: #F8FAFC;
@@ -157,12 +177,14 @@ def get_theme():
     QPushButton#dialogButton:hover {
         background-color: #2563EB;
     }
+'''
 
-    /* ============================================
-    CUSTOM DIALOG
-    ============================================ */
+# ============================================
+# Custom Dialog
+# ============================================
 
-    QFrame#dialogContainer {
+CUSTOM_DIALOG_STYLE = r'''
+QFrame#dialogContainer {
     background-color: #263145;
     border: 1px solid #334155;
     border-radius: 16px;
@@ -195,12 +217,14 @@ def get_theme():
     QPushButton#dialogButton:pressed {
         background-color: #1D4ED8;
     }
+'''
 
-     /* ============================================
-    DASHBOARD
-    ============================================ */
+# ============================================
+# Dashboard
+# ============================================
 
-    QWidget#dashboardPage {
+DASHBOARD_STYLE = r'''
+QWidget#dashboardPage {
     background-color: #0F172A;
     }
 
@@ -214,13 +238,14 @@ def get_theme():
         color: #CBD5E1;
         font-size: 16px;
     }
+'''
 
+# ============================================
+# App Layout
+# ============================================
 
-
- /* ============================================
-    APP LAYOUT
-    ============================================ */
-    QWidget#appLayout {
+APP_LAYOUT_STYLE = r'''
+QWidget#appLayout {
     background-color: #0F172A;
     }
 
@@ -310,12 +335,14 @@ def get_theme():
         color: #94A3B8;
         font-size: 13px;
     }
+'''
 
-    /* ============================================
-   SECTIONS
-    ============================================ */
+# ============================================
+# Sections
+# ============================================
 
-    QFrame#sectionCard {
+SECTIONS_STYLE = r'''
+QFrame#sectionCard {
         background-color: #1E293B;
         border: 1px solid #334155;
         border-radius: 16px;
@@ -347,11 +374,15 @@ def get_theme():
         color: #CBD5E1;
         font-size: 14px;
         padding: 6px 0;
-    }/* ============================================
-   DASHBOARD
-    ============================================ */
+    }
+'''
 
-    QFrame#dashboardWelcomeCard {
+# ============================================
+# Dashboard
+# ============================================
+
+DASHBOARD_STYLE_2 = r'''
+QFrame#dashboardWelcomeCard {
         background-color: #1E293B;
         border: 1px solid #334155;
         border-radius: 18px;
@@ -430,12 +461,14 @@ def get_theme():
     QScrollBar::sub-line:vertical {
         height: 0;
     }
+'''
 
-    /* ============================================
-   TASK ITEMS
-    ============================================ */
+# ============================================
+# Task Items
+# ============================================
 
-    QFrame#taskItem {
+TASK_ITEMS_STYLE = r'''
+QFrame#taskItem {
         background-color: transparent;
         border-bottom: 1px solid #334155;
     }
@@ -463,12 +496,14 @@ def get_theme():
         font-size: 13px;
         min-width: 48px;
     }
+'''
 
-    /* ============================================
-    EVENT ITEMS
-    ============================================ */
+# ============================================
+# Event Items
+# ============================================
 
-    QFrame#eventItem {
+EVENT_ITEMS_STYLE = r'''
+QFrame#eventItem {
         background-color: transparent;
         border-bottom: 1px solid #334155;
     }
@@ -489,12 +524,14 @@ def get_theme():
         color: #94A3B8;
         font-size: 12px;
     }
+'''
 
-    /* ============================================
-    GOAL PROGRESS
-    ============================================ */
+# ============================================
+# Goal Progress
+# ============================================
 
-    QFrame#goalProgressWidget {
+GOAL_PROGRESS_STYLE = r'''
+QFrame#goalProgressWidget {
         background-color: transparent;
         border: none;
     }
@@ -532,13 +569,14 @@ def get_theme():
         background-color: #10B981;
         border-radius: 8px;
     }
+'''
 
+# ============================================
+# Tasks Page
+# ============================================
 
-    /* ============================================
-    TASKS PAGE
-    ============================================ */
-
-    QWidget#tasksPage {
+TASKS_PAGE_STYLE = r'''
+QWidget#tasksPage {
         background-color: #0F172A;
     }
 
@@ -564,11 +602,14 @@ def get_theme():
         font-size: 18px;
         font-weight: 700;
     }
-    /* ============================================
-    TASKS PAGE - HEADER
-    ============================================ */
+'''
 
-    QWidget#tasksContent QLabel#contentPageTitle {
+# ============================================
+# Tasks Page - Header
+# ============================================
+
+TASKS_PAGE_HEADER_STYLE = r'''
+QWidget#tasksContent QLabel#contentPageTitle {
         color: #F8FAFC;
         font-size: 32px;
         font-weight: 800;
@@ -579,11 +620,14 @@ def get_theme():
         font-size: 15px;
         font-weight: 500;
     }
-    /* ============================================
-    TASK FORM INPUTS
-    ============================================ */
+'''
 
-    QLineEdit#taskInput,
+# ============================================
+# Task Form Inputs
+# ============================================
+
+TASK_FORM_INPUTS_STYLE = r'''
+QLineEdit#taskInput,
     QComboBox#taskCombo,
     QDateEdit#taskDate,
     QTimeEdit#taskTimeEdit {
@@ -633,13 +677,14 @@ def get_theme():
         width: 0;
         height: 0;
     }
+'''
 
+# ============================================
+# Task Action Icon Buttons
+# ============================================
 
-    /* ============================================
-    TASK ACTION ICON BUTTONS
-    ============================================ */
-
-    QPushButton#taskIconButton {
+TASK_ACTION_ICON_BUTTONS_STYLE = r'''
+QPushButton#taskIconButton {
         background-color: rgba(148, 163, 184, 0.10);
         border: none;
         border-radius: 8px;
@@ -827,12 +872,14 @@ def get_theme():
     QPushButton#taskToggleFormButton:hover {
         background-color: #1D4ED8;
     }
+'''
 
-    /* ============================================
-    CALENDAR PAGE
-    ============================================ */
+# ============================================
+# Calendar Page
+# ============================================
 
-    QWidget#calendarPage {
+CALENDAR_PAGE_STYLE = r'''
+QWidget#calendarPage {
         background-color: #0F172A;
     }
 
@@ -957,12 +1004,14 @@ def get_theme():
     QPushButton#eventIconDangerButton:hover {
         background-color: rgba(239, 68, 68, 0.22);
     }
+'''
 
-    /* ============================================
-    MONTH CALENDAR
-    ============================================ */
+# ============================================
+# Month Calendar
+# ============================================
 
-    QFrame#calendarMonthCard {
+MONTH_CALENDAR_STYLE = r'''
+QFrame#calendarMonthCard {
         background-color: #1E293B;
         border: 1px solid #334155;
         border-radius: 16px;
@@ -1057,11 +1106,14 @@ def get_theme():
         font-weight: 600;
         padding-left: 4px;
     }
-    /* ============================================
-    EVENT POPUP DIALOGS
-    ============================================ */
+'''
 
-    QFrame#eventDialogContainer {
+# ============================================
+# Event Popup Dialogs
+# ============================================
+
+EVENT_POPUP_DIALOGS_STYLE = r'''
+QFrame#eventDialogContainer {
         background-color: #1E293B;
         border: 1px solid #334155;
         border-radius: 18px;
@@ -1217,12 +1269,14 @@ def get_theme():
     selection-color: #F8FAFC;
     padding: 6px;
     }
+'''
 
-    /* ============================================
-    EVENT DATE PICKER CALENDAR
-    ============================================ */
+# ============================================
+# Event Date Picker Calendar
+# ============================================
 
-    QCalendarWidget#eventDateCalendar {
+EVENT_DATE_PICKER_CALENDAR_STYLE = r'''
+QCalendarWidget#eventDateCalendar {
         background-color: #1E293B;
         border: 1px solid #334155;
         border-radius: 12px;
@@ -1308,13 +1362,14 @@ def get_theme():
     selection-background-color: #2563EB;
     selection-color: white;
     }
+'''
 
-  
-/* ============================================
-    DAY EVENTS DIALOG
-    ============================================ */
+# ============================================
+# Day Events Dialog
+# ============================================
 
-    QFrame#dayEventsDialogContainer {
+DAY_EVENTS_DIALOG_STYLE = r'''
+QFrame#dayEventsDialogContainer {
         background-color: #1E293B;
         border: 1px solid #334155;
         border-radius: 18px;
@@ -1354,12 +1409,14 @@ def get_theme():
     QPushButton#calendarMoreEventsButton:hover {
         color: #F8FAFC;
     }
-    
-    /* ============================================
-    NOTES PAGE
-    ============================================ */
+'''
 
-    QWidget#notesPage {
+# ============================================
+# Notes Page
+# ============================================
+
+NOTES_PAGE_STYLE = r'''
+QWidget#notesPage {
         background-color: #0F172A;
     }
 
@@ -1443,12 +1500,14 @@ def get_theme():
     QPushButton#noteIconDangerButton:hover {
         background-color: rgba(248, 113, 113, 0.22);
     }
+'''
 
-    /* ============================================
-    NOTE CARD
-    ============================================ */
+# ============================================
+# Note Card
+# ============================================
 
-    QFrame#noteCard {
+NOTE_CARD_STYLE = r'''
+QFrame#noteCard {
         background-color: #0F172A;
         border: 1px solid #334155;
         border-radius: 14px;
@@ -1498,13 +1557,14 @@ def get_theme():
     QPushButton#noteIconDangerButton:hover {
         background-color: rgba(248, 113, 113, 0.22);
     }
+'''
 
+# ============================================
+# Note Dialog
+# ============================================
 
-/* ============================================
-    NOTE DIALOG
-    ============================================ */
-
-    QFrame#noteDialogContainer {
+NOTE_DIALOG_STYLE = r'''
+QFrame#noteDialogContainer {
         background-color: #1E293B;
         border: 1px solid #334155;
         border-radius: 18px;
@@ -2447,10 +2507,34 @@ def get_theme():
     QPushButton#settingsDialogCancelButton:hover {
         background-color: rgba(148, 163, 184, 0.20);
     }
+'''
 
-    QFrame#dashboardGoalSection {
-        background-color: rgba(15, 23, 42, 0.86);
-        border: 1px solid rgba(148, 163, 184, 0.12);
-        border-radius: 18px;
-    }
-    """
+
+
+DARK_THEME = _join_styles(
+    GLOBAL_AND_AUTH_STYLE,
+    CUSTOM_DIALOG_STYLE,
+    DASHBOARD_STYLE,
+    APP_LAYOUT_STYLE,
+    SECTIONS_STYLE,
+    DASHBOARD_STYLE_2,
+    TASK_ITEMS_STYLE,
+    EVENT_ITEMS_STYLE,
+    GOAL_PROGRESS_STYLE,
+    TASKS_PAGE_STYLE,
+    TASKS_PAGE_HEADER_STYLE,
+    TASK_FORM_INPUTS_STYLE,
+    TASK_ACTION_ICON_BUTTONS_STYLE,
+    CALENDAR_PAGE_STYLE,
+    MONTH_CALENDAR_STYLE,
+    EVENT_POPUP_DIALOGS_STYLE,
+    EVENT_DATE_PICKER_CALENDAR_STYLE,
+    DAY_EVENTS_DIALOG_STYLE,
+    NOTES_PAGE_STYLE,
+    NOTE_CARD_STYLE,
+    NOTE_DIALOG_STYLE,
+)
+
+def get_theme():
+    """Return the LifePlanner dark theme stylesheet."""
+    return DARK_THEME
