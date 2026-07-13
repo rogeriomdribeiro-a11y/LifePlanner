@@ -2507,6 +2507,68 @@ QFrame#noteDialogContainer {
     QPushButton#settingsDialogCancelButton:hover {
         background-color: rgba(148, 163, 184, 0.20);
     }
+    /* Task filters */
+
+    QFrame#taskFiltersCard {
+        background-color: rgba(15, 23, 42, 0.86);
+        border: 1px solid rgba(148, 163, 184, 0.12);
+        border-radius: 16px;
+    }
+
+    QLabel#taskFilterLabel {
+        color: #94A3B8;
+        font-size: 13px;
+        font-weight: 700;
+    }
+
+    QCheckBox#taskFilterCheckbox {
+        color: #CBD5E1;
+        font-size: 13px;
+        font-weight: 700;
+        spacing: 8px;
+    }
+
+    QDateEdit#taskFilterDate,
+    QComboBox#taskFilterCombo {
+        background-color: rgba(15, 23, 42, 0.96);
+        color: #F8FAFC;
+        border: 1px solid rgba(148, 163, 184, 0.20);
+        border-radius: 10px;
+        padding: 8px 11px;
+        font-size: 13px;
+    }
+
+    QDateEdit#taskFilterDate:focus,
+    QComboBox#taskFilterCombo:focus {
+        border: 1px solid #3B82F6;
+    }
+
+    QComboBox#taskFilterCombo::drop-down,
+    QDateEdit#taskFilterDate::drop-down {
+        border: none;
+        background-color: transparent;
+        width: 28px;
+    }
+
+    QComboBox#taskFilterCombo::down-arrow {
+        image: none;
+        width: 0;
+        height: 0;
+    }
+
+    QPushButton#taskClearFilterButton {
+        background-color: rgba(148, 163, 184, 0.12);
+        color: #CBD5E1;
+        border: none;
+        border-radius: 10px;
+        font-size: 13px;
+        font-weight: 800;
+    }
+
+    QPushButton#taskClearFilterButton:hover {
+        background-color: rgba(148, 163, 184, 0.20);
+        color: #F8FAFC;
+    }
 '''
 
 

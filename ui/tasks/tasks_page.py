@@ -1,6 +1,6 @@
 from datetime import date, datetime, timedelta
 
-from PySide6.QtCore import Qt, QSize
+from PySide6.QtCore import Qt, QSize, QDate
 from PySide6.QtWidgets import (
     QWidget,
     QFrame,
@@ -10,6 +10,9 @@ from PySide6.QtWidgets import (
     QPushButton,
     QScrollArea,
     QDialog,
+    QComboBox,
+    QDateEdit,
+    QCheckBox,
 )
 from PySide6.QtGui import QIcon
 
@@ -50,6 +53,7 @@ class TasksPage(QWidget):
         main_layout.addWidget(self.scroll_area)
 
         self.create_header()
+        self.create_filters()
         self.create_tasks_list()
 
     def create_header(self):
@@ -79,6 +83,65 @@ class TasksPage(QWidget):
         header.addWidget(self.new_task_button)
 
         self.layout.addLayout(header)
+
+    def create_filters(self):
+        self.filters_card = QFrame()
+        self.filters_card.setObjectName("taskFiltersCard")
+
+        layout = QHBoxLayout(self.filters_card)
+        layout.setContentsMargins(18, 14, 18, 14)
+        layout.setSpacing(14)
+
+        date_label = QLabel("Data")
+        date_label.setObjectName("taskFilterLabel")
+
+        self.date_filter_checkbox = QCheckBox("Filtrar por data")
+        self.date_filter_checkbox.setObjectName("taskFilterCheckbox")
+        self.date_filter_checkbox.setCursor(Qt.PointingHandCursor)
+        self.date_filter_checkbox.stateChanged.connect(self.handle_date_filter_changed)
+
+        self.date_filter_input = QDateEdit()
+        self.date_filter_input.setObjectName("taskFilterDate")
+        self.date_filter_input.setCalendarPopup(True)
+        self.date_filter_input.setDisplayFormat("dd/MM/yyyy")
+        self.date_filter_input.setDate(QDate.currentDate())
+        self.date_filter_input.setEnabled(False)
+        self.date_filter_input.setFixedSize(140, 40)
+        self.date_filter_input.dateChanged.connect(self.refresh)
+
+        category_label = QLabel("Categoria")
+        category_label.setObjectName("taskFilterLabel")
+
+        self.category_filter_input = QComboBox()
+        self.category_filter_input.setObjectName("taskFilterCombo")
+        self.category_filter_input.setFixedSize(150, 40)
+        self.category_filter_input.addItems([
+            "Todas",
+            "Geral",
+            "Pessoal",
+            "Trabalho",
+            "Saúde",
+            "Estudo",
+        ])
+        self.category_filter_input.currentTextChanged.connect(self.refresh)
+
+        self.clear_filters_button = QPushButton("Limpar filtros")
+        self.clear_filters_button.setObjectName("taskClearFilterButton")
+        self.clear_filters_button.setCursor(Qt.PointingHandCursor)
+        self.clear_filters_button.setFixedSize(130, 40)
+        self.clear_filters_button.clicked.connect(self.clear_filters)
+
+        layout.addWidget(date_label)
+        layout.addWidget(self.date_filter_checkbox)
+        layout.addWidget(self.date_filter_input)
+        layout.addSpacing(10)
+        layout.addWidget(category_label)
+        layout.addWidget(self.category_filter_input)
+        layout.addStretch()
+        layout.addWidget(self.clear_filters_button)
+
+        self.layout.addWidget(self.filters_card)
+
 
     def create_tasks_list(self):
         self.list_card = QFrame()
@@ -182,7 +245,34 @@ class TasksPage(QWidget):
             )
 
         self.refresh()
+    def handle_date_filter_changed(self):
+        is_enabled = self.date_filter_checkbox.isChecked()
+        self.date_filter_input.setEnabled(is_enabled)
+        self.refresh()
 
+
+    def clear_filters(self):
+        self.date_filter_checkbox.setChecked(False)
+        self.date_filter_input.setDate(QDate.currentDate())
+        self.category_filter_input.setCurrentText("Todas")
+        self.refresh()
+
+
+    def get_selected_filter_date(self):
+        if not self.date_filter_checkbox.isChecked():
+            return None
+
+        return self.date_filter_input.date().toString("yyyy-MM-dd")
+
+
+    def get_selected_filter_category(self):
+        category = self.category_filter_input.currentText()
+
+        if category == "Todas":
+            return None
+
+        return category
+    
     def refresh(self):
         user = Session.current_user
 
@@ -197,10 +287,31 @@ class TasksPage(QWidget):
 
         tasks = self.task_repository.get_tasks_by_user(user["id"])
 
-        pending_tasks = [
-            task for task in tasks
-            if not task["is_completed"]
-        ]
+        selected_date = self.get_selected_filter_date()
+        selected_category = self.get_selected_filter_category()
+        today = date.today().isoformat()
+
+        pending_tasks = []
+        completed_tasks = []
+
+        for task in tasks:
+            task_category = task["category"] or "Pessoal"
+            task_due_date = task["due_date"]
+
+            if selected_category and task_category != selected_category:
+                continue
+
+            if selected_date and task_due_date != selected_date:
+                continue
+
+            if task["is_completed"]:
+                if selected_date:
+                    completed_tasks.append(task)
+                elif task_due_date == today:
+                    completed_tasks.append(task)
+            else:
+                pending_tasks.append(task)
+
         pending_tasks.sort(
             key=lambda task: (
                 not self.is_task_overdue(task),
@@ -209,22 +320,24 @@ class TasksPage(QWidget):
             )
         )
 
-        completed_tasks = [
-            task for task in tasks
-            if task["is_completed"]
-        ]
+        completed_tasks.sort(
+            key=lambda task: (
+                task["due_date"] or "9999-12-31",
+                task["due_time"] or "23:59",
+            )
+        )
 
-        total = len(tasks)
+        total = len(pending_tasks) + len(completed_tasks)
 
         self.total_label.setText(
-            f"{total} tarefa" if total == 1 else f"{total} tarefas"
+            f"{total} tarefa visível" if total == 1 else f"{total} tarefas visíveis"
         )
 
         self.pending_counter.setText(str(len(pending_tasks)))
         self.completed_counter.setText(str(len(completed_tasks)))
 
         if not pending_tasks:
-            empty_label = QLabel("Não tens tarefas pendentes.")
+            empty_label = QLabel("Não tens tarefas pendentes para este filtro.")
             empty_label.setObjectName("emptyStateLabel")
             self.pending_tasks_layout.addWidget(empty_label)
         else:
@@ -234,7 +347,12 @@ class TasksPage(QWidget):
                 )
 
         if not completed_tasks:
-            empty_label = QLabel("Ainda não concluíste nenhuma tarefa.")
+            if selected_date:
+                message = "Não tens tarefas concluídas nesta data."
+            else:
+                message = "Ainda não concluíste nenhuma tarefa hoje."
+
+            empty_label = QLabel(message)
             empty_label.setObjectName("emptyStateLabel")
             self.completed_tasks_layout.addWidget(empty_label)
         else:
