@@ -270,15 +270,33 @@ QWidget#appLayout {
         color: white;
     }
 
+
     QFrame#topbar {
-        background-color: #0F172A;
+    background-color: #0F172A;
+    border: none;
+    }
+
+    QLabel#weatherForecast {
+    color: #E2E8F0;
+    font-size: 13px;
+    font-weight: 800;
+    }
+
+    QFrame#weatherDayItem {
+        background-color: transparent;
         border: none;
     }
 
-    QLabel#topbarTitle {
+    QLabel#weatherDayText {
+        color: #E2E8F0;
+        font-size: 13px;
+        font-weight: 800;
+    }
+
+    QLabel#weatherIcon {
         color: #F8FAFC;
-        font-size: 26px;
-        font-weight: 700;
+        font-size: 20px;
+        font-weight: 800;
     }
 
     QLineEdit#searchInput {

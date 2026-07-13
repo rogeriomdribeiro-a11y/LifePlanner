@@ -240,7 +240,7 @@ class DashboardPage(QWidget):
             f"{today.day} de {months[today.month - 1]} de {today.year}"
         )
 
-        self.welcome_title.setText(f"Olá, {first_name} 👋")
+        self.welcome_title.setText(f"Olá, {first_name}")
         self.welcome_subtitle.setText(
             f"Hoje é {formatted_date}. Organiza o teu dia com clareza."
         )
