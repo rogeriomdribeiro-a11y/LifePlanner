@@ -1,8 +1,11 @@
 from PySide6.QtCore import Qt
 
 from PySide6.QtWidgets import (
-     QHBoxLayout, QVBoxLayout, QLabel,
-     QPushButton, QFrame
+    QHBoxLayout,
+    QVBoxLayout,
+    QLabel,
+    QPushButton,
+    QFrame,
 )
 
 from app.constants import (
@@ -13,25 +16,24 @@ from app.constants import (
     LOGO_WIDTH,
     LOGO_HEIGHT,
     ILLUSTRATION_WIDTH,
-    ILLUSTRATION_HEIGHT
+    ILLUSTRATION_HEIGHT,
 )
+from app.session import Session
+from database.user_repository import UserRepository
+from services.google_auth_service import GoogleAuthService
+from ui.base.base_page import BasePage
+from ui.dialogs.custom_dialog import CustomDialog
 from ui.widgets.button import LPButton, LPGoogleButton
 from ui.widgets.line_edit import LPLineEdit, LPPasswordEdit
 from ui.widgets.separator import LPSeparator
-from ui.base.base_page import BasePage
-from database.user_repository import UserRepository
-from ui.dialogs.custom_dialog import CustomDialog
-from app.session import Session
+
 
 class LoginPage(BasePage):
     def __init__(self, app_controller=None):
         super().__init__()
 
         self.app_controller = app_controller
-
         self.setObjectName("loginWindow")
-       
-        
 
         self.old_pos = None
 
@@ -45,7 +47,7 @@ class LoginPage(BasePage):
         main_layout.addWidget(self.create_left_panel())
         main_layout.addWidget(
             self.create_right_panel(),
-            alignment=Qt.AlignVCenter
+            alignment=Qt.AlignVCenter,
         )
 
     def create_left_panel(self):
@@ -53,7 +55,7 @@ class LoginPage(BasePage):
         panel.setObjectName("loginPanel")
         panel.setFixedSize(
             LEFT_PANEL_WIDTH,
-            LEFT_PANEL_HEIGHT
+            LEFT_PANEL_HEIGHT,
         )
 
         layout = QVBoxLayout(panel)
@@ -63,7 +65,7 @@ class LoginPage(BasePage):
         logo = self.image_label(
             "logo.png",
             LOGO_WIDTH,
-            LOGO_HEIGHT
+            LOGO_HEIGHT,
         )
         logo.setAlignment(Qt.AlignLeft)
 
@@ -81,7 +83,7 @@ class LoginPage(BasePage):
         illustration = self.image_label(
             "login_illustration.png",
             ILLUSTRATION_WIDTH,
-            ILLUSTRATION_HEIGHT
+            ILLUSTRATION_HEIGHT,
         )
 
         layout.addWidget(logo)
@@ -98,7 +100,7 @@ class LoginPage(BasePage):
         panel.setObjectName("loginPanel")
         panel.setFixedSize(
             RIGHT_PANEL_WIDTH,
-            RIGHT_PANEL_HEIGHT
+            RIGHT_PANEL_HEIGHT,
         )
 
         layout = QVBoxLayout(panel)
@@ -114,6 +116,7 @@ class LoginPage(BasePage):
         subtitle.setAlignment(Qt.AlignCenter)
 
         google_button = LPGoogleButton()
+        google_button.clicked.connect(self.handle_google_login)
 
         separator = LPSeparator("ou")
 
@@ -157,7 +160,7 @@ class LoginPage(BasePage):
             CustomDialog.warning(
                 self,
                 "Preencha todos os campos.",
-                "Campos obrigatórios"
+                "Campos obrigatórios",
             )
             return
 
@@ -165,17 +168,46 @@ class LoginPage(BasePage):
 
         success, message, user = repository.authenticate_user(
             email,
-            password
+            password,
         )
 
         if not success:
             CustomDialog.error(
                 self,
                 message,
-                "Erro no login"
+                "Erro no login",
             )
             return
 
+        Session.login(user)
+
+        if self.app_controller:
+            self.app_controller.show_dashboard()
+
+    def handle_google_login(self):
+        google_service = GoogleAuthService()
+
+        success, message, google_user = google_service.authenticate()
+
+        if not success:
+            CustomDialog.error(
+                self,
+                message,
+                "Erro no login Google",
+            )
+            return
+
+        repository = UserRepository()
+
+        success, message, user = repository.get_or_create_google_user(google_user)
+
+        if not success:
+            CustomDialog.error(
+                self,
+                message,
+                "Erro no login Google",
+            )
+            return
 
         Session.login(user)
 
