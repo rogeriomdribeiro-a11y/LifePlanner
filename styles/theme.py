@@ -272,7 +272,7 @@ QWidget#appLayout {
 
     QFrame#topbar {
         background-color: #0F172A;
-        border-bottom: 1px solid #1E293B;
+        border: none;
     }
 
     QLabel#topbarTitle {

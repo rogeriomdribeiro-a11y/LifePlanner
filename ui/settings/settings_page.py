@@ -146,14 +146,13 @@ class SettingsPage(QWidget):
         self.create_header()
         self.create_user_section()
         self.create_security_section()
-        self.create_preferences_section()
         self.create_app_section()
 
     def create_header(self):
         title = QLabel("Definições")
         title.setObjectName("contentPageTitle")
 
-        subtitle = QLabel("Gere os teus dados, segurança e preferências da aplicação.")
+        subtitle = QLabel("Gere os teus dados e segurança da aplicação.")
         subtitle.setObjectName("contentPageSubtitle")
 
         self.layout.addWidget(title)
@@ -220,29 +219,7 @@ class SettingsPage(QWidget):
 
         section.addLayout(row)
 
-    def create_preferences_section(self):
-        section = self.create_section("Preferências")
-
-        row = QHBoxLayout()
-        row.setSpacing(12)
-
-        text_layout = QVBoxLayout()
-        text_layout.setSpacing(4)
-
-        title = QLabel("Tema da aplicação")
-        title.setObjectName("settingsRowTitle")
-
-        subtitle = QLabel("Tema escuro ativo.")
-        subtitle.setObjectName("settingsRowSubtitle")
-
-        text_layout.addWidget(title)
-        text_layout.addWidget(subtitle)
-
-        row.addLayout(text_layout)
-        row.addStretch()
-
-        section.addLayout(row)
-
+   
     def create_app_section(self):
         section = self.create_section("Aplicação")
 

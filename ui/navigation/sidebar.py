@@ -36,7 +36,7 @@ class Sidebar(QFrame):
                 180,
                 75,
                 Qt.KeepAspectRatio,
-                Qt.SmoothTransformation
+                Qt.SmoothTransformation,
             )
             logo.setPixmap(pixmap)
         else:
@@ -45,15 +45,15 @@ class Sidebar(QFrame):
         layout.addWidget(logo)
         layout.addSpacing(28)
 
-        # Menu
+        # Menu principal
         self.dashboard_btn = LPSidebarButton("Dashboard", "dashboard.svg")
         self.calendar_btn = LPSidebarButton("Calendário", "calendar.svg")
         self.tasks_btn = LPSidebarButton("Tarefas", "tasks.svg")
         self.notes_btn = LPSidebarButton("Notas", "notes.svg")
         self.goals_btn = LPSidebarButton("Objetivos", "goals.svg")
-        self.reminders_btn = LPSidebarButton("Lembretes", "reminders.svg")
         self.reports_btn = LPSidebarButton("Relatórios", "reports.svg")
 
+        # Menu inferior
         self.settings_btn = LPSidebarButton("Definições", "settings.svg")
         self.logout_btn = LPSidebarButton("Logout", "logout.svg")
 
@@ -63,7 +63,6 @@ class Sidebar(QFrame):
             self.tasks_btn,
             self.notes_btn,
             self.goals_btn,
-            self.reminders_btn,
             self.reports_btn,
             self.settings_btn,
         ]
@@ -73,7 +72,6 @@ class Sidebar(QFrame):
         layout.addWidget(self.tasks_btn)
         layout.addWidget(self.notes_btn)
         layout.addWidget(self.goals_btn)
-        layout.addWidget(self.reminders_btn)
         layout.addWidget(self.reports_btn)
 
         layout.addStretch()
@@ -97,9 +95,6 @@ class Sidebar(QFrame):
         )
         self.goals_btn.clicked.connect(
             lambda: self.set_active_button(self.goals_btn)
-        )
-        self.reminders_btn.clicked.connect(
-            lambda: self.set_active_button(self.reminders_btn)
         )
         self.reports_btn.clicked.connect(
             lambda: self.set_active_button(self.reports_btn)

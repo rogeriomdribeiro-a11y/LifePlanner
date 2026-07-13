@@ -8,7 +8,6 @@ from ui.calendar.calendar_page import CalendarPage
 from ui.tasks.tasks_page import TasksPage
 from ui.notes.notes_page import NotesPage
 from ui.goals.goals_page import GoalsPage
-from ui.reminders.reminders_page import RemindersPage
 from ui.reports.reports_page import ReportsPage
 from ui.settings.settings_page import SettingsPage
 
@@ -38,12 +37,11 @@ class AppLayout(QWidget):
         self.pages = QStackedWidget()
         self.pages.setObjectName("contentStack")
 
-        self.dashboard_page = DashboardPage(on_navigate=self.navigate_from_dashboard)
+        self.dashboard_page = DashboardPage()
         self.calendar_page = CalendarPage()
         self.tasks_page = TasksPage()
         self.notes_page = NotesPage()
         self.goals_page = GoalsPage()
-        self.reminders_page = RemindersPage()
         self.reports_page = ReportsPage()
         self.settings_page = SettingsPage()
 
@@ -52,7 +50,6 @@ class AppLayout(QWidget):
         self.pages.addWidget(self.tasks_page)
         self.pages.addWidget(self.notes_page)
         self.pages.addWidget(self.goals_page)
-        self.pages.addWidget(self.reminders_page)
         self.pages.addWidget(self.reports_page)
         self.pages.addWidget(self.settings_page)
 
@@ -80,9 +77,6 @@ class AppLayout(QWidget):
         self.sidebar.goals_btn.clicked.connect(
             lambda: self.show_page(self.goals_page)
         )
-        self.sidebar.reminders_btn.clicked.connect(
-            lambda: self.show_page(self.reminders_page)
-        )
         self.sidebar.reports_btn.clicked.connect(
             lambda: self.show_page(self.reports_page)
         )
@@ -101,9 +95,3 @@ class AppLayout(QWidget):
 
         if hasattr(self.topbar, "refresh_user"):
             self.topbar.refresh_user()
-
-    def navigate_from_dashboard(self, page_name):
-        if page_name == "calendar":
-            self.show_page(self.calendar_page)
-        elif page_name == "goals":
-            self.show_page(self.goals_page)

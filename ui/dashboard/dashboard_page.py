@@ -23,11 +23,11 @@ from ui.widgets.section import LPSection
 from ui.widgets.goal_progress import LPGoalProgress
 
 class DashboardPage(QWidget):
-    def __init__(self, on_navigate=None):
+    def __init__(self):
         super().__init__()
 
         self.setObjectName("dashboardPage")
-        self.on_navigate = on_navigate
+        
 
         self.task_repository = TaskRepository()
         self.event_repository = EventRepository()
@@ -127,16 +127,12 @@ class DashboardPage(QWidget):
         sections_grid = QGridLayout()
         sections_grid.setSpacing(18)
 
-        self.events_section = LPSection("Próximos eventos", "Ver calendário")
+        self.events_section = LPSection("Próximos eventos")
         self.events_section.setMinimumHeight(230)
 
-        self.goal_section = LPSection("Objetivo principal", "Ver objetivos")
-        self.goal_section.setObjectName("dashboardGoalSection")
+        self.goal_section = LPSection("Objetivo principal")
         self.goal_section.setMinimumHeight(230)
         self.goal_section.add_text_item("A carregar objetivo...")
-
-        self.connect_section_action(self.events_section, self.go_to_calendar)
-        self.connect_section_action(self.goal_section, self.go_to_goals)
 
         sections_grid.addWidget(self.events_section, 0, 0)
         sections_grid.addWidget(self.goal_section, 0, 1)
@@ -144,27 +140,12 @@ class DashboardPage(QWidget):
         sections_grid.setColumnStretch(0, 1)
         sections_grid.setColumnStretch(1, 1)
 
-        self.tasks_section = LPSection("Tarefas de hoje", "Ver +")
+        self.tasks_section = LPSection("Tarefas de hoje")
         self.tasks_section.setMinimumHeight(260)
 
         self.layout.addLayout(sections_grid)
         self.layout.addWidget(self.tasks_section)
 
-    def connect_section_action(self, section, callback):
-        if hasattr(section, "set_action_callback"):
-            section.set_action_callback(callback)
-            return
-
-        if hasattr(section, "action_button") and section.action_button:
-            section.action_button.clicked.connect(callback)
-
-    def go_to_calendar(self):
-        if self.on_navigate:
-            self.on_navigate("calendar")
-
-    def go_to_goals(self):
-        if self.on_navigate:
-            self.on_navigate("goals")
 
     def refresh(self):
         user = Session.current_user
