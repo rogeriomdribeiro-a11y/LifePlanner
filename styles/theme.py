@@ -2448,15 +2448,6 @@ def get_theme():
         background-color: rgba(148, 163, 184, 0.20);
     }
 
-    QLabel#dashboardHeaderImage {
-    background-color: transparent;
-    border-radius: 14px;
-    }
-
-    QLabel#dashboardGoalImage {
-        background-color: transparent;
-    }
-
     QFrame#dashboardGoalSection {
         background-color: rgba(15, 23, 42, 0.86);
         border: 1px solid rgba(148, 163, 184, 0.12);

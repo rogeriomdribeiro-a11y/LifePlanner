@@ -59,38 +59,23 @@ class DashboardPage(QWidget):
         main_layout.addWidget(scroll_area)
 
     def create_welcome_card(self):
-        self.welcome_card = QFrame()
-        self.welcome_card.setObjectName("dashboardWelcomeCard")
-        self.welcome_card.setMinimumHeight(150)
+        welcome_card = QFrame()
+        welcome_card.setObjectName("dashboardWelcomeCard")
 
-        image_path = DASHBOARD_IMAGES_DIR / "header_bg_dark.png"
-
-        if image_path.exists():
-            self.welcome_card.setStyleSheet(f"""
-                QFrame#dashboardWelcomeCard {{
-                    border-image: url("{image_path.as_posix()}") 0 0 0 0 stretch stretch;
-                    border-radius: 18px;
-                    border: 1px solid rgba(148, 163, 184, 0.18);
-                }}
-            """)
-
-        layout = QVBoxLayout(self.welcome_card)
-        layout.setContentsMargins(26, 24, 26, 24)
-        layout.setSpacing(8)
+        layout = QVBoxLayout(welcome_card)
+        layout.setContentsMargins(26, 22, 26, 22)
+        layout.setSpacing(6)
 
         self.welcome_title = QLabel("Olá!")
         self.welcome_title.setObjectName("dashboardWelcomeTitle")
 
         self.welcome_subtitle = QLabel("")
         self.welcome_subtitle.setObjectName("dashboardWelcomeSubtitle")
-        self.welcome_subtitle.setWordWrap(True)
 
-        layout.addStretch()
         layout.addWidget(self.welcome_title)
         layout.addWidget(self.welcome_subtitle)
-        layout.addStretch()
 
-        self.layout.addWidget(self.welcome_card)
+        self.layout.addWidget(welcome_card)
 
     def create_info_cards(self):
         cards_grid = QGridLayout()
