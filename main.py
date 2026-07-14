@@ -5,4 +5,5 @@ if __name__ == "__main__":
     app = LifePlannerApp()
     app.run()
 
-    #python scripts/seed_july_demo.py
+    #python scripts/seed_july_demo.pycelar
+    
