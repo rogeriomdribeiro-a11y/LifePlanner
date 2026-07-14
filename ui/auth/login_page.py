@@ -122,10 +122,10 @@ class LoginPage(BasePage):
 
         self.email_input = LPLineEdit("Email")
         self.password_input = LPPasswordEdit("Password")
+        self.email_input.returnPressed.connect(self.handle_login)
+        self.password_input.returnPressed.connect(self.handle_login)
 
-        recover = QLabel("Recuperar password")
-        recover.setObjectName("recoverPassword")
-        recover.setAlignment(Qt.AlignRight)
+        
 
         login_button = LPButton("Login")
         login_button.clicked.connect(self.handle_login)
@@ -144,7 +144,6 @@ class LoginPage(BasePage):
         layout.addSpacing(14)
         layout.addWidget(self.email_input)
         layout.addWidget(self.password_input)
-        layout.addWidget(recover)
         layout.addSpacing(32)
         layout.addWidget(login_button, alignment=Qt.AlignHCenter)
         layout.addWidget(register_link, alignment=Qt.AlignHCenter)

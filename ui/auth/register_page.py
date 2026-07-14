@@ -118,6 +118,11 @@ class RegisterPage(BasePage):
         self.password_input = LPPasswordEdit("Password")
         self.confirm_password_input = LPPasswordEdit("Confirmar password")
 
+        self.name_input.returnPressed.connect(self.handle_register)
+        self.email_input.returnPressed.connect(self.handle_register)
+        self.password_input.returnPressed.connect(self.handle_register)
+        self.confirm_password_input.returnPressed.connect(self.handle_register)
+        
         create_button = LPButton("Criar")
         create_button.clicked.connect(self.handle_register)
 

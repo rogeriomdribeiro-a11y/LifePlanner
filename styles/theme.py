@@ -65,12 +65,6 @@ QWidget {
         font-size: 13px;
     }
 
-    QLabel#recoverPassword {
-        font-size: 11px;
-        color: #CBD5E1;
-        text-decoration: underline;
-    }
-
     QLineEdit {
         background-color: #020617;
         border: none;
@@ -2537,13 +2531,6 @@ QFrame#noteDialogContainer {
         color: #94A3B8;
         font-size: 13px;
         font-weight: 700;
-    }
-
-    QCheckBox#taskFilterCheckbox {
-        color: #CBD5E1;
-        font-size: 13px;
-        font-weight: 700;
-        spacing: 8px;
     }
 
     QDateEdit#taskFilterDate,

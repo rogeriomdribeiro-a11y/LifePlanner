@@ -1,8 +1,16 @@
 from PySide6.QtCore import Qt, QThread, Signal
-from PySide6.QtWidgets import QFrame, QHBoxLayout, QLabel, QWidget
-
 from services.weather_service import WeatherService
+from PySide6.QtCore import Qt, QThread, Signal, QSize
+from PySide6.QtGui import QIcon
+from PySide6.QtWidgets import (
+    QFrame,
+    QHBoxLayout,
+    QLabel,
+    QWidget,
+    QSizePolicy,
+)
 
+from app.path import ICONS_DIR
 
 class WeatherWorker(QThread):
     finished = Signal(bool, list)
@@ -19,28 +27,37 @@ class WeatherDayWidget(QFrame):
 
         self.setObjectName("weatherDayItem")
         self.setToolTip(day["description"])
+        self.setFixedSize(116, 32)
 
         layout = QHBoxLayout(self)
-        layout.setContentsMargins(6, 0, 6, 0)
+        layout.setContentsMargins(0, 0, 0, 0)
         layout.setSpacing(4)
 
         day_label = QLabel(day["day"])
         day_label.setObjectName("weatherDayText")
-        day_label.setToolTip(day["description"])
+        day_label.setFixedWidth(30)
+        day_label.setAlignment(Qt.AlignLeft | Qt.AlignVCenter)
 
-        temp_label = QLabel(f'{day["min"]}°/{day["max"]}°')
+        temp_label = QLabel(
+            f'{day["min"]}°/{day["max"]}°'
+        )
         temp_label.setObjectName("weatherDayText")
-        temp_label.setToolTip(day["description"])
+        temp_label.setFixedWidth(52)
+        temp_label.setAlignment(Qt.AlignCenter)
 
-        icon_label = QLabel(day["icon"])
+        icon_label = QLabel()
         icon_label.setObjectName("weatherIcon")
+        icon_label.setFixedSize(22, 22)
         icon_label.setAlignment(Qt.AlignCenter)
         icon_label.setToolTip(day["description"])
+
+        icon_path = ICONS_DIR / "weather" / day["icon"]
+        icon_pixmap = QIcon(str(icon_path)).pixmap(QSize(20, 20))
+        icon_label.setPixmap(icon_pixmap)
 
         layout.addWidget(day_label)
         layout.addWidget(temp_label)
         layout.addWidget(icon_label)
-
 
 class Topbar(QFrame):
     def __init__(self):
@@ -58,7 +75,7 @@ class Topbar(QFrame):
         self.weather_card = QFrame()
         self.weather_card.setObjectName("weatherCard")
         self.weather_card.setFixedHeight(46)
-        self.weather_card.setMaximumWidth(1040)
+        self.weather_card.setMaximumWidth(1200)
 
         weather_layout = QHBoxLayout(self.weather_card)
         weather_layout.setContentsMargins(18, 8, 18, 8)
@@ -73,7 +90,7 @@ class Topbar(QFrame):
         self.weather_days_container = QWidget()
         self.weather_days_layout = QHBoxLayout(self.weather_days_container)
         self.weather_days_layout.setContentsMargins(0, 0, 0, 0)
-        self.weather_days_layout.setSpacing(10)
+        self.weather_days_layout.setSpacing(8)
 
         self.loading_label = QLabel("A carregar meteorologia...")
         self.loading_label.setObjectName("weatherForecast")
@@ -114,17 +131,13 @@ class Topbar(QFrame):
         if not success or not forecast:
             unavailable_label = QLabel("Meteorologia indisponível")
             unavailable_label.setObjectName("weatherForecast")
-            unavailable_label.setToolTip("Meteorologia indisponível")
             self.weather_days_layout.addWidget(unavailable_label)
             return
-
-        self.weather_days_layout.addStretch()
 
         for day in forecast:
             day_widget = WeatherDayWidget(day)
             self.weather_days_layout.addWidget(day_widget)
-
-        self.weather_days_layout.addStretch()
+        
 
     def refresh_user(self):
         pass
