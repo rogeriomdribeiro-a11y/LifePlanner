@@ -1,5 +1,6 @@
 # Ambiente virtual
 .venv/
+venv/
 
 # Cache Python
 __pycache__/
@@ -10,10 +11,24 @@ __pycache__/
 
 # Base de dados SQLite
 data/*.db
+data/*.db-journal
+data/*.db-wal
+data/*.db-shm
 
-# Sistema
+# Sistema operativo
 Thumbs.db
 .DS_Store
 
-#Autenticacao Google
+# Autenticação Google
 config/google_oauth_client.json
+
+# Chave da API meteorológica
+.env
+
+# PyInstaller
+build/
+dist/
+*.spec
+
+# Pacotes de release locais
+LifePlanner-v*-Windows.zip

@@ -81,7 +81,7 @@ class Topbar(QFrame):
         weather_layout.setContentsMargins(18, 8, 18, 8)
         weather_layout.setSpacing(16)
 
-        self.weather_title = QLabel("Fafe · 7 dias")
+        self.weather_title = QLabel("Braga · 7 dias")
         self.weather_title.setObjectName("weatherTitle")
         self.weather_title.setFixedWidth(100)
         self.weather_title.setAlignment(Qt.AlignLeft | Qt.AlignVCenter)

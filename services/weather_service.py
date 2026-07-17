@@ -1,32 +1,31 @@
+import os
+import sys
+from datetime import datetime
+from pathlib import Path
+from urllib.parse import quote
+
 import requests
+from dotenv import load_dotenv
+
+
+def get_env_file():
+   
+    if getattr(sys, "frozen", False):
+        return Path(sys.executable).resolve().parent / ".env"
+
+    return Path(__file__).resolve().parents[1] / ".env"
+
+
+load_dotenv(get_env_file())
 
 
 class WeatherService:
-    BASE_URL = "https://api.open-meteo.com/v1/forecast"
+    BASE_URL = (
+        "https://weather.visualcrossing.com/"
+        "VisualCrossingWebServices/rest/services/timeline"
+    )
 
-    WEATHER_CODES = {
-    0: ("clear.svg", "Céu limpo"),
-    1: ("partly-cloudy.svg", "Pouco nublado"),
-    2: ("partly-cloudy.svg", "Parcialmente nublado"),
-    3: ("cloudy.svg", "Nublado"),
-    45: ("fog.svg", "Nevoeiro"),
-    48: ("fog.svg", "Nevoeiro"),
-    51: ("rain.svg", "Chuvisco"),
-    53: ("rain.svg", "Chuvisco"),
-    55: ("rain.svg", "Chuvisco forte"),
-    61: ("rain.svg", "Chuva fraca"),
-    63: ("rain.svg", "Chuva"),
-    65: ("rain.svg", "Chuva forte"),
-    71: ("snow.svg", "Neve fraca"),
-    73: ("snow.svg", "Neve"),
-    75: ("snow.svg", "Neve forte"),
-    80: ("rain.svg", "Aguaceiros"),
-    81: ("rain.svg", "Aguaceiros"),
-    82: ("storm.svg", "Aguaceiros fortes"),
-    95: ("storm.svg", "Trovoada"),
-    96: ("storm.svg", "Trovoada com granizo"),
-    99: ("storm.svg", "Trovoada com granizo"),
-}
+    LOCATION = "Braga, Portugal"
 
     WEEKDAYS = {
         0: "Seg",
@@ -38,58 +37,82 @@ class WeatherService:
         6: "Dom",
     }
 
-    def get_week_forecast(self):
-        """
-        Devolve previsão compacta para 7 dias.
+    ICON_FILES = {
+        "clear-day": "clear.svg",
+        "clear-night": "clear.svg",
+        "partly-cloudy-day": "partly-cloudy.svg",
+        "partly-cloudy-night": "partly-cloudy.svg",
+        "cloudy": "cloudy.svg",
+        "fog": "fog.svg",
+        "wind": "cloudy.svg",
+        "rain": "rain.svg",
+        "showers-day": "rain.svg",
+        "showers-night": "rain.svg",
+        "snow": "snow.svg",
+        "snow-showers-day": "snow.svg",
+        "snow-showers-night": "snow.svg",
+        "sleet": "snow.svg",
+        "hail": "storm.svg",
+        "thunder": "storm.svg",
+        "thunder-rain": "storm.svg",
+        "thunder-showers-day": "storm.svg",
+        "thunder-showers-night": "storm.svg",
+    }
 
-        Cidade fixa: Fafe.
-        Coordenadas:
-        latitude: 41.4508
-        longitude: -8.1726
-        """
+    def get_week_forecast(self):
+        api_key = os.getenv("VISUAL_CROSSING_API_KEY", "").strip()
+
+        if not api_key:
+            return False, []
+
+        encoded_location = quote(self.LOCATION)
+
+        url = f"{self.BASE_URL}/{encoded_location}"
+
         params = {
-            "latitude": 41.4508,
-            "longitude": -8.1726,
-            "daily": "weather_code,temperature_2m_max,temperature_2m_min",
-            "timezone": "Europe/Lisbon",
-            "forecast_days": 7,
+            "unitGroup": "metric",
+            "include": "days",
+            "contentType": "json",
+            "lang": "pt",
+            "key": api_key,
         }
 
         try:
             response = requests.get(
-                self.BASE_URL,
+                url,
                 params=params,
-                timeout=8,
+                timeout=10,
             )
             response.raise_for_status()
 
             data = response.json()
-            daily = data.get("daily", {})
+            days = data.get("days", [])
 
-            dates = daily.get("time", [])
-            max_temperatures = daily.get("temperature_2m_max", [])
-            min_temperatures = daily.get("temperature_2m_min", [])
-            weather_codes = daily.get("weather_code", [])
+            if not days:
+                return False, []
 
             forecast = []
 
-            for index, day in enumerate(dates):
-                if index >= 7:
-                    break
-
-                icon, description = self.WEATHER_CODES.get(
-                    weather_codes[index],
-                    ("🌡️", "Meteorologia"),
-                )
-
-                label = "Hoje" if index == 0 else self.get_weekday_label(day)
+            for index, day in enumerate(days[:7]):
+                date_text = day.get("datetime", "")
+                icon_code = day.get("icon", "cloudy")
 
                 forecast.append({
-                    "day": label,
-                    "icon": icon,
-                    "description": description,
-                    "max": round(max_temperatures[index]),
-                    "min": round(min_temperatures[index]),
+                    "day": (
+                        "Hoje"
+                        if index == 0
+                        else self.get_weekday_label(date_text)
+                    ),
+                    "min": round(float(day.get("tempmin", 0))),
+                    "max": round(float(day.get("tempmax", 0))),
+                    "icon": self.ICON_FILES.get(
+                        icon_code,
+                        "cloudy.svg",
+                    ),
+                    "description": (
+                        day.get("conditions")
+                        or "Estado do tempo indisponível"
+                    ),
                 })
 
             return True, forecast
@@ -97,14 +120,15 @@ class WeatherService:
         except requests.RequestException:
             return False, []
 
-        except (KeyError, IndexError, TypeError, ValueError):
+        except (TypeError, ValueError, KeyError):
             return False, []
 
     def get_weekday_label(self, date_text):
-        from datetime import datetime
-
         try:
-            parsed_date = datetime.strptime(date_text, "%Y-%m-%d").date()
+            parsed_date = datetime.strptime(
+                date_text,
+                "%Y-%m-%d",
+            ).date()
         except ValueError:
             return ""
 
