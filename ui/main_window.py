@@ -1,5 +1,7 @@
-from PySide6.QtCore import Qt, QSize
-from PySide6.QtWidgets import QWidget, QStackedWidget, QVBoxLayout, QPushButton
+"""Janela principal e navegação entre autenticação e área privada."""
+
+from PySide6.QtCore import QSize, Qt
+from PySide6.QtWidgets import QPushButton, QStackedWidget, QVBoxLayout, QWidget
 
 from app.resources import get_icon
 from ui.auth.login_page import LoginPage
@@ -8,9 +10,10 @@ from ui.layout.app_layout import AppLayout
 
 
 class MainWindow(QWidget):
+    """Alojar todos os ecrãs e controlar a janela sem moldura do sistema."""
+
     def __init__(self, app_controller=None):
         super().__init__()
-
         self.app_controller = app_controller
 
         self.setObjectName("loginWindow")
@@ -22,7 +25,6 @@ class MainWindow(QWidget):
         self.is_window_maximized = True
 
         self.stack = QStackedWidget()
-
         self.login_page = LoginPage(app_controller=self)
         self.register_page = RegisterPage(app_controller=self)
         self.app_layout = AppLayout(app_controller=self)
@@ -36,18 +38,25 @@ class MainWindow(QWidget):
         layout.addWidget(self.stack)
 
         self.create_window_buttons()
+        self.show_login()
 
     def show_login(self):
+        """Apresentar um formulário de login limpo."""
+        self.login_page.reset_form()
         self.stack.setCurrentWidget(self.login_page)
 
     def show_register(self):
+        """Apresentar o formulário de registo sem dados anteriores."""
+        self.register_page.reset_form()
         self.stack.setCurrentWidget(self.register_page)
 
     def show_dashboard(self):
-        self.app_layout.refresh()
+        """Repor o Dashboard como página inicial após cada autenticação."""
+        self.app_layout.show_dashboard()
         self.stack.setCurrentWidget(self.app_layout)
 
     def create_window_buttons(self):
+        """Criar os controlos próprios da janela sem moldura."""
         self.minimize_button = QPushButton(self)
         self.minimize_button.setObjectName("windowButton")
         self.minimize_button.setIcon(get_icon("window", "minimize.svg"))
@@ -86,16 +95,19 @@ class MainWindow(QWidget):
         self.minimize_button.move(minimize_x, top)
         self.resize_button.move(resize_x, top)
         self.close_button.move(close_x, top)
+        self.minimize_button.raise_()
+        self.resize_button.raise_()
+        self.close_button.raise_()
 
     def toggle_window_size(self):
+        """Alternar entre a área útil do ecrã e o tamanho mínimo definido."""
         if self.is_window_maximized:
             self.restore_custom()
         else:
             self.maximize_custom()
 
     def maximize_custom(self):
-        screen_geometry = self.screen().availableGeometry()
-        self.setGeometry(screen_geometry)
+        self.setGeometry(self.screen().availableGeometry())
         self.is_window_maximized = True
 
     def restore_custom(self):
@@ -104,25 +116,27 @@ class MainWindow(QWidget):
         screen_geometry = self.screen().availableGeometry()
         x = screen_geometry.x() + (screen_geometry.width() - self.width()) // 2
         y = screen_geometry.y() + (screen_geometry.height() - self.height()) // 2
-
         self.move(x, y)
         self.is_window_maximized = False
 
     def resizeEvent(self, event):
         if hasattr(self, "close_button"):
             self.position_window_buttons()
-
         super().resizeEvent(event)
 
     def mousePressEvent(self, event):
-        if event.button() == Qt.LeftButton:
+        if event.button() == Qt.LeftButton and not self.is_window_maximized:
             self.old_pos = event.globalPosition().toPoint()
+        super().mousePressEvent(event)
 
     def mouseMoveEvent(self, event):
-        if self.old_pos is not None:
-            delta = event.globalPosition().toPoint() - self.old_pos
-            self.move(self.x() + delta.x(), self.y() + delta.y())
-            self.old_pos = event.globalPosition().toPoint()
+        if self.old_pos is not None and not self.is_window_maximized:
+            new_pos = event.globalPosition().toPoint()
+            delta = new_pos - self.old_pos
+            self.move(self.pos() + delta)
+            self.old_pos = new_pos
+        super().mouseMoveEvent(event)
 
     def mouseReleaseEvent(self, event):
         self.old_pos = None
+        super().mouseReleaseEvent(event)

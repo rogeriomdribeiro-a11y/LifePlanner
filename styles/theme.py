@@ -1,14 +1,11 @@
-"""
-Centralized dark stylesheet for LifePlanner.
+"""Tema visual escuro utilizado por toda a interface LifePlanner.
 
-Structure:
-- get_theme(): public function used by the app.
-- DARK_THEME: current production dark theme.
-
-Note:
-This file is grouped by application areas/pages.
-Avoid adding page-specific styles randomly at the bottom; create or use the correct section.
+Os estilos estão agrupados por área funcional para facilitar a manutenção sem
+alterar a aparência final da aplicação.
 """
+
+
+from app.path import ICONS_DIR
 
 
 def _join_styles(*styles):
@@ -184,17 +181,6 @@ QFrame#dialogContainer {
     border-radius: 16px;
     }
 
-    QLabel#dialogTitle {
-        color: #F8FAFC;
-        font-size: 20px;
-        font-weight: 700;
-    }
-
-    QLabel#dialogMessage {
-        color: #CBD5E1;
-        font-size: 14px;
-    }
-
     QPushButton#dialogButton {
         background-color: #3B82F6;
         border: none;
@@ -202,10 +188,6 @@ QFrame#dialogContainer {
         color: white;
         font-size: 14px;
         font-weight: 600;
-    }
-
-    QPushButton#dialogButton:hover {
-        background-color: #2563EB;
     }
 
     QPushButton#dialogButton:pressed {
@@ -440,10 +422,6 @@ QFrame#dashboardWelcomeCard {
         border-radius: 8px;
     }
 
-    QWidget#dashboardPage {
-    background-color: #0F172A;
-    }
-
     QScrollArea#dashboardScrollArea {
         background-color: #0F172A;
         border: none;
@@ -575,11 +553,6 @@ QFrame#goalProgressWidget {
         border: none;
         border-radius: 8px;
         height: 16px;
-    }
-
-    QProgressBar#goalProgressBar::chunk {
-        background-color: #10B981;
-        border-radius: 8px;
     }
 '''
 
@@ -726,13 +699,6 @@ QPushButton#taskIconButton {
         padding: 10px;
         font-size: 14px;
         min-height: 22px;
-    }
-
-    QLineEdit#taskInput:focus,
-    QComboBox#taskCombo:focus,
-    QDateEdit#taskDate:focus,
-    QTimeEdit#taskTimeEdit:focus {
-        border: 1px solid #3B82F6;
     }
 
     QPushButton#taskAddButton {
@@ -1548,27 +1514,6 @@ QFrame#noteCard {
     QLabel#noteCardPin {
         font-size: 16px;
     }
-
-
-    QPushButton#noteIconButton {
-        background-color: rgba(96, 165, 250, 0.12);
-        border: none;
-        border-radius: 8px;
-    }
-
-    QPushButton#noteIconButton:hover {
-        background-color: rgba(96, 165, 250, 0.22);
-    }
-
-    QPushButton#noteIconDangerButton {
-        background-color: rgba(248, 113, 113, 0.12);
-        border: none;
-        border-radius: 8px;
-    }
-
-    QPushButton#noteIconDangerButton:hover {
-        background-color: rgba(248, 113, 113, 0.22);
-    }
 '''
 
 # ============================================
@@ -2137,11 +2082,6 @@ QFrame#noteDialogContainer {
     font-weight: 800;
     }
 
-    QLabel#calendarPageSubtitle {
-        color: #94A3B8;
-        font-size: 14px;
-    }
-
     QPushButton#calendarPrimaryButton {
     background-color: #2563EB;
     color: #FFFFFF;
@@ -2161,21 +2101,12 @@ QFrame#noteDialogContainer {
     font-weight: 800;
     }
 
-    QLabel#notesPageSubtitle {
-        color: #94A3B8;
-        font-size: 14px;
-    }
-
     QScrollArea#goalFormScrollArea {
     background-color: transparent;
     border: none;
     }
 
     QWidget#goalFormScrollContent {
-        background-color: transparent;
-    }
-
-    QWidget#goalStepsContainer {
         background-color: transparent;
     }
 
@@ -2603,5 +2534,9 @@ DARK_THEME = _join_styles(
 )
 
 def get_theme():
-    """Return the LifePlanner dark theme stylesheet."""
-    return DARK_THEME
+    """Devolver o tema escuro com caminhos de recursos válidos no executável."""
+    calendar_icon = (ICONS_DIR / "actions" / "calendar.svg").as_posix()
+    return DARK_THEME.replace(
+        "assets/icons/actions/calendar.svg",
+        calendar_icon,
+    )

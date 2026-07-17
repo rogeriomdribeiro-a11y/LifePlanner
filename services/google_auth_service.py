@@ -1,20 +1,24 @@
-from app.path import BASE_DIR
+"""Autenticação do utilizador através do Google OAuth 2.0."""
 
-from google_auth_oauthlib.flow import InstalledAppFlow
 from google.auth.transport.requests import AuthorizedSession
+from google_auth_oauthlib.flow import InstalledAppFlow
+
+from app.path import CONFIG_DIR
 
 
-GOOGLE_CLIENT_FILE = BASE_DIR / "config" / "google_oauth_client.json"
-
-SCOPES = [
+GOOGLE_CLIENT_FILE = CONFIG_DIR / "google_oauth_client.json"
+SCOPES = (
     "openid",
     "https://www.googleapis.com/auth/userinfo.email",
     "https://www.googleapis.com/auth/userinfo.profile",
-]
+)
 
 
 class GoogleAuthService:
+    """Executar o fluxo OAuth e normalizar os dados devolvidos pelo Google."""
+
     def authenticate(self):
+        """Abrir o browser, autenticar a conta e devolver os dados essenciais."""
         if not GOOGLE_CLIENT_FILE.exists():
             return False, (
                 "O ficheiro de credenciais Google não foi encontrado.\n\n"
@@ -27,7 +31,6 @@ class GoogleAuthService:
                 str(GOOGLE_CLIENT_FILE),
                 scopes=SCOPES,
             )
-
             credentials = flow.run_local_server(
                 host="localhost",
                 port=0,
@@ -41,28 +44,38 @@ class GoogleAuthService:
             )
 
             session = AuthorizedSession(credentials)
-
             response = session.get(
-                "https://www.googleapis.com/oauth2/v3/userinfo"
+                "https://www.googleapis.com/oauth2/v3/userinfo",
+                timeout=10,
             )
-
-            if response.status_code != 200:
-                return False, "Não foi possível obter os dados da conta Google.", None
-
+            response.raise_for_status()
             user_info = response.json()
 
             google_user = {
                 "oauth_user_id": user_info.get("sub"),
-                "email": user_info.get("email", "").lower(),
-                "full_name": user_info.get("name") or user_info.get("email"),
+                "email": user_info.get("email", "").lower().strip(),
+                "full_name": (
+                    user_info.get("name")
+                    or user_info.get("email")
+                    or "Utilizador Google"
+                ).strip(),
                 "profile_picture": user_info.get("picture"),
-                "email_verified": 1 if user_info.get("email_verified") else 0,
+                "email_verified": int(bool(user_info.get("email_verified"))),
             }
 
             if not google_user["oauth_user_id"] or not google_user["email"]:
-                return False, "A conta Google não devolveu dados suficientes.", None
+                return (
+                    False,
+                    "A conta Google não devolveu os dados necessários.",
+                    None,
+                )
 
             return True, "Login Google efetuado com sucesso.", google_user
 
         except Exception as error:
-            return False, f"Não foi possível iniciar sessão com Google.\n{error}", None
+            return (
+                False,
+                "Não foi possível iniciar sessão com Google.\n"
+                f"Detalhe técnico: {error}",
+                None,
+            )

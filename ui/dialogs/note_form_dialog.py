@@ -18,6 +18,7 @@ from app.path import ICONS_DIR
 
 
 class NoteFormDialog(QDialog):
+    """Recolher e validar os dados de uma nota."""
     COLORS = {
         "Roxo": "#8B5CF6",
         "Azul": "#3B82F6",
@@ -204,6 +205,7 @@ class NoteFormDialog(QDialog):
         self.pin_button.setIconSize(QSize(18, 18))
 
     def validate_and_accept(self):
+        """Validar os campos antes de aceitar o formulário."""
         if not self.title_input.text().strip():
             self.error_label.setText("O título da nota é obrigatório.")
             return
@@ -218,6 +220,7 @@ class NoteFormDialog(QDialog):
         return "Roxo"
 
     def get_data(self):
+        """Devolver os dados normalizados introduzidos no formulário."""
         color_name = self.color_input.currentText()
 
         return {

@@ -1,11 +1,10 @@
-from PySide6.QtGui import QIcon, QPixmap
+"""Funções auxiliares para carregar recursos gráficos da aplicação."""
 
-from app.path import ICONS_DIR, IMAGES_DIR
+from PySide6.QtGui import QIcon
+
+from app.path import ICONS_DIR
 
 
 def get_icon(folder: str, filename: str) -> QIcon:
+    """Devolver um ícone localizado numa subpasta de ``assets/icons``."""
     return QIcon(str(ICONS_DIR / folder / filename))
-
-
-def get_pixmap(folder: str, filename: str) -> QPixmap:
-    return QPixmap(str(IMAGES_DIR / folder / filename))

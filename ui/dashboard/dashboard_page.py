@@ -9,11 +9,9 @@ from PySide6.QtWidgets import (
     QGridLayout,
     QScrollArea,
     QFrame,
-    QGraphicsOpacityEffect,
 )
 
 from app.session import Session
-from app.path import DASHBOARD_IMAGES_DIR
 from database.task_repository import TaskRepository
 from database.event_repository import EventRepository
 from database.note_repository import NoteRepository
@@ -23,6 +21,7 @@ from ui.widgets.section import LPSection
 from ui.widgets.goal_progress import LPGoalProgress
 
 class DashboardPage(QWidget):
+    """Resumir a informação mais relevante do utilizador autenticado."""
     def __init__(self):
         super().__init__()
 
@@ -148,6 +147,7 @@ class DashboardPage(QWidget):
 
 
     def refresh(self):
+        """Atualizar a interface com os dados do utilizador autenticado."""
         user = Session.current_user
 
         if not user:
@@ -246,6 +246,7 @@ class DashboardPage(QWidget):
         )
 
     def load_today_events(self, user_id):
+        """Carregar os eventos do dia apresentados no Dashboard."""
         self.clear_layout(self.events_section.content_layout)
 
         events = self.event_repository.get_today_events(user_id)
@@ -260,6 +261,7 @@ class DashboardPage(QWidget):
             )
 
     def load_main_goal(self, user_id):
+        """Carregar o objetivo principal apresentado no Dashboard."""
         self.clear_layout(self.goal_section.content_layout)
 
         main_goal = self.goal_repository.get_main_goal(user_id)
@@ -291,6 +293,7 @@ class DashboardPage(QWidget):
         self.goal_section.content_layout.addWidget(goal_widget)
 
     def load_today_tasks(self, user_id):
+        """Carregar as tarefas do dia apresentadas no Dashboard."""
         self.clear_layout(self.tasks_section.content_layout)
 
         tasks = self.task_repository.get_today_tasks(user_id)

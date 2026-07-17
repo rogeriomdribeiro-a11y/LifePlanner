@@ -18,10 +18,10 @@ from PySide6.QtWidgets import (
     QWidget,
 )
 
-from app.path import ICONS_DIR
 
 
 class GoalStepEditor(QFrame):
+    """Editar uma etapa individual dentro do formulário de objetivos."""
     def __init__(self, number, step=None, on_remove=None):
         super().__init__()
 
@@ -77,6 +77,7 @@ class GoalStepEditor(QFrame):
             self.on_remove(self)
 
     def get_data(self):
+        """Devolver os dados normalizados introduzidos no formulário."""
         return {
             "title": self.title_input.text().strip(),
             "description": self.description_input.toPlainText().strip(),
@@ -85,6 +86,7 @@ class GoalStepEditor(QFrame):
 
 
 class GoalFormDialog(QDialog):
+    """Recolher e validar um objetivo e as respetivas etapas."""
     COLORS = {
         "Verde": "#10B981",
         "Azul": "#3B82F6",
@@ -377,6 +379,7 @@ class GoalFormDialog(QDialog):
         self.date_input.setEnabled(not self.no_date_checkbox.isChecked())
 
     def validate_and_accept(self):
+        """Validar os campos antes de aceitar o formulário."""
         if not self.title_input.text().strip():
             self.error_label.setText("O título do objetivo é obrigatório.")
             return
@@ -412,6 +415,7 @@ class GoalFormDialog(QDialog):
         return "Verde"
 
     def get_data(self):
+        """Devolver os dados normalizados introduzidos no formulário."""
         color_name = self.color_input.currentText()
 
         target_date = None

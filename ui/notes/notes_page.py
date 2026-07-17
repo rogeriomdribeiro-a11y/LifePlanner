@@ -19,6 +19,7 @@ from ui.widgets.note_card import LPNoteCard
 
 
 class NotesPage(QWidget):
+    """Apresentar, criar e organizar as notas do utilizador."""
     def __init__(self):
         super().__init__()
 
@@ -107,6 +108,7 @@ class NotesPage(QWidget):
         self.layout.addStretch()
 
     def open_note_form(self, note=None):
+        """Abrir o formulário e guardar uma nota nova ou editada."""
         user = Session.current_user
 
         if not user:
@@ -142,6 +144,7 @@ class NotesPage(QWidget):
         self.refresh()
 
     def refresh(self):
+        """Atualizar a interface com os dados do utilizador autenticado."""
         user = Session.current_user
 
         self.clear_layout(self.notes_grid)
@@ -182,6 +185,7 @@ class NotesPage(QWidget):
             self.notes_grid.setColumnStretch(column, 1)
 
     def toggle_pin(self, note):
+        """Fixar ou desafixar a nota selecionada."""
         user = Session.current_user
 
         if not user:
@@ -196,6 +200,7 @@ class NotesPage(QWidget):
         self.refresh()
 
     def delete_note(self, note):
+        """Confirmar e eliminar a nota selecionada."""
         user = Session.current_user
 
         if not user:

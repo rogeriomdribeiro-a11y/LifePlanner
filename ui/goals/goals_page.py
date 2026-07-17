@@ -19,6 +19,7 @@ from ui.widgets.goal_card import LPGoalCard
 
 
 class GoalsPage(QWidget):
+    """Apresentar, criar e atualizar os objetivos do utilizador."""
     def __init__(self):
         super().__init__()
 
@@ -168,6 +169,7 @@ class GoalsPage(QWidget):
         self.content_layout.addWidget(self.goals_card)
 
     def open_goal_form(self, goal=None):
+        """Abrir o formulário e guardar um objetivo novo ou editado."""
         steps = []
 
         if goal:
@@ -215,6 +217,7 @@ class GoalsPage(QWidget):
         self.refresh()
 
     def delete_goal(self, goal):
+        """Confirmar e eliminar o objetivo selecionado."""
         confirmed = CustomDialog.confirm(
             self,
             "Tens a certeza que queres eliminar este objetivo?",
@@ -233,6 +236,7 @@ class GoalsPage(QWidget):
         self.refresh()
 
     def toggle_goal_step(self, goal, step, is_completed):
+        """Atualizar uma etapa e recalcular o progresso do objetivo."""
         user = Session.current_user
 
         if not user:
@@ -257,6 +261,7 @@ class GoalsPage(QWidget):
                 widget.deleteLater()
 
     def refresh(self):
+        """Atualizar a interface com os dados do utilizador autenticado."""
         user = Session.current_user
 
         if not user:
@@ -310,6 +315,7 @@ class GoalsPage(QWidget):
         self.goals_grid.setColumnStretch(1, 1)
 
     def set_main_goal(self, goal):
+        """Definir o objetivo selecionado como principal."""
         user = Session.current_user
 
         if not user:

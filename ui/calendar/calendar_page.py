@@ -1,6 +1,5 @@
 import calendar
 from datetime import date
-from turtle import title
 from PySide6.QtCore import Qt, QSize
 from PySide6.QtGui import QIcon
 from PySide6.QtWidgets import (
@@ -24,6 +23,7 @@ from ui.dialogs.day_events_dialog import DayEventsDialog
 from app.path import ICONS_DIR
 
 class CalendarDayCell(QFrame):
+    """Representar um dia e os respetivos eventos no calendário mensal."""
     def __init__(self, day_date, current_month, is_today=False, on_click=None):
         super().__init__()
 
@@ -130,6 +130,7 @@ class CalendarDayCell(QFrame):
 
 
 class CalendarPage(QWidget):
+    """Apresentar e gerir os eventos numa vista mensal."""
     MONTHS = [
         "Janeiro",
         "Fevereiro",
@@ -268,6 +269,7 @@ class CalendarPage(QWidget):
         self.layout.addStretch()
 
     def open_event_form(self, selected_date=None, event=None):
+        """Abrir o formulário e guardar um evento novo ou editado."""
         user = Session.current_user
 
         if not user:
@@ -315,6 +317,7 @@ class CalendarPage(QWidget):
         self.refresh()
 
     def handle_day_click(self, day_date):
+        """Validar a data selecionada antes de criar um evento."""
         if day_date < date.today():
             CustomDialog.warning(
                 self,
@@ -326,6 +329,7 @@ class CalendarPage(QWidget):
         self.open_event_form(selected_date=day_date)
 
     def handle_event_click(self, event):
+        """Processar a ação escolhida nos detalhes de um evento."""
         dialog = EventDetailsDialog(self, event)
 
         if dialog.exec() != QDialog.Accepted:
@@ -350,6 +354,7 @@ class CalendarPage(QWidget):
         self.handle_event_click(dialog.selected_event)
 
     def delete_event(self, event):
+        """Confirmar e eliminar o evento selecionado."""
         user = Session.current_user
 
         if not user:
@@ -376,6 +381,7 @@ class CalendarPage(QWidget):
         self.refresh()
 
     def refresh(self):
+        """Atualizar a interface com os dados do utilizador autenticado."""
         self.month_label.setText(
             f"{self.MONTHS[self.current_month - 1]} {self.current_year}"
         )
@@ -384,6 +390,7 @@ class CalendarPage(QWidget):
         self.populate_calendar()
 
     def populate_calendar(self):
+        """Construir a grelha mensal e distribuir os eventos por data."""
         user = Session.current_user
 
         events_by_date = {}

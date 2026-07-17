@@ -22,6 +22,7 @@ def hex_to_rgba(hex_color, opacity=0.16):
 
 
 class LPNoteCard(QFrame):
+    """Apresentar o conteúdo e as ações de uma nota."""
     def __init__(
         self,
         note,

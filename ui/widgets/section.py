@@ -9,6 +9,7 @@ from PySide6.QtWidgets import (
 
 
 class LPSection(QFrame):
+    """Agrupar informação relacionada numa secção visual."""
     def __init__(self, title, action_text=None):
         super().__init__()
 

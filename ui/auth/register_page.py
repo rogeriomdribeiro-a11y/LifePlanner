@@ -1,62 +1,41 @@
-from pathlib import Path
+"""Ecrã de criação de contas locais."""
 
-from PySide6.QtCore import Qt, QSize
-from PySide6.QtGui import QPixmap
-from PySide6.QtWidgets import (
-    QWidget,
-    QHBoxLayout,
-    QVBoxLayout,
-    QLabel,
-    QPushButton,
-    QFrame,
-)
+from PySide6.QtCore import Qt
+from PySide6.QtWidgets import QFrame, QHBoxLayout, QLabel, QPushButton, QVBoxLayout
 
 from app.constants import (
-    LEFT_PANEL_WIDTH,
-    LEFT_PANEL_HEIGHT,
-    RIGHT_PANEL_WIDTH,
-    RIGHT_PANEL_HEIGHT,
-    LOGO_WIDTH,
-    LOGO_HEIGHT,
-    ILLUSTRATION_WIDTH,
     ILLUSTRATION_HEIGHT,
+    ILLUSTRATION_WIDTH,
+    LEFT_PANEL_HEIGHT,
+    LEFT_PANEL_WIDTH,
+    LOGO_HEIGHT,
+    LOGO_WIDTH,
+    RIGHT_PANEL_HEIGHT,
+    RIGHT_PANEL_WIDTH,
 )
-from ui.widgets.button import LPButton
-from ui.widgets.line_edit import LPLineEdit, LPPasswordEdit
 from database.user_repository import UserRepository
 from ui.base.base_page import BasePage
 from ui.dialogs.custom_dialog import CustomDialog
-
-
-BASE_DIR = Path(__file__).resolve().parents[2]
-IMAGES_DIR = BASE_DIR / "assets" / "images" / "login"
+from ui.widgets.button import LPButton
+from ui.widgets.line_edit import LPLineEdit, LPPasswordEdit
 
 
 class RegisterPage(BasePage):
+    """Recolher, validar e guardar os dados de uma nova conta local."""
+
     def __init__(self, app_controller=None):
         super().__init__()
-
         self.app_controller = app_controller
-
         self.setObjectName("loginWindow")
-        self.setWindowTitle("LifePlanner - Criar Conta")
-        self.setWindowFlags(Qt.FramelessWindowHint)
-        self.setMinimumSize(1280, 720)
-
-        self.old_pos = None
-
         self.setup_ui()
 
     def setup_ui(self):
+        """Construir os painéis do formulário de registo."""
         main_layout = QHBoxLayout(self)
         main_layout.setContentsMargins(78, 28, 78, 36)
         main_layout.setSpacing(176)
-
         main_layout.addWidget(self.create_left_panel())
-        main_layout.addWidget(
-            self.create_right_panel(),
-            alignment=Qt.AlignVCenter,
-        )
+        main_layout.addWidget(self.create_right_panel(), alignment=Qt.AlignVCenter)
 
     def create_left_panel(self):
         panel = QFrame()
@@ -93,7 +72,6 @@ class RegisterPage(BasePage):
         layout.addWidget(description)
         layout.addStretch()
         layout.addWidget(illustration, alignment=Qt.AlignCenter)
-
         return panel
 
     def create_right_panel(self):
@@ -118,11 +96,14 @@ class RegisterPage(BasePage):
         self.password_input = LPPasswordEdit("Password")
         self.confirm_password_input = LPPasswordEdit("Confirmar password")
 
-        self.name_input.returnPressed.connect(self.handle_register)
-        self.email_input.returnPressed.connect(self.handle_register)
-        self.password_input.returnPressed.connect(self.handle_register)
-        self.confirm_password_input.returnPressed.connect(self.handle_register)
-        
+        for field in (
+            self.name_input,
+            self.email_input,
+            self.password_input,
+            self.confirm_password_input,
+        ):
+            field.returnPressed.connect(self.handle_register)
+
         create_button = LPButton("Criar")
         create_button.clicked.connect(self.handle_register)
 
@@ -143,16 +124,16 @@ class RegisterPage(BasePage):
         layout.addSpacing(10)
         layout.addWidget(login_link, alignment=Qt.AlignHCenter)
         layout.addStretch()
-
         return panel
 
     def handle_register(self):
+        """Validar o formulário e criar a conta na base de dados local."""
         full_name = self.name_input.text().strip()
         email = self.email_input.text().strip().lower()
         password = self.password_input.text()
         confirm_password = self.confirm_password_input.text()
 
-        if not full_name or not email or not password or not confirm_password:
+        if not all((full_name, email, password, confirm_password)):
             CustomDialog.warning(
                 self,
                 "Preenche todos os campos para criar a tua conta.",
@@ -160,13 +141,10 @@ class RegisterPage(BasePage):
             )
             return
 
-        if "@" not in email or "." not in email:
-            CustomDialog.warning(
-                self,
-                "Introduz um email válido.",
-                "Email inválido",
-            )
+        if "@" not in email or "." not in email.rsplit("@", 1)[-1]:
+            CustomDialog.warning(self, "Introduz um email válido.", "Email inválido")
             return
+
         if len(password) < 6:
             CustomDialog.warning(
                 self,
@@ -174,6 +152,7 @@ class RegisterPage(BasePage):
                 "Password inválida",
             )
             return
+
         if password != confirm_password:
             CustomDialog.warning(
                 self,
@@ -182,52 +161,24 @@ class RegisterPage(BasePage):
             )
             return
 
-        repository = UserRepository()
-
-        success, message = repository.create_user(
-            full_name,
-            email,
-            password,
-        )
+        success, message = UserRepository().create_user(full_name, email, password)
 
         if not success:
-            CustomDialog.error(
-                self,
-                message,
-                "Erro ao criar conta",
-            )
+            CustomDialog.error(self, message, "Erro ao criar conta")
             return
 
-        CustomDialog.success(
-            self,
-            message,
-            "Conta criada",
-        )
-
+        CustomDialog.success(self, message, "Conta criada")
+        self.reset_form()
         self.go_to_login()
+
+    def reset_form(self):
+        """Limpar todos os campos antes de uma nova utilização do ecrã."""
+        self.name_input.clear()
+        self.email_input.clear()
+        self.password_input.clear()
+        self.confirm_password_input.clear()
+        self.name_input.setFocus()
 
     def go_to_login(self):
         if self.app_controller:
             self.app_controller.show_login()
-
-    def image_label(self, filename, width, height):
-        label = QLabel()
-        label.setFixedSize(width, height)
-        label.setAlignment(Qt.AlignCenter)
-
-        image_path = IMAGES_DIR / filename
-
-        if image_path.exists():
-            pixmap = QPixmap(str(image_path))
-            pixmap = pixmap.scaled(
-                width,
-                height,
-                Qt.KeepAspectRatio,
-                Qt.SmoothTransformation,
-            )
-            label.setPixmap(pixmap)
-        else:
-            label.setText(f"Imagem não encontrada:\n{filename}")
-            label.setStyleSheet("color: #EF4444;")
-
-        return label

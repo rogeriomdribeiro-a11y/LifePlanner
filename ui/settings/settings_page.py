@@ -19,6 +19,7 @@ from ui.dialogs.custom_dialog import CustomDialog
 from ui.widgets.line_edit import LPPasswordEdit
 
 class ChangePasswordDialog(QDialog):
+    """Validar os dados necessários para alterar a password."""
     def __init__(self, parent=None):
         super().__init__(parent)
 
@@ -90,6 +91,7 @@ class ChangePasswordDialog(QDialog):
         layout.addLayout(buttons)
 
     def validate_and_accept(self):
+        """Validar os campos antes de aceitar o formulário."""
         current_password = self.current_password_input.text()
         new_password = self.new_password_input.text()
         confirm_password = self.confirm_password_input.text()
@@ -109,6 +111,7 @@ class ChangePasswordDialog(QDialog):
         self.accept()
 
     def get_data(self):
+        """Devolver os dados normalizados introduzidos no formulário."""
         return {
             "current_password": self.current_password_input.text(),
             "new_password": self.new_password_input.text(),
@@ -116,6 +119,7 @@ class ChangePasswordDialog(QDialog):
 
 
 class SettingsPage(QWidget):
+    """Permitir a consulta e alteração dos dados da conta."""
     def __init__(self):
         super().__init__()
 
@@ -275,6 +279,7 @@ class SettingsPage(QWidget):
         return row
 
     def refresh(self):
+        """Atualizar a interface com os dados do utilizador autenticado."""
         user = Session.current_user
 
         if not user:
@@ -285,6 +290,7 @@ class SettingsPage(QWidget):
         
 
     def save_user_name(self):
+        """Validar e guardar o novo nome do utilizador."""
         user = Session.current_user
 
         if not user:
@@ -317,6 +323,7 @@ class SettingsPage(QWidget):
         )
 
     def open_change_password_dialog(self):
+        """Abrir o diálogo e aplicar a alteração da password."""
         user = Session.current_user
 
         if not user:

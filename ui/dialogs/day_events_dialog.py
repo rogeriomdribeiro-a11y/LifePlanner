@@ -15,6 +15,7 @@ from PySide6.QtWidgets import (
 
 
 class DayEventsDialog(QDialog):
+    """Listar todos os eventos existentes numa determinada data."""
     def __init__(self, parent=None, events=None):
         super().__init__(parent)
 

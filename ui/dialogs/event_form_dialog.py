@@ -22,6 +22,7 @@ from app.path import ICONS_DIR
 
 
 class EventFormDialog(QDialog):
+    """Recolher e validar os dados de criação ou edição de um evento."""
     COLORS = {
         "Azul": "#3B82F6",
         "Verde": "#10B981",
@@ -288,25 +289,13 @@ class EventFormDialog(QDialog):
             self.color_input.setCurrentText("Azul")
 
     def validate_and_accept(self):
+        """Validar os campos antes de aceitar o formulário."""
         if not self.title_input.text().strip():
             self.error_label.setText("O título do evento é obrigatório.")
             return
 
         if self.date_input.date().toJulianDay() < QDate.currentDate().toJulianDay():
             self.error_label.setText("Não é possível adicionar eventos em dias passados.")
-            return
-
-        start_time = self.start_time_input.time()
-        end_time = self.end_time_input.time()
-
-        if end_time <= start_time:
-            self.error_label.setText("A hora de fim deve ser posterior à hora de início.")
-            return
-
-        self.accept()
-
-        if self.date_input.date().toJulianDay() < QDate.currentDate().toJulianDay():
-            self.error_label.setText("Não é possível criar eventos no passado.")
             return
 
         start_time = self.start_time_input.time()
@@ -326,6 +315,7 @@ class EventFormDialog(QDialog):
         return "Azul"
 
     def get_data(self):
+        """Devolver os dados normalizados introduzidos no formulário."""
         color_name = self.color_input.currentText()
 
         return {

@@ -22,6 +22,7 @@ def hex_to_rgba(hex_color, opacity=0.16):
 
 
 class LPInfoCard(QFrame):
+    """Apresentar uma métrica resumida no Dashboard."""
     def __init__(
         self,
         title,

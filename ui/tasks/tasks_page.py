@@ -25,6 +25,7 @@ from ui.widgets.priority_badge import LPPriorityBadge
 
 
 class TasksPage(QWidget):
+    """Apresentar e gerir tarefas filtradas por data e categoria."""
     def __init__(self):
         super().__init__()
 
@@ -112,6 +113,7 @@ class TasksPage(QWidget):
             "Todas",
             "Pessoal",
             "Trabalho",
+            "Saúde",
             "Estudo",
             "Projeto",
             "Planeamento",
@@ -213,6 +215,7 @@ class TasksPage(QWidget):
         return category
 
     def open_task_form(self, task=None):
+        """Abrir o formulário e guardar uma tarefa nova ou editada."""
         if task and task["is_completed"]:
             CustomDialog.warning(
                 self,
@@ -256,6 +259,7 @@ class TasksPage(QWidget):
         self.refresh()
 
     def refresh(self):
+        """Atualizar a interface com os dados do utilizador autenticado."""
         user = Session.current_user
 
         self.clear_layout(self.pending_tasks_layout)
@@ -419,6 +423,7 @@ class TasksPage(QWidget):
         return row
 
     def toggle_task(self, task):
+        """Alternar o estado concluído da tarefa selecionada."""
         user = Session.current_user
 
         if not user:
@@ -435,6 +440,7 @@ class TasksPage(QWidget):
         self.refresh()
 
     def delete_task(self, task):
+        """Confirmar e eliminar uma tarefa pendente."""
         user = Session.current_user
 
         if not user:

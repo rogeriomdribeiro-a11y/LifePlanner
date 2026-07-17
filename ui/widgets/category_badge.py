@@ -13,6 +13,7 @@ def hex_to_rgba(hex_color, opacity=0.16):
 
 
 class LPCategoryBadge(QLabel):
+    """Apresentar uma categoria com cor própria."""
     COLORS = {
         "Pessoal": "#3B82F6",
         "Trabalho": "#10B981",

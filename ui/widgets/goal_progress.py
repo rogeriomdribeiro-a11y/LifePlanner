@@ -8,6 +8,7 @@ from PySide6.QtWidgets import (
 
 
 class LPGoalProgress(QFrame):
+    """Apresentar visualmente o progresso de um objetivo."""
     def __init__(
         self,
         title,

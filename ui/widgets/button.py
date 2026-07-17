@@ -5,6 +5,7 @@ from app.resources import get_icon
 
 
 class LPButton(QPushButton):
+    """Botão principal reutilizável da aplicação."""
     def __init__(self, text="", parent=None):
         super().__init__(text, parent)
 
@@ -14,6 +15,7 @@ class LPButton(QPushButton):
 
 
 class LPGoogleButton(QPushButton):
+    """Botão reutilizável para iniciar a autenticação Google."""
     def __init__(self, text="Continuar com Google", parent=None):
         super().__init__(text, parent)
 

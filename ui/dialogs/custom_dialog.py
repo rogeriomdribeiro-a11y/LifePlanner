@@ -1,5 +1,3 @@
-from pathlib import Path
-
 from PySide6.QtCore import Qt
 from PySide6.QtGui import QColor
 from PySide6.QtSvgWidgets import QSvgWidget
@@ -14,11 +12,14 @@ from PySide6.QtWidgets import (
 )
 
 
-BASE_DIR = Path(__file__).resolve().parents[2]
-DIALOG_ICONS_DIR = BASE_DIR / "assets" / "icons" / "dialogs"
+from app.path import ICONS_DIR
+
+
+DIALOG_ICONS_DIR = ICONS_DIR / "dialogs"
 
 
 class CustomDialog(QDialog):
+    """Apresentar mensagens e confirmações com o estilo da aplicação."""
     def __init__(
         self,
         parent,

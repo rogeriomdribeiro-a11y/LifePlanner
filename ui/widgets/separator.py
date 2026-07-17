@@ -3,6 +3,7 @@ from PySide6.QtWidgets import QWidget, QLabel, QHBoxLayout, QFrame
 
 
 class LPSeparator(QWidget):
+    """Separar alternativas de autenticação com um texto central."""
     def __init__(self, text="ou"):
         super().__init__()
 

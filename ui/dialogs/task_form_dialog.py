@@ -18,11 +18,15 @@ from PySide6.QtWidgets import (
 
 
 class TaskFormDialog(QDialog):
+    """Recolher e validar os dados de uma tarefa."""
     CATEGORIES = [
         "Pessoal",
         "Trabalho",
         "Saúde",
         "Estudo",
+        "Projeto",
+        "Planeamento",
+        "Objetivos",
     ]
 
     PRIORITIES = [
@@ -184,6 +188,7 @@ class TaskFormDialog(QDialog):
                 self.time_input.setTime(task_time)
 
     def validate_and_accept(self):
+        """Validar os campos antes de aceitar o formulário."""
         if not self.title_input.text().strip():
             self.error_label.setText("O título da tarefa é obrigatório.")
             return
@@ -191,6 +196,7 @@ class TaskFormDialog(QDialog):
         self.accept()
 
     def get_data(self):
+        """Devolver os dados normalizados introduzidos no formulário."""
         return {
             "title": self.title_input.text().strip(),
             "category": self.category_input.currentText(),

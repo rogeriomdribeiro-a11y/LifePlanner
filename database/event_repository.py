@@ -1,10 +1,14 @@
+"""Operações de persistência relacionadas com eventos do calendário."""
+
 from datetime import date
 
 from database.connection import get_connection
 
 
 class EventRepository:
-    def __init__(self):
+    """Disponibilizar operações CRUD e contagens de eventos."""
+
+    def __init__(self) -> None:
         self.connection = get_connection()
 
     def create_event(
@@ -18,9 +22,11 @@ class EventRepository:
         location="",
         color="#3B82F6",
     ):
+        """Criar um evento e devolver o identificador gerado."""
         cursor = self.connection.cursor()
 
-        cursor.execute("""
+        cursor.execute(
+            """
             INSERT INTO events (
                 user_id,
                 title,
@@ -32,25 +38,28 @@ class EventRepository:
                 color
             )
             VALUES (?, ?, ?, ?, ?, ?, ?, ?)
-        """, (
-            user_id,
-            title,
-            description,
-            event_date,
-            start_time,
-            end_time,
-            location,
-            color,
-        ))
+            """,
+            (
+                user_id,
+                title,
+                description,
+                event_date,
+                start_time,
+                end_time,
+                location,
+                color,
+            ),
+        )
 
         self.connection.commit()
-
         return cursor.lastrowid
 
     def get_events_by_user(self, user_id):
+        """Listar todos os eventos do utilizador por data e hora."""
         cursor = self.connection.cursor()
 
-        cursor.execute("""
+        cursor.execute(
+            """
             SELECT *
             FROM events
             WHERE user_id = ?
@@ -59,16 +68,19 @@ class EventRepository:
                 start_time IS NULL,
                 start_time ASC,
                 created_at DESC
-        """, (user_id,))
+            """,
+            (user_id,),
+        )
 
         return cursor.fetchall()
 
     def get_today_events(self, user_id, limit=5):
+        """Obter os próximos eventos do dia atual para o Dashboard."""
         today = date.today().isoformat()
-
         cursor = self.connection.cursor()
 
-        cursor.execute("""
+        cursor.execute(
+            """
             SELECT *
             FROM events
             WHERE user_id = ?
@@ -78,24 +90,28 @@ class EventRepository:
                 start_time ASC,
                 created_at DESC
             LIMIT ?
-        """, (user_id, today, limit))
+            """,
+            (user_id, today, limit),
+        )
 
         return cursor.fetchall()
 
-    def count_today_events(self, user_id):
+    def count_today_events(self, user_id) -> int:
+        """Contar os eventos marcados para o dia atual."""
         today = date.today().isoformat()
-
         cursor = self.connection.cursor()
 
-        cursor.execute("""
+        cursor.execute(
+            """
             SELECT COUNT(*) AS total
             FROM events
             WHERE user_id = ?
               AND event_date = ?
-        """, (user_id, today))
+            """,
+            (user_id, today),
+        )
 
         result = cursor.fetchone()
-
         return result["total"] if result else 0
 
     def update_event(
@@ -109,12 +125,15 @@ class EventRepository:
         end_time=None,
         location="",
         color="#3B82F6",
-    ):
+    ) -> None:
+        """Atualizar um evento pertencente ao utilizador autenticado."""
         cursor = self.connection.cursor()
 
-        cursor.execute("""
+        cursor.execute(
+            """
             UPDATE events
-            SET title = ?,
+            SET
+                title = ?,
                 description = ?,
                 event_date = ?,
                 start_time = ?,
@@ -124,75 +143,33 @@ class EventRepository:
                 updated_at = CURRENT_TIMESTAMP
             WHERE id = ?
               AND user_id = ?
-        """, (
-            title,
-            description,
-            event_date,
-            start_time,
-            end_time,
-            location,
-            color,
-            event_id,
-            user_id,
-        ))
+            """,
+            (
+                title,
+                description,
+                event_date,
+                start_time,
+                end_time,
+                location,
+                color,
+                event_id,
+                user_id,
+            ),
+        )
 
         self.connection.commit()
 
-    def delete_event(self, event_id, user_id):
+    def delete_event(self, event_id, user_id) -> None:
+        """Eliminar um evento pertencente ao utilizador autenticado."""
         cursor = self.connection.cursor()
 
-        cursor.execute("""
+        cursor.execute(
+            """
             DELETE FROM events
             WHERE id = ?
               AND user_id = ?
-        """, (event_id, user_id))
+            """,
+            (event_id, user_id),
+        )
 
         self.connection.commit()
-
-    def ensure_sample_events_for_today(self, user_id):
-        if self.count_today_events(user_id) > 0:
-            return
-
-        today = date.today().isoformat()
-
-        sample_events = [
-            (
-                "Reunião de equipa",
-                "Revisão semanal do projeto",
-                today,
-                "15:00",
-                "16:00",
-                "Sala 2B",
-                "#3B82F6",
-            ),
-            (
-                "Ginásio",
-                "Treino de força",
-                today,
-                "18:30",
-                "19:30",
-                "Fitness Club",
-                "#10B981",
-            ),
-            (
-                "Aniversário da Ana",
-                "Jantar de aniversário",
-                today,
-                "20:00",
-                "22:00",
-                "Restaurante",
-                "#8B5CF6",
-            ),
-        ]
-
-        for title, description, event_date, start_time, end_time, location, color in sample_events:
-            self.create_event(
-                user_id=user_id,
-                title=title,
-                description=description,
-                event_date=event_date,
-                start_time=start_time,
-                end_time=end_time,
-                location=location,
-                color=color,
-            )

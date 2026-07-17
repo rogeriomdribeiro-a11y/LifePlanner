@@ -26,6 +26,7 @@ def hex_to_rgba(hex_color, opacity=0.16):
 
 
 class LPGoalCard(QFrame):
+    """Apresentar um objetivo, etapas e ações associadas."""
     def __init__(
         self,
         goal,

@@ -13,6 +13,7 @@ def hex_to_rgba(hex_color, opacity=0.16):
 
 
 class LPPriorityBadge(QLabel):
+    """Apresentar a prioridade de uma tarefa com cor própria."""
     COLORS = {
         "Baixa": "#10B981",
         "Normal": "#3B82F6",

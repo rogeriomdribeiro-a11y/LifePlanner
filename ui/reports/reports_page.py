@@ -1,6 +1,6 @@
 from datetime import date, datetime
 
-from PySide6.QtCore import Qt, QRectF, QSize
+from PySide6.QtCore import Qt, QRectF
 from PySide6.QtGui import QPainter, QColor, QPen
 from PySide6.QtWidgets import (
     QWidget,
@@ -20,6 +20,7 @@ from database.note_repository import NoteRepository
 from database.goal_repository import GoalRepository
 
 class DonutCircle(QWidget):
+    """Desenhar um indicador circular de percentagem."""
     def __init__(self, color="#3B82F6"):
         super().__init__()
 
@@ -33,6 +34,7 @@ class DonutCircle(QWidget):
         self.update()
 
     def paintEvent(self, event):
+        """Desenhar o componente com os valores atualmente definidos."""
         painter = QPainter(self)
         painter.setRenderHint(QPainter.Antialiasing)
 
@@ -65,6 +67,7 @@ class DonutCircle(QWidget):
 
 
 class ReportDonutCard(QFrame):
+    """Combinar um indicador circular com o respetivo resumo textual."""
     def __init__(self, title, subtitle, color):
         super().__init__()
 
@@ -101,6 +104,7 @@ class ReportDonutCard(QFrame):
             self.subtitle_label.setText(subtitle)
 
 class ReportsPage(QWidget):
+    """Calcular e apresentar estatísticas sobre os dados da aplicação."""
     def __init__(self):
         super().__init__()
 
@@ -374,6 +378,7 @@ class ReportsPage(QWidget):
         store[label_text] = value
 
     def refresh(self):
+        """Atualizar a interface com os dados do utilizador autenticado."""
         user = Session.current_user
 
         if not user:

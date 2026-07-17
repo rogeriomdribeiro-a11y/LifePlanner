@@ -14,6 +14,7 @@ from PySide6.QtWidgets import (
 
 
 class EventDetailsDialog(QDialog):
+    """Mostrar os detalhes de um evento e disponibilizar ações."""
     def __init__(self, parent=None, event_data=None):
         super().__init__(parent)
 
@@ -173,5 +174,6 @@ class EventDetailsDialog(QDialog):
         self.accept()
 
     def delete_event(self):
+        """Confirmar e eliminar o evento selecionado."""
         self.action = "delete"
         self.accept()
